@@ -88,6 +88,22 @@ header{
 .wl-name{color:var(--muted)}
 #watchlist-overlay{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.45)}
 
+/* ─── Lock Panel ─── */
+#lock-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:300;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.65);width:480px;max-width:95vw;max-height:80vh;overflow-y:auto}
+#lock-panel h3{font-size:.9rem;font-weight:700;margin-bottom:.3rem;color:var(--text);display:flex;justify-content:space-between;align-items:center}
+#lock-panel h3 button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;line-height:1;padding:.1rem .3rem}
+#lock-panel h3 button:hover{color:var(--text)}
+.lock-explain{font-size:.75rem;color:var(--muted);margin-bottom:.9rem;line-height:1.5;padding:.5rem .7rem;background:rgba(248,81,73,.06);border-left:3px solid rgba(248,81,73,.4);border-radius:0 6px 6px 0}
+.lock-item{display:flex;flex-direction:column;gap:.25rem;padding:.65rem 0;border-bottom:1px solid #21262d}
+.lock-item:last-child{border-bottom:none}
+.lock-item-top{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.lock-sid{color:var(--blue);font-weight:700;font-size:.9rem;min-width:3rem}
+.lock-name{font-weight:600;font-size:.88rem}
+.lock-score{margin-left:auto;font-size:.78rem;color:#ffa600;font-weight:600}
+.lock-reason{font-size:.76rem;color:var(--muted);line-height:1.55;padding:.2rem .3rem .1rem}
+.lock-reason span{color:var(--text);font-weight:500}
+#lock-overlay{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.45)}
+
 /* ─── KPI ─── */
 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.3rem 2rem}
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.3rem;transition:border-color .18s,transform .18s}
@@ -273,11 +289,11 @@ footer a{color:var(--blue);text-decoration:none}
     <div class="kpi-value sm" id="kpi-latest">—</div>
     <div class="kpi-sub"      id="kpi-mtime">—</div>
   </div>
-  <div class="kpi">
+  <div class="kpi" onclick="toggleLockPanel(event)" style="cursor:pointer">
     <div class="kpi-icon">🔥</div>
     <div class="kpi-label" data-zh="最新鎖碼個股數" data-en="Lock Signals (Latest)">最新鎖碼個股數</div>
     <div class="kpi-value" id="kpi-locks">—</div>
-    <div class="kpi-sub" data-zh="最新一次分析中的鎖碼訊號" data-en="Lock signals in latest run">最新一次分析中的鎖碼訊號</div>
+    <div class="kpi-sub" data-zh="▾ 點擊展開鎖碼清單" data-en="▾ Click to view lock stocks">▾ 點擊展開鎖碼清單</div>
   </div>
 </div>
 
@@ -606,6 +622,7 @@ function render(d){
   document.getElementById('kpi-latest').textContent=d.latest_date||'—';
   document.getElementById('kpi-mtime').textContent=(LANG==='zh'?'資料更新：':'Updated: ')+(d.file_mtime||'—');
   document.getElementById('kpi-locks').textContent=d.lock_latest>0?d.lock_latest:(LANG==='zh'?'無':'None');
+  LOCK_STOCKS=(d.latest_stocks||[]).filter(s=>s.is_lock);
   document.getElementById('file-status').textContent=(LANG==='zh'?'更新：':'Updated: ')+(d.file_mtime||'—');
   CHART_DATA=d;renderCharts(d);
   document.getElementById('summary-box').textContent=d.latest_summary||'—';
@@ -770,6 +787,81 @@ document.body.insertAdjacentHTML('beforeend',`
     <div class="wl-grid">${WATCHLIST.map(s=>`<div class="wl-item"><span class="wl-sid">${s.sid}</span><span class="wl-name">${s.name}</span></div>`).join('')}</div>
   </div>
 `);
+// ── Lock Panel ─────────────────────────────────────────────────────────────
+document.body.insertAdjacentHTML('beforeend',`
+  <div id="lock-overlay" onclick="closeLockPanel()"></div>
+  <div id="lock-panel" style="display:none">
+    <h3><span>🔥 <span data-zh="最新鎖碼個股" data-en="Latest Lock Signals">最新鎖碼個股</span></span><button onclick="closeLockPanel()">✕</button></h3>
+    <div class="lock-explain" id="lock-explain"></div>
+    <div id="lock-list"></div>
+  </div>
+`);
+
+function buildLockReason(s){
+  const parts=[];
+  const trend=s.trend_state||'';
+  const pos=s.pos_label||'';
+  const inst=parseFloat(s.inst3||0);
+  const score=Math.round(s.score||0);
+
+  if(trend==='多頭強勢'||trend==='多頭轉強')
+    parts.push(`趨勢處於<span>${trend}</span>，動能持續累積`);
+  else if(trend==='多頭')
+    parts.push(`趨勢維持<span>多頭</span>結構`);
+
+  if(pos==='主力進場')
+    parts.push(`籌碼顯示<span>主力進場</span>，成本集中`);
+  else if(pos==='多頭續強')
+    parts.push(`位置偏強，籌碼持續擴張`);
+
+  if(inst>0)
+    parts.push(`法人近3日買超 <span>+${inst.toLocaleString()} 張</span>`);
+  else if(inst<0)
+    parts.push(`法人近3日小幅賣超 ${inst.toLocaleString()} 張，但主力仍鎖貨`);
+
+  if(score>=85)
+    parts.push(`綜合評分 <span>${score} 分</span>（強勢）`);
+  else if(score>=70)
+    parts.push(`綜合評分 <span>${score} 分</span>`);
+
+  return parts.length?parts.join('；')+'。':'主力鎖碼訊號觸發，建議關注。';
+}
+
+let LOCK_STOCKS=[];
+function openLockPanel(){
+  if(!LOCK_STOCKS.length){
+    document.getElementById('lock-list').innerHTML=
+      `<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:.85rem">${LANG==='zh'?'尚無鎖碼資料':'No lock signal data'}</div>`;
+  } else {
+    const explain=LANG==='zh'
+      ?'🔒 <b>鎖碼</b> 是指主力資金集中、籌碼不輕易釋出的個股。以下為最新一次分析中被判定為鎖碼的個股與判斷依據：'
+      :'🔒 <b>Lock Signal</b> means smart money is concentrated and unwilling to release shares. Below are the latest stocks with lock signals and their reasons:';
+    document.getElementById('lock-explain').innerHTML=explain;
+
+    document.getElementById('lock-list').innerHTML=LOCK_STOCKS.map(s=>{
+      const name=LANG==='zh'?(s.display||s.sid):transStock(s.display||s.sid);
+      const sid=(s.display||s.sid||'').match(/^(\d{4,6})/)?.[1]||'';
+      const dispName=name.replace(/^\d+\s*/,'');
+      const reason=buildLockReason(s);
+      const score=Math.round(s.score||0);
+      return`<div class="lock-item">
+        <div class="lock-item-top">
+          <span class="lock-sid">${sid}</span>
+          <span class="lock-name">${dispName}</span>
+          <span class="tag tag-lock">${LANG==='zh'?'🔥 鎖碼':'🔥 Lock'}</span>
+          <span class="lock-score">評分 ${score}</span>
+        </div>
+        <div class="lock-reason">${reason}</div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('lock-panel').style.display='block';
+  document.getElementById('lock-overlay').style.display='block';
+  document.querySelectorAll('#lock-panel [data-zh][data-en]').forEach(t);
+}
+function toggleLockPanel(e){if(e)e.stopPropagation();const p=document.getElementById('lock-panel');p.style.display==='none'?openLockPanel():closeLockPanel();}
+function closeLockPanel(){document.getElementById('lock-panel').style.display='none';document.getElementById('lock-overlay').style.display='none';}
+
 function toggleWatchlist(e){if(e)e.stopPropagation();const p=document.getElementById('watchlist-panel'),o=document.getElementById('watchlist-overlay'),open=p.style.display!=='none';p.style.display=open?'none':'block';o.style.display=open?'none':'block';}
 function closeWatchlist(){document.getElementById('watchlist-panel').style.display='none';document.getElementById('watchlist-overlay').style.display='none';}
 
