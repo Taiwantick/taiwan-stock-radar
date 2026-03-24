@@ -114,6 +114,26 @@ header{
 .tag-d{background:rgba(227,179,65,.12);color:var(--yellow)}
 .no-screener{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem}
 
+/* ─── Insider Tracker ─── */
+.insider-section{padding:0 2rem 1rem}
+.insider-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
+.insider-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,166,0,.1);border:1px solid rgba(255,166,0,.3);color:#ffa600;padding:.22rem .75rem;border-radius:20px;font-size:.8rem;font-weight:600}
+.insider-meta{color:var(--muted);font-size:.78rem}
+.insider-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.insider-table th{background:rgba(255,255,255,.05);color:var(--muted);font-weight:500;padding:.45rem .6rem;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.insider-table td{padding:.45rem .6rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+.insider-table tr:hover td{background:rgba(255,255,255,.03)}
+.ins-level-high{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:700;background:rgba(248,81,73,.15);color:#f85149}
+.ins-level-medium{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:700;background:rgba(255,166,0,.15);color:#ffa600}
+.ins-level-low{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.08);color:var(--muted)}
+.ins-level-buy{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:700;background:rgba(63,185,80,.15);color:#3fb950}
+.ins-lots-neg{color:#f85149;font-weight:600}
+.ins-lots-pos{color:#3fb950;font-weight:600}
+.ins-summary{display:flex;gap:1.2rem;margin-bottom:.8rem;flex-wrap:wrap}
+.ins-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem;font-size:.8rem;text-align:center}
+.ins-stat span{display:block;font-size:1.1rem;font-weight:700;margin-top:.1rem}
+.no-insider{text-align:center;padding:2rem;color:var(--muted);font-size:.85rem}
+
 /* ─── Realtime Radar ─── */
 .radar-section{padding:0 2rem 0;margin-bottom:1rem}
 .radar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
@@ -289,6 +309,37 @@ footer a{color:var(--blue);text-decoration:none}
         <tbody id="screener-table-body"></tbody>
       </table>
     </div>
+  </div>
+</div>
+
+<!-- ═══ Insider Tracker ══════════════════════════════════════════════════════ -->
+<div class="insider-section">
+  <div class="insider-header">
+    <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+      <span class="insider-badge">🚨 <span data-zh="大股東持股異動" data-en="Insider Trading Alert">大股東持股異動</span></span>
+      <span style="color:var(--muted);font-size:.8rem" data-zh="申報轉讓追蹤 · 抓出提前偷跑" data-en="Pre-Transfer Filing Tracker">申報轉讓追蹤 · 抓出提前偷跑</span>
+    </div>
+    <span id="insider-meta" class="insider-meta"></span>
+  </div>
+  <div id="insider-summary" class="ins-summary"></div>
+  <div style="overflow-x:auto">
+    <table class="insider-table">
+      <thead>
+        <tr>
+          <th data-zh="申報日" data-en="Date">申報日</th>
+          <th data-zh="代號 / 名稱" data-en="Stock">代號 / 名稱</th>
+          <th data-zh="申報人" data-en="Person">申報人</th>
+          <th data-zh="職稱" data-en="Title">職稱</th>
+          <th data-zh="張數" data-en="Lots">張數</th>
+          <th data-zh="動作" data-en="Action">動作</th>
+          <th data-zh="風險" data-en="Risk">風險</th>
+          <th data-zh="轉讓期間" data-en="Period">轉讓期間</th>
+        </tr>
+      </thead>
+      <tbody id="insider-tbody">
+        <tr><td colspan="8" class="no-insider" data-zh="載入中..." data-en="Loading...">載入中...</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -629,6 +680,63 @@ async function loadRealtime(){
   }catch(e){document.getElementById('radar-meta').textContent=LANG==='zh'?'尚無今日大單資料':'No data yet';}
 }
 
+// ── Insider ────────────────────────────────────────────────────────────────
+function renderInsider(d){
+  const meta = document.getElementById('insider-meta');
+  const sumEl = document.getElementById('insider-summary');
+  const tbody = document.getElementById('insider-tbody');
+  if(!d||(!d.sells?.length&&!d.buys?.length)){
+    tbody.innerHTML=`<tr><td colspan="8" class="no-insider">${LANG==='zh'?'暫無異動申報資料':'No insider filing data'}</td></tr>`;
+    return;
+  }
+  meta.textContent = (LANG==='zh'?'更新：':'Updated: ')+d.date+' '+d.time
+    +(LANG==='zh'?` · 賣出 ${d.sell_count} 筆｜買進 ${d.buy_count} 筆`
+                 :` · Sell ${d.sell_count} | Buy ${d.buy_count}`);
+
+  // 統計卡
+  sumEl.innerHTML=`
+    <div class="ins-stat"><div>${LANG==='zh'?'🔴 高度警示':'🔴 High Alert'}</div><span style="color:#f85149">${d.high_count}</span></div>
+    <div class="ins-stat"><div>${LANG==='zh'?'🟡 注意':'🟡 Watch'}</div><span style="color:#ffa600">${d.medium_count}</span></div>
+    <div class="ins-stat"><div>${LANG==='zh'?'🟢 買進回補':'🟢 Insider Buy'}</div><span style="color:#3fb950">${d.buy_count}</span></div>
+    <div class="ins-stat"><div>${LANG==='zh'?'賣出總筆數':'Total Sells'}</div><span>${d.sell_count}</span></div>
+  `;
+
+  // 合併賣出+買進，最新在前
+  const rows=[...d.sells.map(r=>({...r,action:'sell'})),...d.buys.map(r=>({...r,action:'buy'}))];
+  rows.sort((a,b)=>b.date.localeCompare(a.date));
+
+  const levelLabel={
+    high: `<span class="ins-level-high">${LANG==='zh'?'🔴 高度警示':'🔴 High'}</span>`,
+    medium:`<span class="ins-level-medium">${LANG==='zh'?'🟡 注意':'🟡 Watch'}</span>`,
+    low:  `<span class="ins-level-low">${LANG==='zh'?'一般':'Low'}</span>`,
+    buy:  `<span class="ins-level-buy">${LANG==='zh'?'🟢 買進':'🟢 Buy'}</span>`,
+  };
+  const actionLabel=(r)=>r.action==='buy'
+    ?`<span class="ins-lots-pos">▲ ${r.lots.toLocaleString()} ${LANG==='zh'?'張':'lots'}</span>`
+    :`<span class="ins-lots-neg">▼ ${r.lots.toLocaleString()} ${LANG==='zh'?'張':'lots'}</span>`;
+
+  tbody.innerHTML=rows.slice(0,50).map(r=>`<tr>
+    <td style="white-space:nowrap">${r.date}</td>
+    <td><b style="color:var(--blue)">${r.stock_id}</b> ${r.stock_name}</td>
+    <td>${r.person}</td>
+    <td style="color:var(--muted);font-size:.78rem">${r.title}</td>
+    <td>${actionLabel(r)}</td>
+    <td>${r.action==='buy'?`<span style="color:#3fb950">${LANG==='zh'?'買進':'Buy'}</span>`:`<span style="color:#f85149">${LANG==='zh'?'賣出申報':'Sell Filing'}</span>`}</td>
+    <td>${levelLabel[r.level]||''}</td>
+    <td style="color:var(--muted);font-size:.75rem;white-space:nowrap">${r.period_start||''}${r.period_end?'～'+r.period_end:''}</td>
+  </tr>`).join('');
+}
+
+async function loadInsider(){
+  try{
+    const d=await fetch('./data/insider_data.json?_='+Date.now()).then(r=>r.json());
+    renderInsider(d);
+  }catch(e){
+    const tbody=document.getElementById('insider-tbody');
+    if(tbody)tbody.innerHTML=`<tr><td colspan="8" class="no-insider">${LANG==='zh'?'尚無異動申報資料（每日盤後更新）':'No data yet (updated after market close)'}</td></tr>`;
+  }
+}
+
 async function loadScreener(){
   try{
     const d=await fetch('./data/screener_data.json?_='+Date.now()).then(r=>r.json());
@@ -667,10 +775,11 @@ function closeWatchlist(){document.getElementById('watchlist-panel').style.displ
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
-load();loadRealtime();loadScreener();
+load();loadRealtime();loadScreener();loadInsider();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
 setInterval(loadScreener,3600000);
+setInterval(loadInsider,3600000);
 </script>
 </body>
 </html>
