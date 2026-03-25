@@ -335,7 +335,8 @@ footer a{color:var(--blue);text-decoration:none}
     <div class="kpi-icon">🔥</div>
     <div class="kpi-label" data-zh="最新鎖碼個股數" data-en="Lock Signals (Latest)">最新鎖碼個股數</div>
     <div class="kpi-value" id="kpi-locks">—</div>
-    <div class="kpi-sub" data-zh="▾ 點擊展開鎖碼清單" data-en="▾ Click to view lock stocks">▾ 點擊展開鎖碼清單</div>
+    <div class="kpi-sub">▾ <span data-zh="點擊展開鎖碼清單" data-en="Click to view lock stocks">點擊展開鎖碼清單</span></div>
+    <div id="kpi-lock-meta" style="font-size:.68rem;color:var(--muted);margin-top:.3rem;line-height:1.5;pointer-events:none"></div>
   </div>
 </div>
 
@@ -618,6 +619,7 @@ function computeStats(rawData, days){
     total_runs:runs.length,total_stocks:Object.keys(stockCnt).length,
     latest_date:fmt(latestDt)+' '+latestDt.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}),
     lock_latest:(latestRun.stocks||[]).filter(s=>s.is_lock).length,
+    latest_run_ts: latestRun.ts,
     latest_summary:latestRun.summary||'',latest_stocks:latestS,
     date_range:`${fmt(dates.reduce((a,b)=>a<b?a:b))} ~ ${fmt(dates.reduce((a,b)=>a>b?a:b))}`,
     file_mtime:fmt(latestDt),
@@ -764,6 +766,35 @@ function render(d){
   document.getElementById('kpi-mtime').textContent=(LANG==='zh'?'資料更新：':'Updated: ')+(d.file_mtime||'—');
   document.getElementById('kpi-locks').textContent=d.lock_latest>0?d.lock_latest:(LANG==='zh'?'無':'None');
   LOCK_STOCKS=(d.latest_stocks||[]).filter(s=>s.is_lock);
+  // 鎖碼 KPI 補充資訊：判斷時間 + 排程說明
+  (function(){
+    const el=document.getElementById('kpi-lock-meta');
+    if(!el) return;
+    const zh=LANG!=='en';
+    const ts=d.latest_run_ts;
+    let runLine='';
+    if(ts){
+      const dt=new Date(ts*1000);
+      const tw=new Date(dt.getTime()+dt.getTimezoneOffset()*60000+8*3600000);
+      const mm=String(tw.getMonth()+1).padStart(2,'0'),dd=String(tw.getDate()).padStart(2,'0');
+      const hh=String(tw.getHours()).padStart(2,'0'),mi=String(tw.getMinutes()).padStart(2,'0');
+      runLine=zh?`📅 判斷時間：${mm}/${dd} ${hh}:${mi}`:`📅 As of: ${mm}/${dd} ${hh}:${mi}`;
+    }
+    // 判斷今天是否已有盤後資料（台北時間 16:30 後）
+    const now=new Date();
+    const twNow=new Date(now.getTime()+now.getTimezoneOffset()*60000+8*3600000);
+    const twMins=twNow.getHours()*60+twNow.getMinutes();
+    const isWeekend=twNow.getDay()===0||twNow.getDay()===6;
+    let scheduleLine='';
+    if(isWeekend){
+      scheduleLine=zh?'⏸ 今日休市':'⏸ Market closed today';
+    } else if(twMins < 16*60+30){
+      scheduleLine=zh?'⏳ 盤後 16:30 更新':'⏳ Updates after 16:30';
+    } else {
+      scheduleLine=zh?'✅ 今日盤後資料已就緒':'✅ Today\'s data ready';
+    }
+    el.innerHTML=[runLine,scheduleLine].filter(Boolean).join('<br>');
+  })();
   document.getElementById('file-status').textContent=(LANG==='zh'?'更新：':'Updated: ')+(d.file_mtime||'—');
   CHART_DATA=d;renderCharts(d);
   document.getElementById('summary-box').textContent=d.latest_summary||'—';
