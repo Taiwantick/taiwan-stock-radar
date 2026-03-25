@@ -1479,7 +1479,7 @@ async function loadGlobalTicker(){
       _tickerHtml('💱','USD/TWD',twd.price,twd.prev,'https://finance.yahoo.com/quote/USDTWD%3DX',2);
     const now=new Date();
     const hm=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-    document.getElementById('ticker-updated').textContent='🟢 LIVE · '+hm;
+    document.getElementById('ticker-updated').textContent='🟢 LIVE · '+hm+' · 每60秒更新';
   }catch(e){
     // 失敗時 fallback 讀靜態檔
     try{
