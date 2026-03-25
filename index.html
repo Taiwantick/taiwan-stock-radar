@@ -104,6 +104,21 @@ header{
 .lock-reason{font-size:.76rem;color:var(--muted);line-height:1.55;padding:.2rem .3rem .1rem}
 .lock-reason span{color:var(--text);font-weight:500}
 #lock-overlay{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.45)}
+/* ─── Sector Panel ─── */
+#sector-overlay{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.5)}
+#sector-panel{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:300;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;box-shadow:0 16px 48px rgba(0,0,0,.75);width:min(600px,95vw);max-height:84vh;overflow-y:auto}
+#sector-panel h3{font-size:.9rem;font-weight:700;margin-bottom:.9rem;color:var(--text);display:flex;justify-content:space-between;align-items:center}
+#sector-panel h3 button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;padding:.1rem .3rem}
+#sector-panel h3 button:hover{color:var(--text)}
+.sec-block{margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid #21262d}
+.sec-block:last-child{border-bottom:none;margin-bottom:0}
+.sec-block-title{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;margin-bottom:.45rem}
+.sec-stock-row{display:flex;justify-content:space-between;align-items:center;padding:.22rem .3rem;font-size:.78rem;border-radius:4px}
+.sec-stock-row:hover{background:rgba(88,166,255,.06)}
+.sec-stock-sid{color:var(--blue);font-weight:600;min-width:2.8rem}
+.sec-stock-name{flex:1;padding:0 .4rem;color:var(--text)}
+.sec-stock-price{color:var(--muted);min-width:3.5rem;text-align:right}
+.sec-stock-pct{font-weight:700;min-width:4rem;text-align:right}
 
 /* ─── KPI ─── */
 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.3rem 2rem}
@@ -391,11 +406,13 @@ footer a{color:var(--blue);text-decoration:none}
     <div class="kpi-value">25 <span style="font-size:1rem;font-weight:400" data-zh="檔" data-en="stocks">檔</span></div>
     <div class="kpi-sub" data-zh="▾ 點擊展開清單" data-en="▾ Click to expand">▾ 點擊展開清單</div>
   </div>
-  <div class="kpi">
-    <div class="kpi-icon">🕐</div>
-    <div class="kpi-label" data-zh="最新分析時間" data-en="Latest Analysis">最新分析時間</div>
-    <div class="kpi-value sm" id="kpi-latest">—</div>
-    <div class="kpi-sub"      id="kpi-mtime">—</div>
+  <div class="kpi" onclick="toggleSectorPanel(event)" style="cursor:pointer">
+    <div class="kpi-icon">📊</div>
+    <div class="kpi-label" data-zh="電子板塊表現" data-en="Sector Performance">電子板塊表現</div>
+    <div id="kpi-sector-list" style="font-size:.72rem;line-height:1.75;margin:.35rem 0 .25rem">
+      <span style="color:var(--muted)">載入中…</span>
+    </div>
+    <div class="kpi-sub">▾ <span data-zh="點擊看成分股明細" data-en="Click for details">點擊看成分股明細</span></div>
   </div>
   <div class="kpi" onclick="toggleLockPanel(event)" style="cursor:pointer">
     <div class="kpi-icon">🔥</div>
@@ -1431,6 +1448,21 @@ document.body.insertAdjacentHTML('beforeend',`
   </div>
 `);
 
+/* ─── Sector Panel HTML ─── */
+document.body.insertAdjacentHTML('beforeend',`
+  <div id="sector-overlay" onclick="closeSectorPanel()"></div>
+  <div id="sector-panel">
+    <h3>
+      <span>📊 <span data-zh="電子板塊成分股" data-en="Sector Details">電子板塊成分股</span></span>
+      <button onclick="closeSectorPanel()">✕</button>
+    </h3>
+    <div id="sector-panel-body"></div>
+    <div style="font-size:.7rem;color:var(--muted);margin-top:.9rem;text-align:center;border-top:1px solid #21262d;padding-top:.6rem">
+      資料來源：Yahoo Finance · 每 60 秒更新
+    </div>
+  </div>
+`);
+
 function buildLockReason(s){
   const parts=[];
   const trend=s.trend_state||'';
@@ -1567,6 +1599,129 @@ function _tickerHtml(emoji,label,price,prev,url,decimals=1){
     ` <span class="${cls}">(${sign}${pct.toFixed(2)}%)</span></a>`;
 }
 
+/* ════════════════════════════════════════════
+   電子板塊表現
+   ════════════════════════════════════════════ */
+const SECTORS = [
+  { name:'IC設計', icon:'🧠', stocks:[
+    {sid:'2454',name:'聯發科', yf:'2454.TW'},
+    {sid:'3034',name:'聯詠',   yf:'3034.TW'},
+    {sid:'2379',name:'瑞昱',   yf:'2379.TW'},
+    {sid:'6415',name:'矽力-KY',yf:'6415.TW'}
+  ]},
+  { name:'PCB', icon:'🔌', stocks:[
+    {sid:'2313',name:'華通',   yf:'2313.TW'},
+    {sid:'3037',name:'欣興',   yf:'3037.TW'},
+    {sid:'2367',name:'燿華',   yf:'2367.TW'},
+    {sid:'3044',name:'健鼎',   yf:'3044.TW'},
+    {sid:'8046',name:'南電',   yf:'8046.TW'}
+  ]},
+  { name:'記憶體', icon:'💾', stocks:[
+    {sid:'2303',name:'南亞科', yf:'2303.TW'},
+    {sid:'2337',name:'旺宏',   yf:'2337.TW'},
+    {sid:'2344',name:'華邦電', yf:'2344.TW'}
+  ]},
+  { name:'被動元件', icon:'⚙️', stocks:[
+    {sid:'2327',name:'國巨',   yf:'2327.TW'},
+    {sid:'2492',name:'華新科', yf:'2492.TW'},
+    {sid:'2351',name:'順德',   yf:'2351.TW'}
+  ]},
+  { name:'組裝代工', icon:'🖥️', stocks:[
+    {sid:'2317',name:'鴻海',   yf:'2317.TW'},
+    {sid:'2382',name:'廣達',   yf:'2382.TW'},
+    {sid:'3231',name:'緯創',   yf:'3231.TW'},
+    {sid:'2324',name:'仁寶',   yf:'2324.TW'}
+  ]},
+  { name:'低軌衛星', icon:'🛰️', stocks:[
+    {sid:'2314',name:'台揚',   yf:'2314.TW'},
+    {sid:'3491',name:'昇達科', yf:'3491.TWO'},
+    {sid:'6271',name:'同欣電', yf:'6271.TWO'},
+    {sid:'4977',name:'眾達-KY',yf:'4977.TW'}
+  ]}
+];
+
+let _sectorData = [];
+
+async function _yfPrice(symbol){
+  try{
+    const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d&includePrePost=false`;
+    const r=await fetch(url);
+    const d=await r.json();
+    if(!d.chart||!d.chart.result||!d.chart.result[0]) return null;
+    const meta=d.chart.result[0].meta;
+    const price=meta.regularMarketPrice;
+    const prev=meta.chartPreviousClose||meta.regularMarketPrice;
+    const pct=prev?((price-prev)/prev*100):0;
+    return{price,pct};
+  }catch(e){return null;}
+}
+
+async function loadSectors(){
+  const results=await Promise.all(SECTORS.map(async sector=>{
+    const stocks=await Promise.all(sector.stocks.map(async s=>{
+      const d=await _yfPrice(s.yf);
+      return{...s,...(d||{price:null,pct:null})};
+    }));
+    const valid=stocks.filter(s=>s.pct!==null);
+    const avgPct=valid.length?valid.reduce((a,b)=>a+b.pct,0)/valid.length:null;
+    return{...sector,stocks,avgPct};
+  }));
+  _sectorData=results;
+  renderSectorKpi();
+  const body=document.getElementById('sector-panel-body');
+  if(body&&document.getElementById('sector-panel').style.display==='block') renderSectorPanel();
+}
+
+function _pctColor(v){return v>0.3?'#3fb950':v<-0.3?'#f85149':'#a8b1bb';}
+function _pctStr(v){if(v===null)return'—';return(v>=0?'+':'')+v.toFixed(2)+'%';}
+
+function renderSectorKpi(){
+  const el=document.getElementById('kpi-sector-list');
+  if(!el)return;
+  el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.05rem .5rem">'+
+    _sectorData.map(s=>{
+      const c=_pctColor(s.avgPct??0);
+      const str=_pctStr(s.avgPct);
+      const col=s.avgPct===null?'var(--muted)':c;
+      return`<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">`+
+        `${s.icon}<span style="color:var(--muted)"> ${s.name}</span> `+
+        `<span style="color:${col};font-weight:600">${str}</span></div>`;
+    }).join('')+
+  '</div>';
+}
+
+function renderSectorPanel(){
+  const body=document.getElementById('sector-panel-body');
+  if(!body)return;
+  body.innerHTML=_sectorData.map(sector=>{
+    const ac=_pctColor(sector.avgPct??0);
+    const avgStr=sector.avgPct!==null
+      ?`<span style="color:${ac};font-size:.88rem">${_pctStr(sector.avgPct)} 均</span>`
+      :'<span style="color:var(--muted)">—</span>';
+    const rows=sector.stocks.map(s=>{
+      if(s.pct===null)return`<div class="sec-stock-row"><span class="sec-stock-sid">${s.sid}</span><span class="sec-stock-name">${s.name}</span><span class="sec-stock-price">—</span><span class="sec-stock-pct" style="color:var(--muted)">—</span></div>`;
+      const c=_pctColor(s.pct);
+      return`<div class="sec-stock-row"><span class="sec-stock-sid">${s.sid}</span><span class="sec-stock-name">${s.name}</span><span class="sec-stock-price">${s.price?.toFixed(1)??'—'}</span><span class="sec-stock-pct" style="color:${c}">${_pctStr(s.pct)}</span></div>`;
+    }).join('');
+    return`<div class="sec-block"><div class="sec-block-title">${sector.icon} ${sector.name} ${avgStr}</div>${rows}</div>`;
+  }).join('');
+}
+
+function toggleSectorPanel(e){
+  if(e)e.stopPropagation();
+  const p=document.getElementById('sector-panel');
+  if(p.style.display==='block'){closeSectorPanel();}
+  else{
+    renderSectorPanel();
+    p.style.display='block';
+    document.getElementById('sector-overlay').style.display='block';
+  }
+}
+function closeSectorPanel(){
+  document.getElementById('sector-panel').style.display='none';
+  document.getElementById('sector-overlay').style.display='none';
+}
+
 async function loadGlobalTicker(){
   try{
     const[gold,silver,oil,twd]=await Promise.all([
@@ -1606,10 +1761,11 @@ async function loadGlobalTicker(){
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
-load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();loadNews();
+load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();loadNews();loadSectors();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
 setInterval(loadGlobalTicker,60000); // Ticker 每 60 秒即時刷新
+setInterval(loadSectors,60000);     // 板塊表現每 60 秒更新
 setInterval(loadNews,3600000);   // 重大訊息每小時更新
 setInterval(loadScreener,3600000);
 setInterval(loadInsider,3600000);
