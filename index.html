@@ -791,9 +791,13 @@ function renderRealtime(d){
     const isAsk=a.type==='外盤';const color=isAsk?'#f85149':'#3fb950';
     const bw=Math.max((a.volume/maxVol)*60,6);
     const side=LANG==='zh'?`${a.icon} ${a.type}`:(isAsk?`${a.icon} Ask`:`${a.icon} Bid`);
-    return`<tr><td style="color:var(--muted)">${a.time||'—'}</td><td style="font-weight:600;color:${color}">${a.sid}</td><td>${(a.price||0).toFixed(1)}</td><td>${a.volume||0}<span class="vol-bar" style="width:${bw}px;background:${color}"></span></td><td style="color:${color};font-size:.76rem;white-space:nowrap">${side}</td></tr>`;
+    const name=sidName(a.sid);
+    const sidCell=name
+      ?`<span style="font-weight:600;color:${color}">${a.sid}</span><br><span style="font-size:.72rem;color:var(--muted)">${name}</span>`
+      :`<span style="font-weight:600;color:${color}">${a.sid}</span>`;
+    return`<tr><td style="color:var(--muted)">${a.time||'—'}</td><td>${sidCell}</td><td>${(a.price||0).toFixed(1)}</td><td>${a.volume||0}<span class="vol-bar" style="width:${bw}px;background:${color}"></span></td><td style="color:${color};font-size:.76rem;white-space:nowrap">${side}</td></tr>`;
   }).join('');
-  if(d.by_stock&&d.by_stock.labels.length)barH('c-radar-stock',d.by_stock.labels,d.by_stock.values,'#f85149');
+  if(d.by_stock&&d.by_stock.labels.length)barH('c-radar-stock',d.by_stock.labels.map(sidLabel),d.by_stock.values,'#f85149');
   if(d.side&&d.side.labels.length){
     const sl=LANG==='en'?d.side.labels.map(l=>l.replace('外盤','Ask').replace('內盤','Bid').replace('中性','Neutral')):d.side.labels;
     pie('c-radar-side',sl,d.side.values,false);
@@ -825,6 +829,11 @@ async function load(){
   document.getElementById('status-msg').innerHTML=`<span class="spinner"></span> ${LANG==='zh'?'載入中...':'Loading...'}`;
   try{
     RAW_DATA=await fetch('./data/dashboard_data.json?_='+Date.now()).then(r=>r.json());
+    // 補充名稱對照表
+    (RAW_DATA.runs||[]).forEach(r=>(r.stocks||[]).forEach(s=>{
+      const m=(s.display||'').match(/^(\d+)\s+(.+)/);
+      if(m&&!NAMES_MAP[m[1]]) NAMES_MAP[m[1]]=m[2];
+    }));
     const d=computeStats(RAW_DATA,currentDays);
     render(d);applyLang();
     document.getElementById('status-msg').textContent='';
@@ -909,6 +918,8 @@ async function loadScreener(){
   try{
     const d=await fetch('./data/screener_data.json?_='+Date.now()).then(r=>r.json());
     SCREENER_DATA=d;
+    // 補充名稱對照表
+    (d.results||[]).forEach(r=>{ if(r.sid&&r.name&&!NAMES_MAP[r.sid]) NAMES_MAP[r.sid]=r.name; });
     renderScreener(d);
     renderYoyChart();  // screener 載入後立刻渲染 YoY 圖
   }catch(e){document.getElementById('screener-meta').textContent=LANG==='zh'?'尚無選股資料':'No screener data';}
@@ -1063,6 +1074,10 @@ const WATCHLIST=[
   {sid:'6217',name:'中探針'},{sid:'6285',name:'啟碁'},{sid:'6546',name:'正基'},
   {sid:'6770',name:'力積電'},
 ];
+// ── 個股名稱對照表（SID → name），從 WATCHLIST 初始化，執行時動態補充 ─────
+const NAMES_MAP = Object.fromEntries(WATCHLIST.map(w=>[w.sid, w.name]));
+function sidName(sid){ return NAMES_MAP[sid]||''; }
+function sidLabel(sid){ const n=sidName(sid); return n?`${sid} ${n}`:sid; }
 document.body.insertAdjacentHTML('beforeend',`
   <div id="watchlist-overlay" onclick="closeWatchlist()"></div>
   <div id="watchlist-panel" style="display:none">
