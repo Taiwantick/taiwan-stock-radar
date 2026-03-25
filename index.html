@@ -1334,11 +1334,11 @@ function loadGlobalTicker(){
       function priceHtml(key,emoji,label){
         const item=d[key];
         if(!item||item.price==null) return `${emoji} ${label}: N/A`;
-        const up=item.change&&item.change.startsWith('+');
+        const up=item.change_pct&&item.change_pct.startsWith('+');
         const cls=up?'ticker-up':'ticker-dn';
         return `<a href="${item.url}" target="_blank" rel="noopener">`+
           `${emoji} ${label}: <b>$${item.price.toLocaleString()}</b>`+
-          ` <span class="${cls}">(${item.change})</span></a>`;
+          ` <span class="${cls}">(${item.change_pct})</span></a>`;
       }
       document.getElementById('ticker-gold').innerHTML=priceHtml('gold','🥇','Gold');
       document.getElementById('ticker-silver').innerHTML=priceHtml('silver','🥈','Silver');
@@ -1347,8 +1347,8 @@ function loadGlobalTicker(){
         document.getElementById('ticker-trump').innerHTML=
           `📢 <a href="${d.trump.url}" target="_blank" rel="noopener">${d.trump.title}</a>`;
       }
-      if(d.updated){
-        document.getElementById('ticker-updated').textContent='Updated: '+d.updated;
+      if(d.updated_at){
+        document.getElementById('ticker-updated').textContent='Updated: '+d.updated_at;
       }
     })
     .catch(()=>{});
