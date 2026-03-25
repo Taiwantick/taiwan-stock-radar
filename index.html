@@ -306,8 +306,6 @@ footer a{color:var(--blue);text-decoration:none}
 .ticker-up{color:#3fb950}
 .ticker-dn{color:#f85149}
 .ticker-divider{color:#3a3a6e;user-select:none}
-.ticker-trump a{color:#ffd700}
-.ticker-trump a:hover{color:#ffe55c}
 .ticker-updated{color:#5a5a8e;font-size:.72rem;margin-left:auto}
 </style>
 </head>
@@ -321,7 +319,7 @@ footer a{color:var(--blue);text-decoration:none}
   <span class="ticker-divider">|</span>
   <span class="ticker-item" id="ticker-oil">🛢️ <span style="color:#8b949e">…</span></span>
   <span class="ticker-divider">|</span>
-  <span class="ticker-item ticker-trump" id="ticker-trump">📢 <span style="color:#8b949e">…</span></span>
+  <span class="ticker-item" id="ticker-usdtwd">💱 <span style="color:#8b949e">…</span></span>
   <span class="ticker-updated" id="ticker-updated"></span>
 </div>
 
@@ -1443,31 +1441,61 @@ document.body.insertAdjacentHTML('beforeend',`
 `);
 
 // ── Global Ticker ─────────────────────────────────────────────────────────────
-function loadGlobalTicker(){
-  fetch('global_data.json?_='+Date.now())
-    .then(r=>r.json())
-    .then(d=>{
+// ── Global Ticker (即時 Yahoo Finance) ────────────────────────────────────────
+async function _yahooPrice(symbol){
+  const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d&includePrePost=false`;
+  const r=await fetch(url);
+  const d=await r.json();
+  const meta=d.chart.result[0].meta;
+  return{price:meta.regularMarketPrice,prev:meta.chartPreviousClose||meta.regularMarketPrice};
+}
+
+function _tickerHtml(emoji,label,price,prev,url,decimals=1){
+  if(price==null) return `${emoji} ${label}: <span style="color:var(--muted)">N/A</span>`;
+  const pct=(price-prev)/prev*100;
+  const sign=pct>=0?'+':'';
+  const cls=pct>=0?'ticker-up':'ticker-dn';
+  const fmt=price.toLocaleString(undefined,{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
+  return `<a href="${url}" target="_blank" rel="noopener">`+
+    `${emoji} ${label}: <b>${fmt}</b>`+
+    ` <span class="${cls}">(${sign}${pct.toFixed(2)}%)</span></a>`;
+}
+
+async function loadGlobalTicker(){
+  try{
+    const[gold,silver,oil,twd]=await Promise.all([
+      _yahooPrice('GC=F'),
+      _yahooPrice('SI=F'),
+      _yahooPrice('CL=F'),
+      _yahooPrice('USDTWD=X'),
+    ]);
+    document.getElementById('ticker-gold').innerHTML=
+      _tickerHtml('🥇','Gold',gold.price,gold.prev,'https://finance.yahoo.com/quote/GC%3DF');
+    document.getElementById('ticker-silver').innerHTML=
+      _tickerHtml('🥈','Silver',silver.price,silver.prev,'https://finance.yahoo.com/quote/SI%3DF');
+    document.getElementById('ticker-oil').innerHTML=
+      _tickerHtml('🛢️','Oil',oil.price,oil.prev,'https://finance.yahoo.com/quote/CL%3DF');
+    document.getElementById('ticker-usdtwd').innerHTML=
+      _tickerHtml('💱','USD/TWD',twd.price,twd.prev,'https://finance.yahoo.com/quote/USDTWD%3DX',2);
+    const now=new Date();
+    const hm=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    document.getElementById('ticker-updated').textContent='🟢 LIVE · '+hm;
+  }catch(e){
+    // 失敗時 fallback 讀靜態檔
+    try{
+      const d=await fetch('global_data.json?_='+Date.now()).then(r=>r.json());
       function priceHtml(key,emoji,label){
-        const item=d[key];
-        if(!item||item.price==null) return `${emoji} ${label}: N/A`;
-        const up=item.change_pct&&item.change_pct.startsWith('+');
-        const cls=up?'ticker-up':'ticker-dn';
-        return `<a href="${item.url}" target="_blank" rel="noopener">`+
-          `${emoji} ${label}: <b>$${item.price.toLocaleString()}</b>`+
-          ` <span class="${cls}">(${item.change_pct})</span></a>`;
+        const item=d[key];if(!item||item.price==null)return`${emoji} ${label}: N/A`;
+        const cls=item.change_pct&&item.change_pct.startsWith('+')?'ticker-up':'ticker-dn';
+        return`<a href="${item.url}" target="_blank" rel="noopener">${emoji} ${label}: <b>$${item.price.toLocaleString()}</b> <span class="${cls}">(${item.change_pct})</span></a>`;
       }
       document.getElementById('ticker-gold').innerHTML=priceHtml('gold','🥇','Gold');
       document.getElementById('ticker-silver').innerHTML=priceHtml('silver','🥈','Silver');
       document.getElementById('ticker-oil').innerHTML=priceHtml('oil','🛢️','Oil');
-      if(d.trump){
-        document.getElementById('ticker-trump').innerHTML=
-          `📢 <a href="${d.trump.url}" target="_blank" rel="noopener">${d.trump.title}</a>`;
-      }
-      if(d.updated_at){
-        document.getElementById('ticker-updated').textContent='Updated: '+d.updated_at;
-      }
-    })
-    .catch(()=>{});
+      document.getElementById('ticker-usdtwd').innerHTML='💱 USD/TWD: —';
+      if(d.updated_at) document.getElementById('ticker-updated').textContent='Updated: '+d.updated_at;
+    }catch(e2){}
+  }
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
@@ -1475,6 +1503,7 @@ if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList
 load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
+setInterval(loadGlobalTicker,60000); // Ticker 每 60 秒即時刷新
 setInterval(loadScreener,3600000);
 setInterval(loadInsider,3600000);
 setInterval(loadKline,3600000);
