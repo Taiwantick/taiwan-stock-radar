@@ -202,6 +202,25 @@ header{
 .empty-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;display:inline-block;font-size:.85rem;line-height:2;text-align:left}
 .empty-box code{background:var(--card2);padding:.15rem .4rem;border-radius:4px;font-family:'Menlo','Courier New',monospace}
 
+/* ─── Why Taiwan ─── */
+.why-section{background:linear-gradient(180deg,#0d1b2a 0%,#0e1117 100%);border-top:1px solid #1a3a52;padding:2.5rem 2rem 2rem}
+.why-inner{max-width:960px;margin:0 auto}
+.why-title{font-size:1.05rem;font-weight:700;color:#e8f4ff;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.why-flag{font-size:1.3rem}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.4rem}
+.why-card{background:rgba(86,199,255,.05);border:1px solid #1a3a52;border-radius:10px;padding:1rem;transition:border-color .2s}
+.why-card:hover{border-color:#56c7ff}
+.why-card-icon{font-size:1.4rem;margin-bottom:.4rem}
+.why-card-title{font-size:.82rem;font-weight:700;color:#56c7ff;margin-bottom:.4rem}
+.why-card-body{font-size:.77rem;color:#8baec8;line-height:1.55}
+.why-links{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.why-links a{color:#56c7ff;text-decoration:none;font-weight:600}
+.why-links a:hover{text-decoration:underline}
+@media(max-width:640px){
+  .why-grid{grid-template-columns:repeat(2,1fr)}
+  .why-section{padding:1.5rem 1rem}
+}
+
 /* ─── Footer ─── */
 footer{text-align:center;padding:2rem;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border)}
 footer a{color:var(--blue);text-decoration:none}
@@ -263,8 +282,8 @@ footer a{color:var(--blue);text-decoration:none}
   <div class="header-left">
     <span class="logo">📊</span>
     <div class="header-titles">
-      <h1 data-zh="台股智能儀表板" data-en="Taiwan Stock Intelligence Dashboard">台股智能儀表板</h1>
-      <p data-zh="📡 今日大單記錄 · 📈 盤後深度分析 · by Taiwan Tick" data-en="📡 Daily Large-Order Log · 📈 After-Market Analysis · by Taiwan Tick">📡 今日大單記錄 · 📈 盤後深度分析 · by Taiwan Tick</p>
+      <h1 data-zh="台股智能儀表板" data-en="Taiwan Stock Radar">台股智能儀表板</h1>
+      <p data-zh="📡 今日大單記錄 · 📈 盤後深度分析 · by Taiwan Tick" data-en="📡 Real-time large-order alerts · 📈 After-market deep analysis · Let the world invest in Taiwan 🇹🇼">📡 今日大單記錄 · 📈 盤後深度分析 · by Taiwan Tick</p>
     </div>
   </div>
   <div class="header-right">
@@ -525,10 +544,49 @@ footer a{color:var(--blue);text-decoration:none}
   </div>
 </div>
 
+<!-- ═══ Why Invest in Taiwan (EN-focused) ════════════════════════════════════ -->
+<div class="why-section" id="why-taiwan">
+  <div class="why-inner">
+    <div class="why-title">
+      <span class="why-flag">🇹🇼</span>
+      <span data-zh="為什麼投資台灣？" data-en="Why Invest in Taiwan?">為什麼投資台灣？</span>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-card-icon">💡</div>
+        <div class="why-card-title" data-zh="半導體心臟" data-en="Semiconductor Heartbeat">半導體心臟</div>
+        <div class="why-card-body" data-zh="台灣製造全球超過 60% 的先進晶片。沒有台灣，AI、iPhone、資料中心都將停擺。" data-en="Taiwan manufactures over 60% of the world's advanced chips. Without Taiwan, AI, iPhones, and data centers stop.">台灣製造全球超過 60% 的先進晶片。沒有台灣，AI、iPhone、資料中心都將停擺。</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">📈</div>
+        <div class="why-card-title" data-zh="深度價值" data-en="Deep Value">深度價值</div>
+        <div class="why-card-body" data-zh="台股本益比長期低於全球均值，台灣企業擁有高殖利率與強勁現金流，被低估的優質資產。" data-en="Taiwan stocks trade at persistent discounts to global peers, with high dividend yields and strong cash flows — a deeply undervalued tech powerhouse.">台股本益比長期低於全球均值，台灣企業擁有高殖利率與強勁現金流，被低估的優質資產。</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">🛡️</div>
+        <div class="why-card-title" data-zh="投資即守護" data-en="Investment = Security">投資即守護</div>
+        <div class="why-card-body" data-zh="全球越多投資人持有台股，台灣的經濟韌性就越強。讓世界與台灣的利益緊密相連，是最好的和平保障。" data-en="The more global investors hold Taiwan equities, the more the world has a stake in Taiwan's stability. Economic interdependence is the best peace guarantee.">全球越多投資人持有台股，台灣的經濟韌性就越強。讓世界與台灣的利益緊密相連，是最好的和平保障。</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">🌏</div>
+        <div class="why-card-title" data-zh="開始投資台灣" data-en="Start Investing">開始投資台灣</div>
+        <div class="why-card-body" data-zh="外國投資人可透過 ETF（如 006208 富邦台50）輕鬆佈局台股，或透過國際券商直接參與個股。" data-en="Foreign investors can access Taiwan equities via ETFs like 006208 (Fubon TWSE 50) or directly through international brokers.">外國投資人可透過 ETF（如 006208 富邦台50）輕鬆佈局台股，或透過國際券商直接參與個股。</div>
+      </div>
+    </div>
+    <div class="why-links">
+      <span data-zh="深入了解台灣：" data-en="Learn more about Taiwan:">深入了解台灣：</span>
+      <a href="https://taiwan.md" target="_blank" rel="noopener">🇹🇼 taiwan.md — Open Knowledge Base</a>
+      <span style="color:var(--border)">·</span>
+      <a href="https://github.com/Taiwantick/taiwan-stock-radar" target="_blank" rel="noopener">📊 Open Source Dashboard</a>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ Footer ════════════════════════════════════════════════════════════════ -->
 <footer>
   <p data-zh="台股智能儀表板 · 資料僅供參考，不構成投資建議" data-en="Taiwan Stock Intelligence Dashboard · Data for reference only, not investment advice">台股智能儀表板 · 資料僅供參考，不構成投資建議</p>
-  <p style="margin-top:.4rem">by <a href="https://github.com/Taiwantick" target="_blank">Taiwan Tick</a> · Powered by <a href="https://github.com/Taiwantick/taiwan-stock-radar" target="_blank">taiwan-stock-radar</a></p>
+  <p style="margin-top:.4rem">by <a href="https://github.com/Taiwantick" target="_blank">Taiwan Tick</a> · Powered by <a href="https://github.com/Taiwantick/taiwan-stock-radar" target="_blank">taiwan-stock-radar</a>
+  · <a href="https://taiwan.md" target="_blank" rel="noopener">🇹🇼 taiwan.md</a></p>
 </footer>
 
 <!-- ═══ Script ════════════════════════════════════════════════════════════════ -->
