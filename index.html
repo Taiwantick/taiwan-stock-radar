@@ -932,8 +932,11 @@ function render(d){
   if(!d||!d.total_runs){empty.style.display='block';return;}
   empty.style.display='none';
   // kpi-runs / kpi-range 已移除，改為今日重大訊息（由 loadNews() 處理）
-  document.getElementById('kpi-latest').textContent=d.latest_date||'—';
-  document.getElementById('kpi-mtime').textContent=(LANG==='zh'?'資料更新：':'Updated: ')+(d.file_mtime||'—');
+  // kpi-latest / kpi-mtime 已被板塊表現卡取代，保留 null guard 避免報錯
+  const _el_latest=document.getElementById('kpi-latest');
+  const _el_mtime=document.getElementById('kpi-mtime');
+  if(_el_latest)_el_latest.textContent=d.latest_date||'—';
+  if(_el_mtime)_el_mtime.textContent=(LANG==='zh'?'資料更新：':'Updated: ')+(d.file_mtime||'—');
   document.getElementById('kpi-locks').textContent=d.lock_latest>0?d.lock_latest:(LANG==='zh'?'無':'None');
   LOCK_STOCKS=(d.latest_stocks||[]).filter(s=>s.is_lock);
   // 鎖碼 KPI 補充資訊：判斷時間 + 排程說明
@@ -1198,8 +1201,9 @@ async function load(){
     const dateStr=`${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`;
     const timeStr=`${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
     const ampm=dt.getHours()<12?(LANG==='zh'?'上午':'AM'):(LANG==='zh'?'下午':'PM');
-    document.getElementById('kpi-latest').textContent=`${dateStr} ${ampm}${timeStr}`;
-    document.getElementById('kpi-mtime').textContent=(LANG==='zh'?'資料更新：':'Updated: ')+dateStr;
+    const _l=document.getElementById('kpi-latest');const _m=document.getElementById('kpi-mtime');
+    if(_l)_l.textContent=`${dateStr} ${ampm}${timeStr}`;
+    if(_m)_m.textContent=(LANG==='zh'?'資料更新：':'Updated: ')+dateStr;
   }catch(e){}
 }
 
