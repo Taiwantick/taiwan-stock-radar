@@ -220,6 +220,18 @@ footer a{color:var(--blue);text-decoration:none}
 #reload-toast button{background:none;border:1px solid rgba(86,199,255,.4);color:#a0c8e8;border-radius:4px;padding:.15rem .5rem;cursor:pointer;font-size:.75rem}
 #reload-toast button:hover{color:#fff;border-color:#56c7ff}
 
+/* ── 訊號個股彈窗 ────────────────────────────────────────────────────── */
+#sig-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;z-index:500;min-width:260px;max-width:360px;width:90%;max-height:70vh;overflow-y:auto;display:none;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+#sig-panel h3{font-size:.9rem;font-weight:700;margin-bottom:.8rem;display:flex;justify-content:space-between;align-items:center}
+#sig-panel h3 button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;padding:.1rem .3rem}
+#sig-panel h3 button:hover{color:var(--text)}
+.sig-stock-item{display:flex;align-items:center;gap:.6rem;padding:.45rem .5rem;border-radius:6px;margin-bottom:.3rem;background:rgba(255,255,255,.04);font-size:.82rem}
+.sig-stock-item:hover{background:rgba(86,199,255,.08)}
+.sig-stock-sid{font-weight:700;color:#56c7ff;min-width:3.2rem}
+.sig-stock-name{color:var(--text);flex:1}
+.sig-stock-score{font-size:.75rem;color:var(--muted)}
+#sig-overlay{display:none;position:fixed;inset:0;z-index:499;background:rgba(0,0,0,.45)}
+
 /* ── K線圖區塊 ─────────────────────────────────────────────────────── */
 .kline-section{padding:0 2rem 1rem;margin-bottom:1rem}
 .kline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
@@ -455,12 +467,12 @@ footer a{color:var(--blue);text-decoration:none}
 <div class="section">
   <div class="g2">
     <div class="card">
-      <div class="card-title" data-zh="📅 每日分析頻率" data-en="📅 Daily Analysis Frequency">📅 每日分析頻率</div>
+      <div class="card-title" data-zh="🚀 YoY 營收最強 Top 10" data-en="🚀 Revenue YoY Top 10">🚀 YoY 營收最強 Top 10</div>
       <div class="ch"><canvas id="c-daily"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title" data-zh="🎯 訊號分佈（鎖碼 / 多頭強 / 觀察）" data-en="🎯 Signal Distribution">🎯 訊號分佈（鎖碼 / 多頭強 / 觀察）</div>
-      <div class="ch"><canvas id="c-signals"></canvas></div>
+      <div class="card-title" data-zh="🎯 訊號分佈（鎖碼 / 多頭強 / 觀察）" data-en="🎯 Signal Distribution">🎯 訊號分佈（鎖碼 / 多頭強 / 觀察）<span style="font-size:.7rem;color:var(--muted);font-weight:400;margin-left:.4rem" data-zh="點擊區塊查看個股" data-en="Click to view stocks">點擊區塊查看個股</span></div>
+      <div class="ch"><canvas id="c-signals" style="cursor:pointer"></canvas></div>
     </div>
   </div>
   <div class="g2">
@@ -610,7 +622,13 @@ function computeStats(rawData, days){
     date_range:`${fmt(dates.reduce((a,b)=>a<b?a:b))} ~ ${fmt(dates.reduce((a,b)=>a>b?a:b))}`,
     file_mtime:fmt(latestDt),
     daily:{labels:Object.keys(daily),values:Object.values(daily)},
-    signals:{labels:Object.keys(signalCnt),values:Object.values(signalCnt)},
+    signals:{labels:Object.keys(signalCnt),values:Object.values(signalCnt),
+      stocks:{
+        '🔥 主力鎖碼':(latestRun.stocks||[]).filter(s=>s.is_lock),
+        '✅ 多頭續強':(latestRun.stocks||[]).filter(s=>!s.is_lock&&s.is_strong),
+        '👀 觀察名單':(latestRun.stocks||[]).filter(s=>!s.is_lock&&!s.is_strong),
+      }
+    },
     trends:{labels:Object.keys(trendCnt),values:Object.values(trendCnt)},
     top_stocks:{labels:topStocks.map(s=>s[0]),values:topStocks.map(s=>s[1])},
     top_scores:{labels:topScores.map(s=>s[0]),values:topScores.map(s=>(s[1]*10|0)/10)},
@@ -647,9 +665,83 @@ function barV(id,labels,values,color){destroy(id);charts[id]=new Chart(document.
 function barH(id,labels,values,color){destroy(id);charts[id]=new Chart(document.getElementById(id).getContext('2d'),{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:color+'bb',borderColor:color,borderWidth:1,borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:TC,font:{size:10}},grid:{color:GC}},y:{ticks:{color:TC,font:{size:10}},grid:{color:GC}}}}});}
 function pie(id,labels,values,doughnut=true){destroy(id);charts[id]=new Chart(document.getElementById(id).getContext('2d'),{type:doughnut?'doughnut':'pie',data:{labels,datasets:[{data:values,backgroundColor:COLORS.slice(0,labels.length),borderColor:'#161b22',borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#e6edf3',font:{size:11},padding:9,boxWidth:12}}}}});}
 
+let SIGNAL_STOCKS={};   // 全域：訊號 → 個股陣列
+let SCREENER_DATA=null; // 全域：screener_data.json
+
+function renderYoyChart(){
+  if(!SCREENER_DATA||!SCREENER_DATA.results) return;
+  const top10=[...SCREENER_DATA.results].sort((a,b)=>b.yoy-a.yoy).slice(0,10);
+  const labels=top10.map(r=>`${r.sid} ${r.name}`);
+  const values=top10.map(r=>r.yoy);
+  const colors=values.map(v=>v>=200?'#f85149bb':v>=100?'#ffa600bb':'#3fb950bb');
+  const borders=values.map(v=>v>=200?'#f85149':v>=100?'#ffa600':'#3fb950');
+  destroy('c-daily');
+  charts['c-daily']=new Chart(document.getElementById('c-daily').getContext('2d'),{
+    type:'bar',
+    data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:borders,borderWidth:1,borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`YoY +${ctx.raw.toFixed(1)}%`}}},
+      scales:{
+        x:{ticks:{color:TC,font:{size:10},callback:v=>`+${v}%`},grid:{color:GC}},
+        y:{ticks:{color:'#e6edf3',font:{size:10}},grid:{color:GC}}
+      }
+    }
+  });
+}
+
+function openSigPanel(label, stocks){
+  const panel=document.getElementById('sig-panel');
+  const overlay=document.getElementById('sig-overlay');
+  if(!panel||!overlay) return;
+  const zh=LANG!=='en';
+  const dispLabel=zh?label:(SIG_EN[label]||label);
+  panel.innerHTML=`
+    <h3><span>${dispLabel}（${stocks.length} ${zh?'檔':'stocks'}）</span><button onclick="closeSigPanel()">✕</button></h3>
+    ${stocks.length?stocks.map(s=>`
+      <div class="sig-stock-item">
+        <span class="sig-stock-sid">${(s.display||s.sid||'').split(' ')[0]||s.sid}</span>
+        <span class="sig-stock-name">${(s.display||s.sid||'').replace(/^\S+\s*/,'')}</span>
+        <span class="sig-stock-score">${s.score!=null?`${zh?'分數':'Score'}: ${s.score}`:''}</span>
+      </div>`).join('')
+    :`<div style="color:var(--muted);text-align:center;padding:1rem">${zh?'本次無此類個股':'No stocks in this category'}</div>`}
+  `;
+  panel.style.display='block';
+  overlay.style.display='block';
+}
+function closeSigPanel(){
+  document.getElementById('sig-panel').style.display='none';
+  document.getElementById('sig-overlay').style.display='none';
+}
+document.body.insertAdjacentHTML('beforeend',`
+  <div id="sig-overlay" onclick="closeSigPanel()"></div>
+  <div id="sig-panel"></div>
+`);
+
 function renderCharts(d){
-  if(d.daily.labels.length)barV('c-daily',d.daily.labels,d.daily.values,'#388bfd');
-  if(d.signals.labels.length)pie('c-signals',d.signals.labels.map(transSignal),d.signals.values);
+  // YoY 圖（screener 資料一旦載入就渲染，否則先留空）
+  renderYoyChart();
+  // 訊號分布（可點擊）
+  if(d.signals.labels.length){
+    SIGNAL_STOCKS=d.signals.stocks||{};
+    destroy('c-signals');
+    const sigLabels=d.signals.labels.map(transSignal);
+    charts['c-signals']=new Chart(document.getElementById('c-signals').getContext('2d'),{
+      type:'doughnut',
+      data:{labels:sigLabels,datasets:[{data:d.signals.values,backgroundColor:COLORS.slice(0,sigLabels.length),borderColor:'#161b22',borderWidth:2,hoverOffset:10}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'right',labels:{color:'#e6edf3',font:{size:11},padding:9,boxWidth:12}},
+          tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} ${LANG==='zh'?'次':'times'}`}}
+        },
+        onClick(evt,elements){
+          if(!elements.length) return;
+          const idx=elements[0].index;
+          const rawLabel=d.signals.labels[idx];
+          const stocks=SIGNAL_STOCKS[rawLabel]||[];
+          openSigPanel(rawLabel,stocks);
+        }
+      }
+    });
+  }
   if(d.top_stocks.labels.length)barH('c-stocks',d.top_stocks.labels.map(transStock),d.top_stocks.values,'#d2a8ff');
   if(d.trends.labels.length)pie('c-trends',d.trends.labels.map(transTrend),d.trends.values,false);
   if(d.top_scores.labels.length)barH('c-scores',d.top_scores.labels.map(transStock),d.top_scores.values,'#ffa657');
@@ -816,7 +908,9 @@ async function loadInsider(){
 async function loadScreener(){
   try{
     const d=await fetch('./data/screener_data.json?_='+Date.now()).then(r=>r.json());
+    SCREENER_DATA=d;
     renderScreener(d);
+    renderYoyChart();  // screener 載入後立刻渲染 YoY 圖
   }catch(e){document.getElementById('screener-meta').textContent=LANG==='zh'?'尚無選股資料':'No screener data';}
 }
 
