@@ -731,6 +731,16 @@ async function load(){
     render(d);applyLang();
     document.getElementById('status-msg').textContent='';
   }catch(e){document.getElementById('status-msg').textContent=(LANG==='zh'?'❌ 載入失敗：':'❌ Load error: ')+e.message;}
+  // 讀取最新推送時間（覆蓋 KPI 卡片）
+  try{
+    const p=await fetch('./data/last_push.json?_='+Date.now()).then(r=>r.json());
+    const dt=new Date(p.ts);
+    const dateStr=`${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`;
+    const timeStr=`${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+    const ampm=dt.getHours()<12?(LANG==='zh'?'上午':'AM'):(LANG==='zh'?'下午':'PM');
+    document.getElementById('kpi-latest').textContent=`${dateStr} ${ampm}${timeStr}`;
+    document.getElementById('kpi-mtime').textContent=(LANG==='zh'?'資料更新：':'Updated: ')+dateStr;
+  }catch(e){}
 }
 
 async function loadRealtime(){
