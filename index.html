@@ -214,6 +214,12 @@ footer a{color:var(--blue);text-decoration:none}
   .header-titles p{display:none}
 }
 
+/* ── 自動重整提示條 ──────────────────────────────────────────────────── */
+#reload-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1a3a52;border:1px solid #56c7ff;color:#e8f4ff;padding:.7rem 1.4rem;border-radius:999px;font-size:.82rem;font-weight:600;z-index:9999;display:none;align-items:center;gap:.8rem;box-shadow:0 4px 20px rgba(0,0,0,.5);white-space:nowrap}
+#reload-toast .toast-count{background:#56c7ff;color:#0e2233;border-radius:50%;width:1.4rem;height:1.4rem;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
+#reload-toast button{background:none;border:1px solid rgba(86,199,255,.4);color:#a0c8e8;border-radius:4px;padding:.15rem .5rem;cursor:pointer;font-size:.75rem}
+#reload-toast button:hover{color:#fff;border-color:#56c7ff}
+
 /* ── K線圖區塊 ─────────────────────────────────────────────────────── */
 .kline-section{padding:0 2rem 1rem;margin-bottom:1rem}
 .kline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
@@ -1048,6 +1054,53 @@ function closeLockPanel(){document.getElementById('lock-panel').style.display='n
 function toggleWatchlist(e){if(e)e.stopPropagation();const p=document.getElementById('watchlist-panel'),o=document.getElementById('watchlist-overlay'),open=p.style.display!=='none';p.style.display=open?'none':'block';o.style.display=open?'none':'block';}
 function closeWatchlist(){document.getElementById('watchlist-panel').style.display='none';document.getElementById('watchlist-overlay').style.display='none';}
 
+// ── 自動重整（偵測推送新資料）────────────────────────────────────────────────
+let _lastPushTs = null;
+let _reloadTimer = null;
+
+async function checkNewPush(){
+  try{
+    const p = await fetch('./data/last_push.json?_='+Date.now()).then(r=>r.json());
+    if(!_lastPushTs){ _lastPushTs = p.ts; return; }   // 初始化，不觸發
+    if(p.ts !== _lastPushTs){
+      _lastPushTs = p.ts;
+      showReloadToast();
+    }
+  }catch(e){}
+}
+
+function showReloadToast(){
+  const toast = document.getElementById('reload-toast');
+  if(!toast) return;
+  toast.style.display = 'flex';
+  let sec = 8;
+  const countEl = toast.querySelector('.toast-count');
+  if(countEl) countEl.textContent = sec;
+  clearInterval(_reloadTimer);
+  _reloadTimer = setInterval(()=>{
+    sec--;
+    if(countEl) countEl.textContent = sec;
+    if(sec <= 0){ clearInterval(_reloadTimer); location.reload(); }
+  }, 1000);
+}
+
+function dismissReload(){
+  clearInterval(_reloadTimer);
+  const toast = document.getElementById('reload-toast');
+  if(toast) toast.style.display = 'none';
+}
+
+// 注入 toast HTML
+document.body.insertAdjacentHTML('beforeend',`
+  <div id="reload-toast">
+    📊 <span data-zh="偵測到新資料，" data-en="New data detected, ">偵測到新資料，</span>
+    <span data-zh="自動重整中" data-en="reloading in">自動重整中</span>
+    <span class="toast-count">8</span>
+    <span data-zh="秒" data-en="s">秒</span>
+    <button onclick="dismissReload()" data-zh="稍後" data-en="Later">稍後</button>
+  </div>
+`);
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
 load();loadRealtime();loadScreener();loadInsider();loadKline();
@@ -1056,6 +1109,8 @@ setInterval(loadRealtime,3600000);
 setInterval(loadScreener,3600000);
 setInterval(loadInsider,3600000);
 setInterval(loadKline,3600000);
+// 每 2 分鐘檢查是否有新推送
+setTimeout(()=>{ checkNewPush(); setInterval(checkNewPush, 120000); }, 5000);
 </script>
 </body>
 </html>
