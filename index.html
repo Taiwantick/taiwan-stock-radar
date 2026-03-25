@@ -378,11 +378,11 @@ footer a{color:var(--blue);text-decoration:none}
 
 <!-- ═══ KPI ═══════════════════════════════════════════════════════════════════ -->
 <div class="kpi-row">
-  <div class="kpi">
-    <div class="kpi-icon">🔁</div>
-    <div class="kpi-label" data-zh="總分析次數" data-en="Total Runs">總分析次數</div>
-    <div class="kpi-value" id="kpi-runs">—</div>
-    <div class="kpi-sub"   id="kpi-range">—</div>
+  <div class="kpi" onclick="toggleNewsPanel(event)" style="cursor:pointer">
+    <div class="kpi-icon">📢</div>
+    <div class="kpi-label" data-zh="今日重大訊息" data-en="Today's Announcements">今日重大訊息</div>
+    <div class="kpi-value" id="kpi-news-count">—</div>
+    <div class="kpi-sub" id="kpi-news-sub">▾ <span data-zh="點擊查看訊息" data-en="Click to view">點擊查看訊息</span></div>
   </div>
   <div class="kpi" onclick="toggleWatchlist(event)" style="cursor:pointer">
     <div class="kpi-icon">⭐</div>
@@ -540,6 +540,17 @@ footer a{color:var(--blue);text-decoration:none}
       <tbody id="ao-table-body"></tbody>
     </table>
   </div>
+</div>
+
+<!-- ═══ News Panel ════════════════════════════════════════════════════════════ -->
+<div id="news-overlay" onclick="closeNewsPanel()" style="display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.5)"></div>
+<div id="news-panel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:300;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.75);width:min(580px,95vw);max-height:82vh;display:none;flex-direction:column">
+  <div style="padding:1rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <span style="font-size:.9rem;font-weight:700">📢 <span data-zh="今日重大訊息（精選25檔）" data-en="Today's Announcements (Featured 25)">今日重大訊息（精選25檔）</span></span>
+    <button onclick="closeNewsPanel()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:.2rem .4rem;border-radius:4px" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">✕</button>
+  </div>
+  <div id="news-panel-body" style="overflow-y:auto;flex:1;padding:.4rem .2rem"></div>
+  <div style="padding:.5rem 1.2rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted);flex-shrink:0" data-zh="資料來源：證交所 / 櫃買中心 OpenAPI · 每小時更新" data-en="Source: TWSE / TPEX OpenAPI · Updated hourly">資料來源：證交所 / 櫃買中心 OpenAPI · 每小時更新</div>
 </div>
 
 <!-- ═══ K線圖 ═══════════════════════════════════════════════════════════════ -->
@@ -896,8 +907,7 @@ function render(d){
   const empty=document.getElementById('empty-state');
   if(!d||!d.total_runs){empty.style.display='block';return;}
   empty.style.display='none';
-  document.getElementById('kpi-runs').textContent=d.total_runs;
-  document.getElementById('kpi-range').textContent=d.date_range||'—';
+  // kpi-runs / kpi-range 已移除，改為今日重大訊息（由 loadNews() 處理）
   document.getElementById('kpi-latest').textContent=d.latest_date||'—';
   document.getElementById('kpi-mtime').textContent=(LANG==='zh'?'資料更新：':'Updated: ')+(d.file_mtime||'—');
   document.getElementById('kpi-locks').textContent=d.lock_latest>0?d.lock_latest:(LANG==='zh'?'無':'None');
@@ -1050,7 +1060,96 @@ function filterAllOrders(){
 }
 
 // 按 Esc 關閉 Modal
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAllOrders();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllOrders();closeNewsPanel();}});
+
+// ── News Panel ────────────────────────────────────────────────────────────────
+// 精選25檔代號（與 stocks.txt 同步）
+const WATCHED_SIDS=new Set(['006208','1711','1717','1802','1815','2313','2367','2421','2634','3017','3163','3324','3481','3491','4760','4989','5340','5439','5475','6125','6182','6217','6285','6546','6770']);
+
+let _newsData=[];
+let _newsPanelOpen=false;
+
+// ROC 日期轉換：1150326 → 03/26
+function rocDateToDisplay(s){
+  s=String(s||'').replace(/\//g,'');
+  if(s.length===7) return s.slice(4,6)+'/'+s.slice(6,8);
+  if(s.length===6) return s.slice(3,5)+'/'+s.slice(5,7);
+  return s;
+}
+
+async function loadNews(){
+  try{
+    const zh=LANG!=='en';
+    const[r1,r2]=await Promise.allSettled([
+      fetch('https://openapi.twse.com.tw/v1/opendata/t187ap04_L').then(r=>r.json()),
+      fetch('https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap04_O').then(r=>r.json()),
+    ]);
+    const all=[
+      ...(r1.status==='fulfilled'&&Array.isArray(r1.value)?r1.value:[]),
+      ...(r2.status==='fulfilled'&&Array.isArray(r2.value)?r2.value:[]),
+    ];
+    _newsData=all
+      .filter(n=>n&&typeof n==='object'&&WATCHED_SIDS.has(String(n['公司代號']||'').trim()))
+      .sort((a,b)=>{
+        const ta=(a['發言日期']||'')+(a['發言時間']||'');
+        const tb=(b['發言日期']||'')+(b['發言時間']||'');
+        return tb.localeCompare(ta);
+      });
+    const cnt=_newsData.length;
+    document.getElementById('kpi-news-count').textContent=cnt>0?cnt:(zh?'無':'None');
+    document.getElementById('kpi-news-sub').innerHTML=cnt>0
+      ?`▾ <span data-zh="點擊查看訊息" data-en="Click to view">${zh?'點擊查看訊息':'Click to view'}</span>`
+      :`<span style="color:var(--green)">${zh?'✅ 今日暫無訊息':'✅ No announcements'}</span>`;
+    if(_newsPanelOpen) renderNewsItems();
+  }catch(e){
+    document.getElementById('kpi-news-count').textContent='—';
+  }
+}
+
+function renderNewsItems(){
+  const zh=LANG!=='en';
+  const body=document.getElementById('news-panel-body');
+  if(!_newsData.length){
+    body.innerHTML=`<div style="text-align:center;color:var(--muted);padding:2.5rem 1rem">${zh?'✅ 今日精選股票暫無重大訊息':'✅ No announcements today for featured stocks'}</div>`;
+    return;
+  }
+  body.innerHTML=_newsData.map(n=>{
+    const sid=String(n['公司代號']||'').trim();
+    const name=n['公司名稱']||sidName(sid)||'';
+    const date=rocDateToDisplay(n['發言日期']||'');
+    const time=(n['發言時間']||'').slice(0,5);
+    const title=String(n['主旨']||'');
+    return`<div style="padding:.7rem 1.2rem;border-bottom:1px solid #21262d">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;flex-wrap:wrap">
+        <span style="font-weight:700;color:var(--blue)">${sid}</span>
+        <span style="color:var(--muted);font-size:.77rem">${name}</span>
+        <span style="color:var(--muted);font-size:.72rem;margin-left:auto;white-space:nowrap">${date} ${time}</span>
+      </div>
+      <div style="font-size:.82rem;line-height:1.45;color:var(--text)">${title}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleNewsPanel(e){
+  if(e)e.stopPropagation();
+  _newsPanelOpen?closeNewsPanel():openNewsPanel();
+}
+
+function openNewsPanel(){
+  _newsPanelOpen=true;
+  const p=document.getElementById('news-panel');
+  p.style.display='flex';
+  document.getElementById('news-overlay').style.display='block';
+  document.body.style.overflow='hidden';
+  renderNewsItems();
+}
+
+function closeNewsPanel(){
+  _newsPanelOpen=false;
+  document.getElementById('news-panel').style.display='none';
+  document.getElementById('news-overlay').style.display='none';
+  document.body.style.overflow='';
+}
 
 // ── Load ──────────────────────────────────────────────────────────────────────
 let currentDays=null;
@@ -1500,10 +1599,11 @@ async function loadGlobalTicker(){
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
-load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();
+load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();loadNews();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
 setInterval(loadGlobalTicker,60000); // Ticker 每 60 秒即時刷新
+setInterval(loadNews,3600000);   // 重大訊息每小時更新
 setInterval(loadScreener,3600000);
 setInterval(loadInsider,3600000);
 setInterval(loadKline,3600000);
