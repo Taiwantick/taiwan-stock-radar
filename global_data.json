@@ -1,0 +1,23 @@
+{
+  "updated": "2026-03-25 13:37",
+  "gold": {
+    "price": 4558.1,
+    "change": "+3.61%",
+    "url": "https://finance.yahoo.com/quote/GC=F"
+  },
+  "silver": {
+    "price": 73.28,
+    "change": "+5.78%",
+    "url": "https://finance.yahoo.com/quote/SI=F"
+  },
+  "oil": {
+    "price": 88.79,
+    "change": "-3.85%",
+    "url": "https://finance.yahoo.com/quote/CL=F"
+  },
+  "trump": {
+    "title": "See Trump's latest posts",
+    "url": "https://truthsocial.com/@realDonaldTrump",
+    "source": "Truth Social"
+  }
+}

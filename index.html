@@ -273,9 +273,36 @@ footer a{color:var(--blue);text-decoration:none}
   .kline-section{padding-left:1rem;padding-right:1rem}
   #kline-container{height:280px}
 }
+/* ─── Global Ticker Bar ─── */
+#global-ticker{
+  background:#1a1a2e;border-bottom:1px solid #2d2d5e;
+  padding:.38rem 2rem;display:flex;align-items:center;gap:1.2rem;
+  flex-wrap:wrap;font-size:.78rem;position:sticky;top:0;z-index:200;
+}
+.ticker-item{display:flex;align-items:center;gap:.3rem;white-space:nowrap}
+.ticker-item a{color:#e2e2ff;text-decoration:none;display:flex;align-items:center;gap:.3rem}
+.ticker-item a:hover{color:#fff;text-decoration:underline}
+.ticker-up{color:#3fb950}
+.ticker-dn{color:#f85149}
+.ticker-divider{color:#3a3a6e;user-select:none}
+.ticker-trump a{color:#ffd700}
+.ticker-trump a:hover{color:#ffe55c}
+.ticker-updated{color:#5a5a8e;font-size:.72rem;margin-left:auto}
 </style>
 </head>
 <body>
+
+<!-- ═══ Global Ticker Bar ══════════════════════════════════════════════════ -->
+<div id="global-ticker">
+  <span class="ticker-item" id="ticker-gold">🥇 <span style="color:#8b949e">Loading…</span></span>
+  <span class="ticker-divider">|</span>
+  <span class="ticker-item" id="ticker-silver">🥈 <span style="color:#8b949e">…</span></span>
+  <span class="ticker-divider">|</span>
+  <span class="ticker-item" id="ticker-oil">🛢️ <span style="color:#8b949e">…</span></span>
+  <span class="ticker-divider">|</span>
+  <span class="ticker-item ticker-trump" id="ticker-trump">📢 <span style="color:#8b949e">…</span></span>
+  <span class="ticker-updated" id="ticker-updated"></span>
+</div>
 
 <!-- ═══ Header ═══════════════════════════════════════════════════════════════ -->
 <header>
@@ -1299,9 +1326,37 @@ document.body.insertAdjacentHTML('beforeend',`
   </div>
 `);
 
+// ── Global Ticker ─────────────────────────────────────────────────────────────
+function loadGlobalTicker(){
+  fetch('global_data.json?_='+Date.now())
+    .then(r=>r.json())
+    .then(d=>{
+      function priceHtml(key,emoji,label){
+        const item=d[key];
+        if(!item||item.price==null) return `${emoji} ${label}: N/A`;
+        const up=item.change&&item.change.startsWith('+');
+        const cls=up?'ticker-up':'ticker-dn';
+        return `<a href="${item.url}" target="_blank" rel="noopener">`+
+          `${emoji} ${label}: <b>$${item.price.toLocaleString()}</b>`+
+          ` <span class="${cls}">(${item.change})</span></a>`;
+      }
+      document.getElementById('ticker-gold').innerHTML=priceHtml('gold','🥇','Gold');
+      document.getElementById('ticker-silver').innerHTML=priceHtml('silver','🥈','Silver');
+      document.getElementById('ticker-oil').innerHTML=priceHtml('oil','🛢️','Oil');
+      if(d.trump){
+        document.getElementById('ticker-trump').innerHTML=
+          `📢 <a href="${d.trump.url}" target="_blank" rel="noopener">${d.trump.title}</a>`;
+      }
+      if(d.updated){
+        document.getElementById('ticker-updated').textContent='Updated: '+d.updated;
+      }
+    })
+    .catch(()=>{});
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
-load();loadRealtime();loadScreener();loadInsider();loadKline();
+load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
 setInterval(loadScreener,3600000);
