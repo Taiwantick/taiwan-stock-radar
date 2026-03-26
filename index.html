@@ -108,24 +108,9 @@ header{
 .lock-reason{font-size:.76rem;color:var(--muted);line-height:1.55;padding:.2rem .3rem .1rem}
 .lock-reason span{color:var(--text);font-weight:500}
 #lock-overlay{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.45)}
-/* ─── Sector Panel ─── */
-#sector-overlay{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.5)}
-#sector-panel{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:300;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;box-shadow:0 16px 48px rgba(0,0,0,.75);width:min(600px,95vw);max-height:84vh;overflow-y:auto}
-#sector-panel h3{font-size:.9rem;font-weight:700;margin-bottom:.9rem;color:var(--text);display:flex;justify-content:space-between;align-items:center}
-#sector-panel h3 button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;padding:.1rem .3rem}
-#sector-panel h3 button:hover{color:var(--text)}
-.sec-block{margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid #21262d}
-.sec-block:last-child{border-bottom:none;margin-bottom:0}
-.sec-block-title{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;margin-bottom:.45rem}
-.sec-stock-row{display:flex;justify-content:space-between;align-items:center;padding:.22rem .3rem;font-size:.78rem;border-radius:4px}
-.sec-stock-row:hover{background:rgba(88,166,255,.06)}
-.sec-stock-sid{color:var(--blue);font-weight:600;min-width:2.8rem}
-.sec-stock-name{flex:1;padding:0 .4rem;color:var(--text)}
-.sec-stock-price{color:var(--muted);min-width:3.5rem;text-align:right}
-.sec-stock-pct{font-weight:700;min-width:4rem;text-align:right}
 
 /* ─── KPI ─── */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.3rem 2rem}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:1.3rem 2rem}
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.3rem;transition:border-color .18s,transform .18s}
 .kpi:hover{border-color:#4fd1c055;transform:translateY(-1px)}
 .kpi-icon{font-size:1.25rem;margin-bottom:.3rem}
@@ -185,6 +170,31 @@ header{
 .alert-table tr:last-child td{border-bottom:none}
 .vol-bar{display:inline-block;height:6px;border-radius:3px;margin-left:4px;vertical-align:middle;opacity:.7}
 .no-data-radar{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.85rem}
+
+/* ─── 三大雷達訊號 ─── */
+.signal-section{padding:0 2rem 1rem;margin-bottom:.5rem}
+.signal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:.5rem}
+.signal-title{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.signal-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(79,209,192,.1);border:1px solid rgba(79,209,192,.28);color:var(--teal);padding:.22rem .8rem;border-radius:20px;font-size:.8rem;font-weight:600}
+.signal-meta{color:var(--muted);font-size:.76rem}
+.signal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.signal-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.signal-card-title{font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:.65rem;display:flex;align-items:center;gap:.45rem}
+.signal-card-title .sig-icon{font-size:1rem}
+.sig-table{width:100%;border-collapse:collapse;font-size:.77rem}
+.sig-table th{color:var(--muted);font-weight:500;padding:.28rem .4rem;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.sig-table td{padding:.32rem .4rem;border-bottom:1px solid rgba(30,69,53,.7)}
+.sig-table tr:last-child td{border-bottom:none}
+.sig-table tr:hover td{background:rgba(79,209,192,.04)}
+.sig-sid{color:var(--teal);font-weight:600}
+.sig-name{color:var(--text)}
+.sig-num{text-align:right;font-weight:600}
+.sig-up{color:var(--green)}
+.sig-dn{color:var(--red)}
+.sig-neutral{color:var(--muted)}
+.sig-empty{text-align:center;padding:1.8rem 1rem;color:var(--muted);font-size:.82rem}
+.streak-bar{display:inline-block;background:rgba(79,209,192,.22);border-radius:3px;height:6px;vertical-align:middle;margin-left:4px}
+@media(max-width:768px){.signal-grid{grid-template-columns:1fr}.signal-section{padding-left:1rem;padding-right:1rem}}
 
 /* ─── All Orders Modal ─── */
 #all-orders-overlay{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
@@ -410,14 +420,6 @@ footer a{color:var(--blue);text-decoration:none}
     <div class="kpi-value">25 <span style="font-size:1rem;font-weight:400" data-zh="檔" data-en="stocks">檔</span></div>
     <div class="kpi-sub" data-zh="▾ 點擊展開清單" data-en="▾ Click to expand">▾ 點擊展開清單</div>
   </div>
-  <div class="kpi" onclick="toggleSectorPanel(event)" style="cursor:pointer">
-    <div class="kpi-icon">📊</div>
-    <div class="kpi-label" data-zh="電子板塊表現" data-en="Sector Performance">電子板塊表現</div>
-    <div id="kpi-sector-list" style="font-size:.72rem;line-height:1.75;margin:.35rem 0 .25rem">
-      <span style="color:var(--muted)">載入中…</span>
-    </div>
-    <div class="kpi-sub">▾ <span data-zh="點擊看成分股明細" data-en="Click for details">點擊看成分股明細</span></div>
-  </div>
   <div class="kpi" onclick="toggleLockPanel(event)" style="cursor:pointer">
     <div class="kpi-icon">🔥</div>
     <div class="kpi-label" data-zh="最新鎖碼個股數" data-en="Lock Signals (Latest)">最新鎖碼個股數</div>
@@ -496,6 +498,52 @@ footer a{color:var(--blue);text-decoration:none}
 </div>
 
 <!-- ═══ Today's Large Orders ═════════════════════════════════════════════════ -->
+<!-- ═══ 三大雷達訊號 ═══════════════════════════════════════════════════════════ -->
+<div class="signal-section">
+  <div class="signal-header">
+    <div class="signal-title">
+      <span class="signal-badge">🎯 <span data-zh="三大雷達訊號" data-en="3 Radar Signals">三大雷達訊號</span></span>
+      <span style="color:var(--muted);font-size:.78rem" data-zh="法人連買 · 券資比 · 爆量掃描" data-en="Inst. Streak · Short Ratio · Volume Surge">法人連買 · 券資比 · 爆量掃描</span>
+    </div>
+    <span class="signal-meta" id="signal-updated"></span>
+  </div>
+  <div class="signal-grid">
+    <!-- Signal 1: 法人連買追蹤 -->
+    <div class="signal-card">
+      <div class="signal-card-title">
+        <span class="sig-icon">🏦</span>
+        <span data-zh="法人連買追蹤" data-en="Inst. Consecutive Buy">法人連買追蹤</span>
+        <span style="color:var(--muted);font-size:.7rem;font-weight:400" data-zh="連買≥3日入榜" data-en="≥3d streak">連買≥3日</span>
+      </div>
+      <div id="sig-consec-body">
+        <div class="sig-empty" data-zh="載入中…" data-en="Loading…">載入中…</div>
+      </div>
+    </div>
+    <!-- Signal 2: 券資比異常排行 -->
+    <div class="signal-card">
+      <div class="signal-card-title">
+        <span class="sig-icon">⚠️</span>
+        <span data-zh="券資比異常排行" data-en="Short/Margin Ratio">券資比異常排行</span>
+        <span style="color:var(--muted);font-size:.7rem;font-weight:400" data-zh="≥10%·空頭壓力" data-en="≥10% short pressure">≥10%</span>
+      </div>
+      <div id="sig-margin-body">
+        <div class="sig-empty" data-zh="載入中…" data-en="Loading…">載入中…</div>
+      </div>
+    </div>
+    <!-- Signal 3: 爆量股掃描 -->
+    <div class="signal-card">
+      <div class="signal-card-title">
+        <span class="sig-icon">💥</span>
+        <span data-zh="爆量股掃描" data-en="Volume Surge">爆量股掃描</span>
+        <span style="color:var(--muted);font-size:.7rem;font-weight:400" data-zh="量比≥2.5倍" data-en="Vol ≥2.5×avg">量比≥2.5倍</span>
+      </div>
+      <div id="sig-vol-body">
+        <div class="sig-empty" data-zh="載入中…" data-en="Loading…">載入中…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="radar-section">
   <div class="radar-header">
     <div class="radar-title">
@@ -622,15 +670,9 @@ footer a{color:var(--blue);text-decoration:none}
       <div class="ch"><canvas id="c-trends"></canvas></div>
     </div>
   </div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-title" data-zh="🏆 個股平均分數排行 Top 10" data-en="🏆 Avg Score Ranking Top 10">🏆 個股平均分數排行 Top 10</div>
-      <div class="chm"><canvas id="c-scores"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-title" data-zh="🔒 個股鎖碼次數 Top 10" data-en="🔒 Lock Signal Count Top 10">🔒 個股鎖碼次數 Top 10</div>
-      <div class="chm"><canvas id="c-locks"></canvas></div>
-    </div>
+  <div class="card">
+    <div class="card-title" data-zh="🔒 個股鎖碼次數 Top 10" data-en="🔒 Lock Signal Count Top 10">🔒 個股鎖碼次數 Top 10</div>
+    <div class="chm"><canvas id="c-locks"></canvas></div>
   </div>
   <div class="card" style="margin-bottom:1rem">
     <div class="card-title" data-zh="📋 最新一次分析摘要" data-en="📋 Latest Analysis Summary">📋 最新一次分析摘要</div>
@@ -921,7 +963,6 @@ function renderCharts(d){
   }
   if(d.top_stocks.labels.length)barH('c-stocks',d.top_stocks.labels.map(transStock),d.top_stocks.values,'#d2a8ff');
   if(d.trends.labels.length)pie('c-trends',d.trends.labels.map(transTrend),d.trends.values,false);
-  if(d.top_scores.labels.length)barH('c-scores',d.top_scores.labels.map(transStock),d.top_scores.values,'#ffa657');
   if(d.top_locks.labels.length)barH('c-locks',d.top_locks.labels.map(transStock),d.top_locks.values,'#f85149');
 }
 
@@ -1275,6 +1316,120 @@ async function loadInsider(){
   }
 }
 
+/* ════════════════════════════════════════════════════════════════
+   三大雷達訊號
+   ════════════════════════════════════════════════════════════════ */
+async function loadSignals(){
+  try{
+    const d=await fetch('./data/radar_data.json?_='+Date.now()).then(r=>r.json());
+    renderSignals(d);
+  }catch(e){
+    ['sig-consec-body','sig-margin-body','sig-vol-body'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.innerHTML=`<div class="sig-empty">${LANG==='zh'?'尚無資料（每日盤後更新）':'No data yet (updated after close)'}</div>`;
+    });
+  }
+}
+
+function renderSignals(d){
+  const ts=d.updated_at||'';
+  const el=document.getElementById('signal-updated');
+  if(el)el.textContent=(LANG==='zh'?'更新：':'Updated: ')+ts;
+
+  // ── Signal 1: 法人連買 ──────────────────────────────────────
+  const cb=document.getElementById('sig-consec-body');
+  if(cb){
+    const rows=d.consec_buy||[];
+    if(!rows.length){
+      cb.innerHTML=`<div class="sig-empty">${LANG==='zh'?'今日無連買≥3日個股':'No streak ≥3d today'}</div>`;
+    } else {
+      const maxStreak=Math.max(...rows.map(r=>r.streak),1);
+      cb.innerHTML=`<table class="sig-table">
+        <thead><tr>
+          <th data-zh="代號" data-en="Code">代號</th>
+          <th data-zh="名稱" data-en="Name">名稱</th>
+          <th style="text-align:right" data-zh="連買日" data-en="Days">連買日</th>
+          <th style="text-align:right" data-zh="累計(張)" data-en="Total lots">累計</th>
+        </tr></thead>
+        <tbody>
+          ${rows.slice(0,12).map(r=>{
+            const w=Math.round(r.streak/maxStreak*50);
+            const totalStr=r.total>0?`<span class="sig-up">+${r.total.toLocaleString()}</span>`:`<span class="sig-dn">${r.total.toLocaleString()}</span>`;
+            return `<tr>
+              <td class="sig-sid">${r.sid}</td>
+              <td class="sig-name">${r.name}</td>
+              <td class="sig-num"><span style="color:var(--teal);font-weight:700">${r.streak}</span><span class="streak-bar" style="width:${w}px"></span></td>
+              <td class="sig-num">${totalStr}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+    }
+  }
+
+  // ── Signal 2: 券資比 ────────────────────────────────────────
+  const mb=document.getElementById('sig-margin-body');
+  if(mb){
+    const rows=d.margin_short||[];
+    if(!rows.length){
+      mb.innerHTML=`<div class="sig-empty">${LANG==='zh'?'今日無券資比≥10%個股':'No ratio ≥10% today'}</div>`;
+    } else {
+      mb.innerHTML=`<table class="sig-table">
+        <thead><tr>
+          <th data-zh="代號" data-en="Code">代號</th>
+          <th data-zh="名稱" data-en="Name">名稱</th>
+          <th style="text-align:right" data-zh="券資比" data-en="S/M %">券資比</th>
+          <th style="text-align:right" data-zh="融券(張)" data-en="Short">融券</th>
+        </tr></thead>
+        <tbody>
+          ${rows.slice(0,12).map(r=>{
+            const cls=r.ratio>=20?'sig-dn':r.ratio>=10?'sig-neutral':'sig-up';
+            return `<tr>
+              <td class="sig-sid">${r.sid}</td>
+              <td class="sig-name">${r.name}</td>
+              <td class="sig-num"><span class="${cls}" style="font-weight:700">${r.ratio}%</span></td>
+              <td class="sig-num sig-neutral">${r.short.toLocaleString()}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+    }
+  }
+
+  // ── Signal 3: 爆量 ──────────────────────────────────────────
+  const vb=document.getElementById('sig-vol-body');
+  if(vb){
+    const rows=d.vol_surge||[];
+    if(!rows.length){
+      vb.innerHTML=`<div class="sig-empty">${LANG==='zh'?'今日無爆量個股（量比≥2.5倍）':'No volume surge today (≥2.5×)'}</div>`;
+    } else {
+      vb.innerHTML=`<table class="sig-table">
+        <thead><tr>
+          <th data-zh="代號" data-en="Code">代號</th>
+          <th data-zh="名稱" data-en="Name">名稱</th>
+          <th style="text-align:right" data-zh="量比" data-en="Vol×">量比</th>
+          <th style="text-align:right" data-zh="漲跌%" data-en="Change%">漲跌</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map(r=>{
+            const pctCls=r.pct>0?'sig-up':r.pct<0?'sig-dn':'sig-neutral';
+            const pctStr=(r.pct>=0?'+':'')+r.pct.toFixed(2)+'%';
+            return `<tr>
+              <td class="sig-sid">${r.sid}</td>
+              <td class="sig-name">${r.name}</td>
+              <td class="sig-num"><span style="color:var(--orange);font-weight:700">${r.vol_ratio}×</span></td>
+              <td class="sig-num"><span class="${pctCls}">${pctStr}</span></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+    }
+  }
+
+  // 翻譯靜態標頭
+  if(LANG==='en') applyLang();
+}
+
 async function loadScreener(){
   try{
     const d=await fetch('./data/screener_data.json?_='+Date.now()).then(r=>r.json());
@@ -1457,19 +1612,6 @@ document.body.insertAdjacentHTML('beforeend',`
 `);
 
 /* ─── Sector Panel HTML ─── */
-document.body.insertAdjacentHTML('beforeend',`
-  <div id="sector-overlay" onclick="closeSectorPanel()"></div>
-  <div id="sector-panel">
-    <h3>
-      <span>📊 <span data-zh="電子板塊成分股" data-en="Sector Details">電子板塊成分股</span></span>
-      <button onclick="closeSectorPanel()">✕</button>
-    </h3>
-    <div id="sector-panel-body"></div>
-    <div style="font-size:.7rem;color:var(--muted);margin-top:.9rem;text-align:center;border-top:1px solid #21262d;padding-top:.6rem">
-      資料來源：Yahoo Finance · 每 60 秒更新
-    </div>
-  </div>
-`);
 
 function buildLockReason(s){
   const parts=[];
@@ -1607,128 +1749,6 @@ function _tickerHtml(emoji,label,price,prev,url,decimals=1){
     ` <span class="${cls}">(${sign}${pct.toFixed(2)}%)</span></a>`;
 }
 
-/* ════════════════════════════════════════════
-   電子板塊表現
-   ════════════════════════════════════════════ */
-const SECTORS = [
-  { name:'IC設計', icon:'🧠', stocks:[
-    {sid:'2454',name:'聯發科', yf:'2454.TW'},
-    {sid:'3034',name:'聯詠',   yf:'3034.TW'},
-    {sid:'2379',name:'瑞昱',   yf:'2379.TW'},
-    {sid:'6415',name:'矽力-KY',yf:'6415.TW'}
-  ]},
-  { name:'PCB', icon:'🔌', stocks:[
-    {sid:'2313',name:'華通',   yf:'2313.TW'},
-    {sid:'3037',name:'欣興',   yf:'3037.TW'},
-    {sid:'2367',name:'燿華',   yf:'2367.TW'},
-    {sid:'3044',name:'健鼎',   yf:'3044.TW'},
-    {sid:'8046',name:'南電',   yf:'8046.TW'}
-  ]},
-  { name:'記憶體', icon:'💾', stocks:[
-    {sid:'2303',name:'南亞科', yf:'2303.TW'},
-    {sid:'2337',name:'旺宏',   yf:'2337.TW'},
-    {sid:'2344',name:'華邦電', yf:'2344.TW'}
-  ]},
-  { name:'被動元件', icon:'⚙️', stocks:[
-    {sid:'2327',name:'國巨',   yf:'2327.TW'},
-    {sid:'2492',name:'華新科', yf:'2492.TW'},
-    {sid:'2351',name:'順德',   yf:'2351.TW'}
-  ]},
-  { name:'組裝代工', icon:'🖥️', stocks:[
-    {sid:'2317',name:'鴻海',   yf:'2317.TW'},
-    {sid:'2382',name:'廣達',   yf:'2382.TW'},
-    {sid:'3231',name:'緯創',   yf:'3231.TW'},
-    {sid:'2324',name:'仁寶',   yf:'2324.TW'}
-  ]},
-  { name:'低軌衛星', icon:'🛰️', stocks:[
-    {sid:'2314',name:'台揚',   yf:'2314.TW'},
-    {sid:'3491',name:'昇達科', yf:'3491.TWO'},
-    {sid:'6271',name:'同欣電', yf:'6271.TWO'},
-    {sid:'4977',name:'眾達-KY',yf:'4977.TW'}
-  ]}
-];
-
-let _sectorData = [];
-
-async function _yfPrice(symbol){
-  try{
-    const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=1d&includePrePost=false`;
-    const r=await fetch(url);
-    const d=await r.json();
-    if(!d.chart||!d.chart.result||!d.chart.result[0]) return null;
-    const meta=d.chart.result[0].meta;
-    const price=meta.regularMarketPrice;
-    const prev=meta.chartPreviousClose||meta.regularMarketPrice;
-    const pct=prev?((price-prev)/prev*100):0;
-    return{price,pct};
-  }catch(e){return null;}
-}
-
-async function loadSectors(){
-  const results=await Promise.all(SECTORS.map(async sector=>{
-    const stocks=await Promise.all(sector.stocks.map(async s=>{
-      const d=await _yfPrice(s.yf);
-      return{...s,...(d||{price:null,pct:null})};
-    }));
-    const valid=stocks.filter(s=>s.pct!==null);
-    const avgPct=valid.length?valid.reduce((a,b)=>a+b.pct,0)/valid.length:null;
-    return{...sector,stocks,avgPct};
-  }));
-  _sectorData=results;
-  renderSectorKpi();
-  const body=document.getElementById('sector-panel-body');
-  if(body&&document.getElementById('sector-panel').style.display==='block') renderSectorPanel();
-}
-
-function _pctColor(v){return v>0.3?'#3fb950':v<-0.3?'#f85149':'#a8b1bb';}
-function _pctStr(v){if(v===null)return'—';return(v>=0?'+':'')+v.toFixed(2)+'%';}
-
-function renderSectorKpi(){
-  const el=document.getElementById('kpi-sector-list');
-  if(!el)return;
-  el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.05rem .5rem">'+
-    _sectorData.map(s=>{
-      const c=_pctColor(s.avgPct??0);
-      const str=_pctStr(s.avgPct);
-      const col=s.avgPct===null?'var(--muted)':c;
-      return`<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">`+
-        `${s.icon}<span style="color:var(--muted)"> ${s.name}</span> `+
-        `<span style="color:${col};font-weight:600">${str}</span></div>`;
-    }).join('')+
-  '</div>';
-}
-
-function renderSectorPanel(){
-  const body=document.getElementById('sector-panel-body');
-  if(!body)return;
-  body.innerHTML=_sectorData.map(sector=>{
-    const ac=_pctColor(sector.avgPct??0);
-    const avgStr=sector.avgPct!==null
-      ?`<span style="color:${ac};font-size:.88rem">${_pctStr(sector.avgPct)} 均</span>`
-      :'<span style="color:var(--muted)">—</span>';
-    const rows=sector.stocks.map(s=>{
-      if(s.pct===null)return`<div class="sec-stock-row"><span class="sec-stock-sid">${s.sid}</span><span class="sec-stock-name">${s.name}</span><span class="sec-stock-price">—</span><span class="sec-stock-pct" style="color:var(--muted)">—</span></div>`;
-      const c=_pctColor(s.pct);
-      return`<div class="sec-stock-row"><span class="sec-stock-sid">${s.sid}</span><span class="sec-stock-name">${s.name}</span><span class="sec-stock-price">${s.price?.toFixed(1)??'—'}</span><span class="sec-stock-pct" style="color:${c}">${_pctStr(s.pct)}</span></div>`;
-    }).join('');
-    return`<div class="sec-block"><div class="sec-block-title">${sector.icon} ${sector.name} ${avgStr}</div>${rows}</div>`;
-  }).join('');
-}
-
-function toggleSectorPanel(e){
-  if(e)e.stopPropagation();
-  const p=document.getElementById('sector-panel');
-  if(p.style.display==='block'){closeSectorPanel();}
-  else{
-    renderSectorPanel();
-    p.style.display='block';
-    document.getElementById('sector-overlay').style.display='block';
-  }
-}
-function closeSectorPanel(){
-  document.getElementById('sector-panel').style.display='none';
-  document.getElementById('sector-overlay').style.display='none';
-}
 
 async function loadGlobalTicker(){
   try{
@@ -1769,15 +1789,15 @@ async function loadGlobalTicker(){
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
-load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();loadNews();loadSectors();
+load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();loadNews();loadSignals();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
 setInterval(loadGlobalTicker,60000); // Ticker 每 60 秒即時刷新
-setInterval(loadSectors,60000);     // 板塊表現每 60 秒更新
 setInterval(loadNews,3600000);   // 重大訊息每小時更新
 setInterval(loadScreener,3600000);
 setInterval(loadInsider,3600000);
 setInterval(loadKline,3600000);
+setInterval(loadSignals,3600000);  // 雷達訊號每小時更新
 // 每 2 分鐘檢查是否有新推送
 setTimeout(()=>{ checkNewPush(); setInterval(checkNewPush, 120000); }, 5000);
 </script>
