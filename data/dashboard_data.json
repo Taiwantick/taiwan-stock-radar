@@ -1321,6 +1321,289 @@
         }
       ],
       "summary": "📋 盤後摘要（共 25 檔，已依分數排序）\n👀 觀察名單 (25)\n• 2367 燿華（48） 【震盪｜週線下/月線上】 📈DMI強 3日法人:-1,276,123\n• 1802 台玻（40） 【震盪｜週線下/月線下】 📈DMI強 3日法人:-408,081\n• 3017 奇鋐（39） 【震盪｜週線下/月線上】 📈DMI強 3日法人:-39,187\n• 2313 華通（38） 【震盪｜週線下/月線上】 📈DMI強 3日法人:126,800\n• 3163 波若威（38） 【震盪｜週線下/月線上】 📈DMI強 3日法人:26,532\n• 4760 勤凱（38） 【震盪｜週線下/月線上】 📈DMI強 3日法人:38,203\n• 5475 德宏（38） 【震盪｜週線下/月線上】 📈DMI強 3日法人:20,644\n• 6217 中探針（38） 【震盪｜週線下/月線上】 📈DMI強 3日法人:136,669\n• 6285 啟碁（38） 【震盪｜週線下/月線上】 📈DMI強 3日法人:14,347\n• 6770 力積電（35） 【空｜週線下/月線下】 3日法人:-6,761,830"
+    },
+    {
+      "ts": 1774852444,
+      "date": "2026-03-30",
+      "time": "14:34",
+      "stocks": [
+        {
+          "sid": "006208",
+          "display": "006208 富邦台50",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -1725540.0,
+          "score": 0
+        },
+        {
+          "sid": "1711",
+          "display": "1711 永光",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": true,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": -95361.0,
+          "score": 166
+        },
+        {
+          "sid": "1717",
+          "display": "1717 長興",
+          "trend_state": "震盪",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": true,
+          "inst3": -940249.0,
+          "score": 25
+        },
+        {
+          "sid": "1802",
+          "display": "1802 台玻",
+          "trend_state": "震盪",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": true,
+          "inst3": 1738713.0,
+          "score": 45
+        },
+        {
+          "sid": "1815",
+          "display": "1815 富喬",
+          "trend_state": "震盪",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 1734249.0,
+          "score": 26
+        },
+        {
+          "sid": "2313",
+          "display": "2313 華通",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 1730263.0,
+          "score": 56
+        },
+        {
+          "sid": "2367",
+          "display": "2367 燿華",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 172914.0,
+          "score": 71
+        },
+        {
+          "sid": "2421",
+          "display": "2421 建準",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -69182.0,
+          "score": 0
+        },
+        {
+          "sid": "2634",
+          "display": "2634 漢翔",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -269771.0,
+          "score": 0
+        },
+        {
+          "sid": "3017",
+          "display": "3017 奇鋐",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 55142.0,
+          "score": 56
+        },
+        {
+          "sid": "3163",
+          "display": "3163 波若威",
+          "trend_state": "震盪",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 59000.0,
+          "score": 26
+        },
+        {
+          "sid": "3324",
+          "display": "3324 雙鴻",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -5071.0,
+          "score": 0
+        },
+        {
+          "sid": "3481",
+          "display": "3481 群創",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -3737850.0,
+          "score": 0
+        },
+        {
+          "sid": "3491",
+          "display": "3491 昇達科",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": true,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": -79795.0,
+          "score": 166
+        },
+        {
+          "sid": "4760",
+          "display": "4760 勤凱",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 287759.0,
+          "score": 62
+        },
+        {
+          "sid": "4989",
+          "display": "4989 榮科",
+          "trend_state": "震盪",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": true,
+          "inst3": 7584.0,
+          "score": 30
+        },
+        {
+          "sid": "5340",
+          "display": "5340 建榮",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 112635.0,
+          "score": 5
+        },
+        {
+          "sid": "5439",
+          "display": "5439 高技",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 299866.0,
+          "score": 56
+        },
+        {
+          "sid": "5475",
+          "display": "5475 德宏",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 5262.0,
+          "score": 56
+        },
+        {
+          "sid": "6125",
+          "display": "6125 廣運",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -13913.0,
+          "score": 0
+        },
+        {
+          "sid": "6182",
+          "display": "6182 合晶",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 134845.0,
+          "score": 56
+        },
+        {
+          "sid": "6217",
+          "display": "6217 中探針",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 39000.0,
+          "score": 56
+        },
+        {
+          "sid": "6285",
+          "display": "6285 啟碁",
+          "trend_state": "多",
+          "pos_label": "週線上/月線上",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": true,
+          "inst3": 835582.0,
+          "score": 56
+        },
+        {
+          "sid": "6546",
+          "display": "6546 正基",
+          "trend_state": "震盪",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": true,
+          "inst3": 23600.0,
+          "score": 30
+        },
+        {
+          "sid": "6770",
+          "display": "6770 力積電",
+          "trend_state": "空",
+          "pos_label": "週線下/月線下",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -1439799.0,
+          "score": 20
+        }
+      ],
+      "summary": "📋 盤後摘要（共 25 檔，已依分數排序）\n🔥 內資鎖碼 (2)\n• 1711 永光（166） 【多｜週線上/月線上】 🔥鎖碼 📈DMI強 3日法人:-95,361\n• 3491 昇達科（166） 【多｜週線上/月線上】 🔥鎖碼 📈DMI強 3日法人:-79,795\n✅ 多頭續強 (9)\n• 2367 燿華（71） 【多｜週線上/月線上】 📈DMI強 3日法人:172,914\n• 4760 勤凱（62） 【多｜週線上/月線上】 📈DMI強 3日法人:287,759\n• 2313 華通（56） 【多｜週線上/月線上】 📈DMI強 3日法人:1,730,263\n• 3017 奇鋐（56） 【多｜週線上/月線上】 📈DMI強 3日法人:55,142\n• 5439 高技（56） 【多｜週線上/月線上】 📈DMI強 3日法人:299,866\n• 5475 德宏（56） 【多｜週線上/月線上】 📈DMI強 3日法人:5,262\n• 6182 合晶（56） 【多｜週線上/月線上】 📈DMI強 3日法人:134,845\n• 6217 中探針（56） 【多｜週線上/月線上】 📈DMI強 3日法人:39,000\n• 6285 啟碁（56） 【多｜週線上/月線上】 📈DMI強 3日法人:835,582\n👀 觀察名單 (14)\n• 1802 台玻（45） 【震盪｜週線下/月線下】 📈DMI強 3日法人:1,738,713\n• 4989 榮科（30） 【震盪｜週線下/月線下】 📈DMI強 3日法人:7,584\n• 6546 正基（30） 【震盪｜週線下/月線下】 📈DMI強 3日法人:23,600\n• 1815 富喬（26） 【震盪｜週線上/月線上】 3日法人:1,734,249\n• 3163 波若威（26） 【震盪｜週線上/月線上】 3日法人:59,000\n• 1717 長興（25） 【震盪｜週線下/月線下】 📈DMI強 3日法人:-940,249\n• 6770 力積電（20） 【空｜週線下/月線下】 3日法人:-1,439,799\n• 5340 建榮（5） 【空｜週線下/月線下】 3日法人:112,635\n• 006208 富邦台50（0） 【空｜週線下/月線下】 3日法人:-1,725,540\n• 2421 建準（0） 【空｜週線下/月線下】 3日法人:-69,182"
     }
   ]
 }

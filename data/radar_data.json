@@ -1,25 +1,6 @@
 {
-  "updated_at": "2026-03-26 14:03",
+  "updated_at": "2026-03-30 14:34",
   "consec_buy": [],
   "margin_short": [],
-  "vol_surge": [
-    {
-      "sid": "5439",
-      "name": "5439",
-      "vol_ratio": 2.7,
-      "today_vol": 9183492,
-      "avg60": 3397434,
-      "price": 301.0,
-      "pct": 4.88
-    },
-    {
-      "sid": "2367",
-      "name": "燿華",
-      "vol_ratio": 2.6,
-      "today_vol": 259760876,
-      "avg60": 98101493,
-      "price": 75.3,
-      "pct": 0.27
-    }
-  ]
+  "vol_surge": []
 }
