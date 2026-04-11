@@ -1,22 +1,22 @@
 {
   "gold": {
-    "price": 4689.2,
-    "change_pct": "N/A",
+    "price": 4761.9,
+    "change_pct": "-0.63%",
     "url": "https://finance.yahoo.com/quote/GC%3DF"
   },
   "silver": {
-    "price": 72.54,
-    "change_pct": "N/A",
+    "price": 76.32,
+    "change_pct": "+0.06%",
     "url": "https://finance.yahoo.com/quote/SI%3DF"
   },
   "oil": {
-    "price": 111.85,
-    "change_pct": "N/A",
+    "price": 96.57,
+    "change_pct": "-1.33%",
     "url": "https://finance.yahoo.com/quote/CL%3DF"
   },
   "trump": {
     "title": "Visit Truth Social for latest posts",
     "url": "https://truthsocial.com/@realDonaldTrump"
   },
-  "updated_at": "2026-04-06 14:03"
+  "updated_at": "2026-04-11 20:54"
 }

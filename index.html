@@ -252,6 +252,44 @@ header{
 .empty-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;display:inline-block;font-size:.85rem;line-height:2;text-align:left}
 .empty-box code{background:var(--card2);padding:.15rem .4rem;border-radius:4px;font-family:'Menlo','Courier New',monospace}
 
+/* ─── Watchlist Status (stock-mcp) ─── */
+.watchlist-section{padding:0 2rem 1rem;margin-bottom:.5rem}
+.watchlist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:.5rem}
+.watchlist-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(196,181,253,.1);border:1px solid rgba(196,181,253,.28);color:var(--purple);padding:.22rem .8rem;border-radius:20px;font-size:.8rem;font-weight:600}
+.watchlist-meta{color:var(--muted);font-size:.76rem}
+.wl-status-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.8rem}
+.wl-stock-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.7rem .9rem;display:flex;justify-content:space-between;align-items:center;transition:border-color .2s}
+.wl-stock-card:hover{border-color:var(--purple)}
+.wl-stock-left{display:flex;flex-direction:column;gap:.15rem}
+.wl-stock-id{font-size:.82rem;font-weight:700;color:var(--purple)}
+.wl-stock-name{font-size:.72rem;color:var(--muted)}
+.wl-stock-strategy{font-size:.68rem;color:var(--teal);margin-top:.1rem}
+.wl-stock-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:.15rem}
+.wl-score-badge{padding:.15rem .55rem;border-radius:12px;font-size:.75rem;font-weight:700}
+.wl-score-a{background:rgba(63,185,80,.15);color:var(--green)}
+.wl-score-b{background:rgba(79,209,192,.12);color:var(--teal)}
+.wl-score-c{background:rgba(227,179,65,.12);color:var(--yellow)}
+.wl-score-d{background:rgba(248,81,73,.08);color:var(--muted)}
+.wl-trend{font-size:.68rem;color:var(--muted)}
+.wl-group-tag{font-size:.62rem;background:var(--card2);border:1px solid var(--border);padding:.1rem .4rem;border-radius:4px;color:var(--muted)}
+.wl-filter-bar{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap}
+.wl-filter-btn{padding:.2rem .6rem;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.75rem;font-family:inherit;transition:all .18s}
+.wl-filter-btn:hover{border-color:var(--purple);color:var(--purple)}
+.wl-filter-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+
+/* ─── Monitor Alerts ─── */
+.monitor-section{padding:0 2rem 1rem;margin-bottom:.5rem}
+.monitor-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,166,87,.1);border:1px solid rgba(255,166,87,.28);color:var(--orange);padding:.22rem .8rem;border-radius:20px;font-size:.8rem;font-weight:600}
+.alert-type-tag{padding:.1rem .45rem;border-radius:4px;font-size:.68rem;font-weight:600;display:inline-block}
+.alert-breakout{background:rgba(63,185,80,.15);color:var(--green)}
+.alert-breakdown{background:rgba(248,81,73,.12);color:var(--red)}
+.alert-entry{background:rgba(79,209,192,.12);color:var(--teal)}
+.alert-target{background:rgba(227,179,65,.15);color:var(--yellow)}
+.alert-volatility{background:rgba(196,181,253,.12);color:var(--purple)}
+
+@media(max-width:768px){.wl-status-grid{grid-template-columns:1fr 1fr}.watchlist-section,.monitor-section{padding-left:1rem;padding-right:1rem}}
+@media(max-width:480px){.wl-status-grid{grid-template-columns:1fr}}
+
 /* ─── Why Taiwan ─── */
 .why-section{background:linear-gradient(180deg,#0d1b2a 0%,#0e1117 100%);border-top:1px solid #1a3a52;padding:2.5rem 2rem 2rem}
 .why-inner{max-width:960px;margin:0 auto}
@@ -700,6 +738,46 @@ footer a{color:var(--blue);text-decoration:none}
   <h2>📭</h2>
   <div class="empty-box">
     <span data-zh="尚無分析資料，請稍後再訪" data-en="No analysis data yet, please check back later">尚無分析資料，請稍後再訪</span>
+  </div>
+</div>
+
+<!-- ═══ Watchlist Status (stock-mcp) ═════════════════════════════════════════ -->
+<div class="watchlist-section" id="watchlist-status-section" style="display:none">
+  <div class="watchlist-header">
+    <div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap">
+      <span class="watchlist-badge">🎯 <span data-zh="觀察清單雷達" data-en="Watchlist Radar">觀察清單雷達</span></span>
+      <span style="color:var(--muted);font-size:.78rem" data-zh="stock-mcp 三引擎即時分析" data-en="stock-mcp 3-Engine Real-time Analysis">stock-mcp 三引擎即時分析</span>
+    </div>
+    <span class="watchlist-meta" id="wl-status-meta"></span>
+  </div>
+  <div class="wl-filter-bar" id="wl-filter-bar"></div>
+  <div class="wl-status-grid" id="wl-status-grid"></div>
+</div>
+
+<!-- ═══ Monitor Alerts ══════════════════════════════════════════════════════ -->
+<div class="monitor-section" id="monitor-section" style="display:none">
+  <div class="watchlist-header">
+    <div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap">
+      <span class="monitor-badge">⚡ <span data-zh="盤中監控警報" data-en="Intraday Monitor Alerts">盤中監控警報</span></span>
+      <span style="color:var(--muted);font-size:.78rem" data-zh="突破/跌破/進場/目標 即時記錄" data-en="Breakout/Breakdown/Entry/Target real-time log">突破/跌破/進場/目標 即時記錄</span>
+    </div>
+    <span class="watchlist-meta" id="monitor-meta"></span>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <table class="sig-table" style="width:100%">
+      <thead><tr>
+        <th data-zh="日期" data-en="Date">日期</th>
+        <th data-zh="代號" data-en="Symbol">代號</th>
+        <th data-zh="名稱" data-en="Name">名稱</th>
+        <th data-zh="類型" data-en="Type">類型</th>
+        <th data-zh="評分" data-en="Score">評分</th>
+        <th data-zh="策略" data-en="Strategy">策略</th>
+      </tr></thead>
+      <tbody id="monitor-table"></tbody>
+    </table>
+    <div id="monitor-empty" class="no-data-radar" style="display:none">
+      <span data-zh="尚無監控警報記錄" data-en="No monitor alerts yet">尚無監控警報記錄</span>
+    </div>
   </div>
 </div>
 
@@ -1787,9 +1865,156 @@ async function loadGlobalTicker(){
   }
 }
 
+// ── Watchlist Status (stock-mcp) ─────────────────────────────────────────────
+let _wlFilter = 'all';
+
+const STRATEGY_ZH = {
+  right_side: '右側交易',
+  pressure_break_ready: '壓力突破',
+  internal_accumulation: '內部吸籌',
+  low_risk_long: '低風險做多',
+  bottom_reversal: '底部反轉',
+  trend_continuation: '趨勢延續',
+  breakout_pullback: '突破回測',
+};
+const STRATEGY_EN = {
+  right_side: 'Right Side',
+  pressure_break_ready: 'Pressure Break',
+  internal_accumulation: 'Accumulation',
+  low_risk_long: 'Low Risk Long',
+  bottom_reversal: 'Bottom Reversal',
+  trend_continuation: 'Trend Cont.',
+  breakout_pullback: 'Breakout PB',
+};
+
+function scoreClass(s){
+  if(s>=80)return'wl-score-a';
+  if(s>=60)return'wl-score-b';
+  if(s>=40)return'wl-score-c';
+  return'wl-score-d';
+}
+
+function renderWatchlistStatus(d){
+  const sec=document.getElementById('watchlist-status-section');
+  sec.style.display='block';
+  const meta=document.getElementById('wl-status-meta');
+  meta.textContent=(LANG==='zh'?'更新：':'Updated: ')+d.date+' · '+(LANG==='zh'?`台股 ${d.tw_count} 檔`:`TW ${d.tw_count} stocks`);
+
+  // 收集 groups
+  const groups=new Set();
+  d.tw_stocks.forEach(s=>{if(s.group)groups.add(s.group);});
+
+  // filter bar
+  const bar=document.getElementById('wl-filter-bar');
+  let btns=`<button class="wl-filter-btn active" onclick="setWlFilter('all',this)" data-zh="全部" data-en="All">全部</button>`;
+  btns+=`<button class="wl-filter-btn" onclick="setWlFilter('strategy',this)" data-zh="有策略" data-en="Strategy">有策略</button>`;
+  groups.forEach(g=>{
+    btns+=`<button class="wl-filter-btn" onclick="setWlFilter('${g}',this)">${g}</button>`;
+  });
+  bar.innerHTML=btns;
+
+  renderWlGrid(d.tw_stocks);
+}
+
+function setWlFilter(f,btn){
+  _wlFilter=f;
+  document.querySelectorAll('.wl-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  // re-render
+  loadWatchlistStatus();
+}
+
+function renderWlGrid(stocks){
+  let filtered=stocks;
+  if(_wlFilter==='strategy') filtered=stocks.filter(s=>s.primary_strategy);
+  else if(_wlFilter!=='all') filtered=stocks.filter(s=>s.group===_wlFilter);
+
+  const grid=document.getElementById('wl-status-grid');
+  if(!filtered.length){
+    grid.innerHTML=`<div class="no-data-radar">${LANG==='zh'?'此分類無標的':'No stocks in this category'}</div>`;
+    return;
+  }
+
+  grid.innerHTML=filtered.map(s=>{
+    const stName=LANG==='zh'?(STRATEGY_ZH[s.primary_strategy]||s.primary_strategy||''):(STRATEGY_EN[s.primary_strategy]||s.primary_strategy||'');
+    const sc=s.score||0;
+    return`<div class="wl-stock-card">
+      <div class="wl-stock-left">
+        <div class="wl-stock-id">${s.symbol} <span style="color:var(--text);font-weight:400">${s.name||''}</span></div>
+        ${s.primary_strategy?`<div class="wl-stock-strategy">▸ ${stName}</div>`:''}
+        <div style="display:flex;gap:.3rem;align-items:center;flex-wrap:wrap">
+          ${s.group?`<span class="wl-group-tag">${s.group}</span>`:''}
+          ${s.risk_flags&&s.risk_flags.length?s.risk_flags.map(f=>`<span class="wl-group-tag" style="border-color:rgba(248,81,73,.3);color:var(--red)">${f}</span>`).join(''):''}
+        </div>
+      </div>
+      <div class="wl-stock-right">
+        <span class="wl-score-badge ${scoreClass(sc)}">${sc}</span>
+        <span class="wl-trend">${s.one_line_summary||''}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadWatchlistStatus(){
+  try{
+    const d=await fetch('./data/watchlist_status.json?_='+Date.now()).then(r=>r.json());
+    renderWatchlistStatus(d);
+    applyLang();
+  }catch(e){/* watchlist_status.json 不存在時靜默跳過 */}
+}
+
+// ── Monitor Alerts ──────────────────────────────────────────────────────────
+const ALERT_TYPE_LABEL={
+  breakout:{zh:'🚀 突破',en:'🚀 Breakout',cls:'alert-breakout'},
+  breakdown:{zh:'⚠️ 跌破',en:'⚠️ Breakdown',cls:'alert-breakdown'},
+  entry:{zh:'🎯 進場',en:'🎯 Entry',cls:'alert-entry'},
+  target:{zh:'🏆 目標',en:'🏆 Target',cls:'alert-target'},
+  volatility:{zh:'⚡ 波動',en:'⚡ Volatility',cls:'alert-volatility'},
+};
+
+function renderMonitorAlerts(d){
+  const sec=document.getElementById('monitor-section');
+  const meta=document.getElementById('monitor-meta');
+  const tbody=document.getElementById('monitor-table');
+  const empty=document.getElementById('monitor-empty');
+
+  if(!d.alerts||!d.alerts.length){
+    empty.style.display='block';
+    tbody.innerHTML='';
+    sec.style.display='block';
+    return;
+  }
+
+  sec.style.display='block';
+  empty.style.display='none';
+  meta.textContent=(LANG==='zh'?'更新：':'Updated: ')+d.updated_at+(LANG==='zh'?` · ${d.count} 則警報`:` · ${d.count} alerts`);
+
+  tbody.innerHTML=d.alerts.slice(0,30).map(a=>{
+    const t=ALERT_TYPE_LABEL[a.alert_type]||{zh:a.alert_type,en:a.alert_type,cls:''};
+    const stName=LANG==='zh'?(STRATEGY_ZH[a.strategy]||a.strategy||'—'):(STRATEGY_EN[a.strategy]||a.strategy||'—');
+    return`<tr>
+      <td style="white-space:nowrap">${a.date}</td>
+      <td><b style="color:var(--purple)">${a.symbol}</b></td>
+      <td>${a.name||''}</td>
+      <td><span class="alert-type-tag ${t.cls}">${LANG==='zh'?t.zh:t.en}</span></td>
+      <td><span class="wl-score-badge ${scoreClass(a.score||0)}" style="font-size:.7rem">${a.score||0}</span></td>
+      <td style="color:var(--muted);font-size:.72rem">${stName}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function loadMonitorAlerts(){
+  try{
+    const d=await fetch('./data/monitor_alerts.json?_='+Date.now()).then(r=>r.json());
+    renderMonitorAlerts(d);
+    applyLang();
+  }catch(e){/* monitor_alerts.json 不存在時靜默跳過 */}
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
 load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();loadNews();loadSignals();
+loadWatchlistStatus();loadMonitorAlerts();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
 setInterval(loadGlobalTicker,60000); // Ticker 每 60 秒即時刷新
@@ -1798,6 +2023,8 @@ setInterval(loadScreener,3600000);
 setInterval(loadInsider,3600000);
 setInterval(loadKline,3600000);
 setInterval(loadSignals,3600000);  // 雷達訊號每小時更新
+setInterval(loadWatchlistStatus,3600000);
+setInterval(loadMonitorAlerts,3600000);
 // 每 2 分鐘檢查是否有新推送
 setTimeout(()=>{ checkNewPush(); setInterval(checkNewPush, 120000); }, 5000);
 </script>

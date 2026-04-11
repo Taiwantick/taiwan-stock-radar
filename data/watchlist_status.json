@@ -1,0 +1,543 @@
+{
+  "updated_at": "2026-04-11T20:54:31",
+  "date": "2026-04-11",
+  "tw_count": 33,
+  "us_jp_count": 34,
+  "tw_stocks": [
+    {
+      "symbol": "2330",
+      "name": "台積電",
+      "group": "半導體",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2454",
+      "name": "聯發科",
+      "group": "半導體",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3034",
+      "name": "聯詠",
+      "group": "半導體",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2308",
+      "name": "台達電",
+      "group": "半導體",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3443",
+      "name": "創意",
+      "group": "半導體",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3711",
+      "name": "日月光投控",
+      "group": "半導體",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2317",
+      "name": "鴻海",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2345",
+      "name": "智邦",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3005",
+      "name": "神基",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2313",
+      "name": "華通",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2367",
+      "name": "燿華",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3231",
+      "name": "緯創",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "6669",
+      "name": "緯穎",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2382",
+      "name": "廣達",
+      "group": "AI_伺服器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2881",
+      "name": "富邦金",
+      "group": "金融",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2882",
+      "name": "國泰金",
+      "group": "金融",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "1301",
+      "name": "台塑",
+      "group": "傳產",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "1303",
+      "name": "南亞",
+      "group": "傳產",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3008",
+      "name": "大立光",
+      "group": "光學",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "8046",
+      "name": "南電",
+      "group": "PCB",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2383",
+      "name": "台光電",
+      "group": "PCB",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "6274",
+      "name": "台燿",
+      "group": "PCB",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3017",
+      "name": "奇鋐",
+      "group": "散熱",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3324",
+      "name": "雙鴻",
+      "group": "散熱",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3081",
+      "name": "聯亞",
+      "group": "光通訊",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "6285",
+      "name": "啟碁",
+      "group": "光通訊",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3714",
+      "name": "富采",
+      "group": "光通訊",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2409",
+      "name": "友達",
+      "group": "低基期",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2027",
+      "name": "大成鋼",
+      "group": "低基期",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2059",
+      "name": "川湖",
+      "group": "機構件",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "3376",
+      "name": "新日興",
+      "group": "連接器",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "2455",
+      "name": "全新",
+      "group": "CPO_台股",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    },
+    {
+      "symbol": "6442",
+      "name": "光聖",
+      "group": "CPO_台股",
+      "score": 0,
+      "trade_quality": "no_data",
+      "primary_strategy": null,
+      "trend_bias": "unknown",
+      "one_line_summary": "未通過策略篩選",
+      "risk_flags": []
+    }
+  ],
+  "us_jp_stocks": [
+    {
+      "symbol": "CRWV",
+      "name": "CoreWeave",
+      "group": "美股_AI"
+    },
+    {
+      "symbol": "NBIS",
+      "name": "Nebius",
+      "group": "美股_AI"
+    },
+    {
+      "symbol": "IREN",
+      "name": "IREN Ltd",
+      "group": "美股_AI"
+    },
+    {
+      "symbol": "AVGO",
+      "name": "Broadcom 博通",
+      "group": "美股_AI"
+    },
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA 輝達",
+      "group": "美股_AI"
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD 超微",
+      "group": "美股_AI"
+    },
+    {
+      "symbol": "PLTR",
+      "name": "Palantir",
+      "group": "美股_AI"
+    },
+    {
+      "symbol": "PL",
+      "name": "Planet Labs",
+      "group": "美股_LEO"
+    },
+    {
+      "symbol": "GE",
+      "name": "GE航天航空",
+      "group": "美股_LEO"
+    },
+    {
+      "symbol": "5801.T",
+      "name": "古河電氣工業",
+      "group": "日股_光纖軍工"
+    },
+    {
+      "symbol": "7011.T",
+      "name": "三菱重工業",
+      "group": "日股_光纖軍工"
+    },
+    {
+      "symbol": "7012.T",
+      "name": "川崎重工業",
+      "group": "日股_光纖軍工"
+    },
+    {
+      "symbol": "7701.T",
+      "name": "島津製作所",
+      "group": "日股_光纖軍工"
+    },
+    {
+      "symbol": "6857.T",
+      "name": "Advantest 愛德萬",
+      "group": "日股_半導體"
+    },
+    {
+      "symbol": "4186.T",
+      "name": "東京應化工業",
+      "group": "日股_半導體"
+    },
+    {
+      "symbol": "285A.T",
+      "name": "Kioxia 鎧俠",
+      "group": "日股_半導體"
+    },
+    {
+      "symbol": "6146.T",
+      "name": "DISCO 迪斯科",
+      "group": "日股_半導體"
+    },
+    {
+      "symbol": "4004.T",
+      "name": "Resonac 力森諾科",
+      "group": "日股_半導體"
+    },
+    {
+      "symbol": "4063.T",
+      "name": "信越化學",
+      "group": "日股_半導體"
+    },
+    {
+      "symbol": "6954.T",
+      "name": "FANUC 發那科",
+      "group": "日股_AI機器人"
+    },
+    {
+      "symbol": "MU",
+      "name": "Micron 美光",
+      "group": "美股_半導體設備"
+    },
+    {
+      "symbol": "ALAB",
+      "name": "Astera Labs",
+      "group": "美股_半導體設備"
+    },
+    {
+      "symbol": "LRCX",
+      "name": "Lam Research 半導體設備",
+      "group": "美股_半導體設備"
+    },
+    {
+      "symbol": "LMT",
+      "name": "Lockheed Martin",
+      "group": "美股_軍工"
+    },
+    {
+      "symbol": "HII",
+      "name": "Huntington Ingalls 軍工造艦",
+      "group": "美股_軍工"
+    },
+    {
+      "symbol": "ISRG",
+      "name": "Intuitive Surgical 直覺外科",
+      "group": "美股_機器人"
+    },
+    {
+      "symbol": "TER",
+      "name": "Teradyne 泰瑞達",
+      "group": "美股_機器人"
+    },
+    {
+      "symbol": "ORCL",
+      "name": "Oracle 甲骨文",
+      "group": "美股_雲端"
+    },
+    {
+      "symbol": "IONQ",
+      "name": "IonQ 量子電腦",
+      "group": "美股_量子"
+    },
+    {
+      "symbol": "CDNS",
+      "name": "Cadence EDA設計",
+      "group": "美股_EDA"
+    },
+    {
+      "symbol": "CRWD",
+      "name": "CrowdStrike 資安",
+      "group": "美股_資安"
+    },
+    {
+      "symbol": "COHR",
+      "name": "Coherent",
+      "group": "CPO_矽光子"
+    },
+    {
+      "symbol": "LITE",
+      "name": "Lumentum",
+      "group": "CPO_矽光子"
+    },
+    {
+      "symbol": "MRVL",
+      "name": "Marvell邁威爾",
+      "group": "CPO_矽光子"
+    }
+  ]
+}

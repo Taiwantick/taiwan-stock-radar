@@ -1,0 +1,357 @@
+{
+  "updated_at": "2026-04-11T20:54:31",
+  "count": 39,
+  "alerts": [
+    {
+      "date": "2026-04-11",
+      "symbol": "6669",
+      "name": "緯穎",
+      "group": "AI_伺服器",
+      "alert_type": "breakdown",
+      "score": 10,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "6442",
+      "name": "光聖",
+      "group": "CPO_台股",
+      "alert_type": "volatility",
+      "score": 35,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "6442",
+      "name": "光聖",
+      "group": "CPO_台股",
+      "alert_type": "breakdown",
+      "score": 35,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "6442",
+      "name": "光聖",
+      "group": "CPO_台股",
+      "alert_type": "target",
+      "score": 35,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "6274",
+      "name": "台燿",
+      "group": "PCB",
+      "alert_type": "entry",
+      "score": 90,
+      "strategy": "right_side"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "6274",
+      "name": "台燿",
+      "group": "PCB",
+      "alert_type": "target",
+      "score": 90,
+      "strategy": "right_side"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3714",
+      "name": "富采",
+      "group": "光通訊",
+      "alert_type": "volatility",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3714",
+      "name": "富采",
+      "group": "光通訊",
+      "alert_type": "entry",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3711",
+      "name": "日月光投控",
+      "group": "半導體",
+      "alert_type": "target",
+      "score": 90,
+      "strategy": "right_side"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3324",
+      "name": "雙鴻",
+      "group": "散熱",
+      "alert_type": "breakdown",
+      "score": 2,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3231",
+      "name": "緯創",
+      "group": "AI_伺服器",
+      "alert_type": "breakout",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3231",
+      "name": "緯創",
+      "group": "AI_伺服器",
+      "alert_type": "entry",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3231",
+      "name": "緯創",
+      "group": "AI_伺服器",
+      "alert_type": "target",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3081",
+      "name": "聯亞",
+      "group": "光通訊",
+      "alert_type": "volatility",
+      "score": 48,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3081",
+      "name": "聯亞",
+      "group": "光通訊",
+      "alert_type": "breakdown",
+      "score": 48,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3081",
+      "name": "聯亞",
+      "group": "光通訊",
+      "alert_type": "target",
+      "score": 48,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3017",
+      "name": "奇鋐",
+      "group": "散熱",
+      "alert_type": "breakdown",
+      "score": 10,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3008",
+      "name": "大立光",
+      "group": "光學",
+      "alert_type": "target",
+      "score": 45,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3005",
+      "name": "神基",
+      "group": "AI_伺服器",
+      "alert_type": "entry",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "3005",
+      "name": "神基",
+      "group": "AI_伺服器",
+      "alert_type": "target",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2882",
+      "name": "國泰金",
+      "group": "金融",
+      "alert_type": "entry",
+      "score": 90,
+      "strategy": "right_side"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2882",
+      "name": "國泰金",
+      "group": "金融",
+      "alert_type": "target",
+      "score": 90,
+      "strategy": "right_side"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2455",
+      "name": "全新",
+      "group": "CPO_台股",
+      "alert_type": "breakout",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2455",
+      "name": "全新",
+      "group": "CPO_台股",
+      "alert_type": "target",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2454",
+      "name": "聯發科",
+      "group": "半導體",
+      "alert_type": "breakdown",
+      "score": 30,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2383",
+      "name": "台光電",
+      "group": "PCB",
+      "alert_type": "volatility",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2383",
+      "name": "台光電",
+      "group": "PCB",
+      "alert_type": "breakout",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2383",
+      "name": "台光電",
+      "group": "PCB",
+      "alert_type": "entry",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2383",
+      "name": "台光電",
+      "group": "PCB",
+      "alert_type": "target",
+      "score": 65,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2367",
+      "name": "燿華",
+      "group": "AI_伺服器",
+      "alert_type": "entry",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2345",
+      "name": "智邦",
+      "group": "AI_伺服器",
+      "alert_type": "volatility",
+      "score": 20,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2345",
+      "name": "智邦",
+      "group": "AI_伺服器",
+      "alert_type": "breakdown",
+      "score": 20,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2330",
+      "name": "台積電",
+      "group": "半導體",
+      "alert_type": "breakout",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2330",
+      "name": "台積電",
+      "group": "半導體",
+      "alert_type": "entry",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2330",
+      "name": "台積電",
+      "group": "半導體",
+      "alert_type": "target",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2308",
+      "name": "台達電",
+      "group": "半導體",
+      "alert_type": "volatility",
+      "score": 30,
+      "strategy": null
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2059",
+      "name": "川湖",
+      "group": "機構件",
+      "alert_type": "entry",
+      "score": 85,
+      "strategy": "right_side"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "2059",
+      "name": "川湖",
+      "group": "機構件",
+      "alert_type": "target",
+      "score": 85,
+      "strategy": "right_side"
+    },
+    {
+      "date": "2026-04-11",
+      "symbol": "1301",
+      "name": "台塑",
+      "group": "傳產",
+      "alert_type": "entry",
+      "score": 70,
+      "strategy": "pressure_break_ready"
+    }
+  ]
+}

@@ -1,6 +1,169 @@
 {
-  "updated_at": "2026-04-06 14:03",
-  "consec_buy": [],
-  "margin_short": [],
-  "vol_surge": []
+  "updated_at": "2026-04-11T20:54:30",
+  "consec_buy": [
+    {
+      "sid": "2382",
+      "foreign_net": 11030247,
+      "trust_net": 1344974,
+      "total_net": 12960672
+    },
+    {
+      "sid": "2027",
+      "foreign_net": 4670776,
+      "trust_net": 894000,
+      "total_net": 5612567
+    },
+    {
+      "sid": "2345",
+      "foreign_net": 692224,
+      "trust_net": 226539,
+      "total_net": 1371025
+    },
+    {
+      "sid": "2455",
+      "foreign_net": 1101911,
+      "trust_net": 66734,
+      "total_net": 1259745
+    },
+    {
+      "sid": "2308",
+      "foreign_net": 581401,
+      "trust_net": 25109,
+      "total_net": 856917
+    }
+  ],
+  "margin_short": [
+    {
+      "sid": "2382",
+      "margin_change": -728,
+      "short_change": 310,
+      "margin_balance": 9489,
+      "short_balance": 742
+    },
+    {
+      "sid": "2313",
+      "margin_change": -522,
+      "short_change": 102,
+      "margin_balance": 34740,
+      "short_balance": 1115
+    },
+    {
+      "sid": "6442",
+      "margin_change": -62,
+      "short_change": 33,
+      "margin_balance": 3825,
+      "short_balance": 132
+    },
+    {
+      "sid": "2383",
+      "margin_change": -53,
+      "short_change": 26,
+      "margin_balance": 1824,
+      "short_balance": 60
+    },
+    {
+      "sid": "2345",
+      "margin_change": -120,
+      "short_change": 18,
+      "margin_balance": 1653,
+      "short_balance": 22
+    },
+    {
+      "sid": "6285",
+      "margin_change": -774,
+      "short_change": 18,
+      "margin_balance": 19673,
+      "short_balance": 425
+    },
+    {
+      "sid": "2308",
+      "margin_change": -44,
+      "short_change": 17,
+      "margin_balance": 4858,
+      "short_balance": 103
+    },
+    {
+      "sid": "3443",
+      "margin_change": -128,
+      "short_change": 7,
+      "margin_balance": 2841,
+      "short_balance": 79
+    },
+    {
+      "sid": "3008",
+      "margin_change": -23,
+      "short_change": 1,
+      "margin_balance": 750,
+      "short_balance": 1
+    },
+    {
+      "sid": "3376",
+      "margin_change": -263,
+      "short_change": 1,
+      "margin_balance": 13599,
+      "short_balance": 8
+    }
+  ],
+  "vol_surge": [
+    {
+      "sid": "2409",
+      "total_net": -93883237,
+      "foreign_net": -82542534,
+      "trust_net": -1769
+    },
+    {
+      "sid": "2367",
+      "total_net": -31649917,
+      "foreign_net": -29884498,
+      "trust_net": -10075
+    },
+    {
+      "sid": "1303",
+      "total_net": -28410544,
+      "foreign_net": -24956746,
+      "trust_net": -3290000
+    },
+    {
+      "sid": "3714",
+      "total_net": -16467892,
+      "foreign_net": -16807898,
+      "trust_net": 25000
+    },
+    {
+      "sid": "2382",
+      "total_net": 12960672,
+      "foreign_net": 11030247,
+      "trust_net": 1344974
+    },
+    {
+      "sid": "3231",
+      "total_net": 10507039,
+      "foreign_net": 9922598,
+      "trust_net": -325524
+    },
+    {
+      "sid": "2881",
+      "total_net": -9771201,
+      "foreign_net": -10071328,
+      "trust_net": 95570
+    },
+    {
+      "sid": "2330",
+      "total_net": 8359236,
+      "foreign_net": 8159941,
+      "trust_net": -175389
+    },
+    {
+      "sid": "2027",
+      "total_net": 5612567,
+      "foreign_net": 4670776,
+      "trust_net": 894000
+    },
+    {
+      "sid": "2882",
+      "total_net": -5415239,
+      "foreign_net": -6756557,
+      "trust_net": 1214691
+    }
+  ]
 }
