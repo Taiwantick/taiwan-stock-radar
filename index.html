@@ -1,4 +1,4 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW" data-lang="zh">
 <head>
 <meta charset="UTF-8">
@@ -177,10 +177,10 @@ footer a:hover{text-decoration:underline}
 </head>
 <body>
 
-<\!-- Global Ticker Bar -->
+<!-- Global Ticker Bar -->
 <div id="global-ticker"></div>
 
-<\!-- Header with Market Tabs -->
+<!-- Header with Market Tabs -->
 <header>
   <div class="header-left">
     <div class="logo">📊</div>
@@ -203,7 +203,7 @@ footer a:hover{text-decoration:underline}
   </div>
 </header>
 
-<\!-- KPI Row -->
+<!-- KPI Row -->
 <div class="kpi-row" id="kpi-row">
   <div class="kpi">
     <div class="kpi-icon">📊</div>
@@ -227,7 +227,7 @@ footer a:hover{text-decoration:underline}
   </div>
 </div>
 
-<\!-- Watchlist Section -->
+<!-- Watchlist Section -->
 <section class="watchlist-section">
   <div class="section-header">
     <h2 class="section-badge section-badge-tw" id="section-badge" data-zh="💼 觀察清單" data-en="💼 Watchlist">💼 觀察清單</h2>
@@ -236,7 +236,7 @@ footer a:hover{text-decoration:underline}
   <div class="stock-grid" id="stock-grid"></div>
 </section>
 
-<\!-- Screener Section (TW only) -->
+<!-- Screener Section (TW only) -->
 <section class="screener-section" data-market="tw">
   <div class="section-header">
     <h2 class="section-badge section-badge-tw" data-zh="📋 營收篩選器" data-en="📋 Screener">📋 營收篩選器</h2>
@@ -259,7 +259,7 @@ footer a:hover{text-decoration:underline}
   </div>
 </section>
 
-<\!-- Signals Section (TW only) -->
+<!-- Signals Section (TW only) -->
 <section class="signal-section" data-market="tw">
   <div class="section-header">
     <h2 class="section-badge section-badge-tw" data-zh="⚡ 三大籌碼訊號" data-en="⚡ Signals">⚡ 三大籌碼訊號</h2>
@@ -307,7 +307,7 @@ footer a:hover{text-decoration:underline}
   </div>
 </section>
 
-<\!-- Monitor Alerts -->
+<!-- Monitor Alerts -->
 <section class="monitor-section">
   <div class="section-header">
     <h2 class="section-badge section-badge-tw" id="monitor-badge" data-zh="🚨 監控警報" data-en="🚨 Monitor Alerts">🚨 監控警報</h2>
@@ -328,7 +328,7 @@ footer a:hover{text-decoration:underline}
   </div>
 </section>
 
-<\!-- K-line Section (TW only) -->
+<!-- K-line Section (TW only) -->
 <section class="kline-section" data-market="tw">
   <div class="section-header">
     <h2 class="section-badge section-badge-tw" data-zh="📊 技術線圖" data-en="📊 K-Chart">📊 技術線圖</h2>
@@ -340,12 +340,12 @@ footer a:hover{text-decoration:underline}
   </div>
 </section>
 
-<\!-- Footer -->
+<!-- Footer -->
 <footer>
   <p data-zh="3市場股票儀表板 · 資料僅供參考，不構成投資建議" data-en="3-Market Stock Dashboard · Data for reference only, not investment advice">3市場股票儀表板 · 資料僅供參考，不構成投資建議</p>
 </footer>
 
-<\!-- Script -->
+<!-- Script -->
 <script>
 let LANG = localStorage.getItem('dashboard_lang') || 'zh';
 let MARKET = 'tw';
@@ -398,7 +398,7 @@ async function loadKPI(){
     const kpi = await res.json();
     const m = MARKET;
     const mk = kpi[m];
-    if(\!mk) return;
+    if(!mk) return;
 
     document.getElementById('kpi-total').textContent = mk.total;
     document.getElementById('kpi-strong').textContent = mk.strong_count;
@@ -427,7 +427,7 @@ function renderWatchlist(){
   const key = m + '_stocks';
   const stocks = (DATA[key] || []).sort((a,b)=>(b.score||0)-(a.score||0));
 
-  if(\!stocks.length){
+  if(!stocks.length){
     document.getElementById('stock-grid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted)"><p data-zh="暫無股票" data-en="No stocks">暫無股票</p></div>`;
     return;
   }
@@ -449,7 +449,7 @@ function filterGroup(btn,group){
   const m = MARKET;
   const key = m + '_stocks';
   let stocks = (DATA[key] || []).sort((a,b)=>(b.score||0)-(a.score||0));
-  if(group \!== 'all'){
+  if(group !== 'all'){
     stocks = stocks.filter(s=>s.group===group);
   }
   renderStockCards(stocks);
@@ -461,7 +461,7 @@ function renderStockCards(stocks){
     const scoreClass = scoreFor(s.score);
     const scoreText = s.score ? s.score.toFixed(1) : '-';
     let price = '';
-    if(m \!== 'tw' && s.price){
+    if(m !== 'tw' && s.price){
       const change = s.change_pct || 0;
       const changeClass = change >= 0 ? 'stock-meta-up' : 'stock-meta-dn';
       price = `<div class="stock-meta-item"><span class="stock-meta-label">P:</span><span class="stock-meta-value">${s.price.toFixed(2)}</span><span class="${changeClass}">${change>0?'+':''}${change.toFixed(2)}%</span></div>`;
@@ -503,11 +503,11 @@ function renderStockCards(stocks){
 function toggleCard(card){
   const isExp = card.classList.contains('expanded');
   document.querySelectorAll('.stock-card.expanded').forEach(c=>c.classList.remove('expanded'));
-  if(\!isExp) card.classList.add('expanded');
+  if(!isExp) card.classList.add('expanded');
 }
 
 function scoreFor(s){
-  if(\!s) return 'score-d';
+  if(!s) return 'score-d';
   if(s >= 75) return 'score-a';
   if(s >= 50) return 'score-b';
   if(s >= 25) return 'score-c';
@@ -518,7 +518,7 @@ async function loadScreener(){
   try{
     const res = await fetch('data/screener_data.json');
     const d = await res.json();
-    if(\!d || \!d.data || d.data.length === 0){
+    if(!d || !d.data || d.data.length === 0){
       document.getElementById('screener-body').innerHTML = '';
       document.getElementById('screener-empty').style.display = 'block';
       return;
@@ -541,7 +541,7 @@ async function loadSignals(){
   try{
     const res = await fetch('data/radar_data.json');
     const d = await res.json();
-    if(\!d) return;
+    if(!d) return;
 
     const consec = (d.consec_buy || []).slice(0,8);
     document.getElementById('sig-consec-buy').innerHTML = consec.map(s=>`
@@ -576,7 +576,7 @@ async function loadMonitor(){
   try{
     const res = await fetch('data/monitor_alerts.json');
     const d = await res.json();
-    if(\!d || \!d.alerts || d.alerts.length === 0){
+    if(!d || !d.alerts || d.alerts.length === 0){
       document.getElementById('monitor-body').innerHTML = '';
       document.getElementById('monitor-empty').style.display = 'block';
       return;
@@ -598,7 +598,7 @@ async function loadKline(){
   try{
     const res = await fetch('data/kline_data.json');
     const d = await res.json();
-    if(\!d || \!d.stocks) return;
+    if(!d || !d.stocks) return;
 
     const html = d.stocks.slice(0,10).map(s=>`
       <button class="kline-chip" onclick="showKlineChart('${s.symbol}')" data-symbol="${s.symbol}">
