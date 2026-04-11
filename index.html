@@ -15,11 +15,11 @@
 :root{
   /* ── DESIGN.md v1: Revolut-inspired fintech dark ── */
   /* Background & Surface */
-  --bg:#0D0F12;--card:#161A1F;--card2:#1C2127;--surface-3:#252B33;--surface-elevated:#1E2329;
+  --bg:#131620;--card:#1B1F2A;--card2:#222838;--surface-3:#2A3142;--surface-elevated:#242A38;
   /* Border */
-  --border:#1F2630;--border-default:#2A3240;--border-hover:#3A4555;--divider:#1A2030;
+  --border:#2A3245;--border-default:#333D52;--border-hover:#455168;--divider:#232B3C;
   /* Text */
-  --text:#F0F2F5;--muted:#8A94A6;--text-tertiary:#5C6678;
+  --text:#F0F2F5;--muted:#94A0B8;--text-tertiary:#6B7A90;
   /* Accent */
   --blue:#6C72FF;--teal:#3DD6C8;--purple:#6C72FF;--forest:#3DD6C8;
   --accent-muted:rgba(108,114,255,0.12);--teal-muted:rgba(61,214,200,0.10);
@@ -29,7 +29,7 @@
   --yellow-muted:rgba(255,170,43,0.10);
   /* Gradient */
   --gradient-brand:linear-gradient(135deg,#6C72FF 0%,#3DD6C8 100%);
-  --gradient-surface:linear-gradient(180deg,#0D0F12 0%,#121519 100%);
+  --gradient-surface:linear-gradient(180deg,#131620 0%,#171C28 100%);
   /* Radius */
   --radius-sm:6px;--radius-md:12px;--radius-lg:16px;--radius-xl:24px;
   /* Transition */
@@ -981,11 +981,11 @@ function computeRealtime(rawData){
 
 // ── Charts ────────────────────────────────────────────────────────────────────
 const COLORS=['#3DD6C8','#6C72FF','#F5475B','#2DD57A','#FFAA2B','#4DA3FF','#7F84FF','#9B6CFF','#FF7B9C','#34D399','#F59E0B','#60A5FA','#A78BFA','#FB923C','#38BDF8'];
-const GC='#1F2630',TC='#5C6678';let charts={};
+const GC='#2A3245',TC='#6B7A90';let charts={};
 function destroy(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
 function barV(id,labels,values,color){destroy(id);charts[id]=new Chart(document.getElementById(id).getContext('2d'),{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:color+'bb',borderColor:color,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:TC,maxRotation:45,font:{size:10}},grid:{color:GC}},y:{ticks:{color:TC,font:{size:10}},grid:{color:GC}}}}});}
 function barH(id,labels,values,color){destroy(id);charts[id]=new Chart(document.getElementById(id).getContext('2d'),{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:color+'bb',borderColor:color,borderWidth:1,borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:TC,font:{size:10}},grid:{color:GC}},y:{ticks:{color:TC,font:{size:10}},grid:{color:GC}}}}});}
-function pie(id,labels,values,doughnut=true){destroy(id);charts[id]=new Chart(document.getElementById(id).getContext('2d'),{type:doughnut?'doughnut':'pie',data:{labels,datasets:[{data:values,backgroundColor:COLORS.slice(0,labels.length),borderColor:'#161A1F',borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#F0F2F5',font:{size:11},padding:9,boxWidth:12}}}}});}
+function pie(id,labels,values,doughnut=true){destroy(id);charts[id]=new Chart(document.getElementById(id).getContext('2d'),{type:doughnut?'doughnut':'pie',data:{labels,datasets:[{data:values,backgroundColor:COLORS.slice(0,labels.length),borderColor:'#1B1F2A',borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#F0F2F5',font:{size:11},padding:9,boxWidth:12}}}}});}
 
 let SIGNAL_STOCKS={};   // 全域：訊號 → 個股陣列
 let SCREENER_DATA=null; // 全域：screener_data.json
@@ -1049,7 +1049,7 @@ function renderCharts(d){
     const sigLabels=d.signals.labels.map(transSignal);
     charts['c-signals']=new Chart(document.getElementById('c-signals').getContext('2d'),{
       type:'doughnut',
-      data:{labels:sigLabels,datasets:[{data:d.signals.values,backgroundColor:COLORS.slice(0,sigLabels.length),borderColor:'#161A1F',borderWidth:2,hoverOffset:10}]},
+      data:{labels:sigLabels,datasets:[{data:d.signals.values,backgroundColor:COLORS.slice(0,sigLabels.length),borderColor:'#1B1F2A',borderWidth:2,hoverOffset:10}]},
       options:{responsive:true,maintainAspectRatio:false,
         plugins:{legend:{position:'right',labels:{color:'#F0F2F5',font:{size:11},padding:9,boxWidth:12}},
           tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} ${LANG==='zh'?'次':'times'}`}}
@@ -1614,7 +1614,7 @@ function showKlineChart(sid){
   // Create new chart
   const isDark = document.documentElement.getAttribute('data-theme')==='dark'||
                  window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const bg     = isDark?'#0D0F12':'#ffffff';
+  const bg     = isDark?'#131620':'#ffffff';
   const txtCol = isDark?'#8A94A6':'#4a5568';
   const gridCol= isDark?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.05)';
 
