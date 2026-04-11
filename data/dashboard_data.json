@@ -2479,6 +2479,19 @@
         "top_strategy": {},
         "source": "stock-mcp"
       }
+    },
+    {
+      "ts": 1775930289,
+      "date": "2026-04-12",
+      "time": "01:58",
+      "stocks": [],
+      "summary": {
+        "total": 0,
+        "strong": 0,
+        "lock": 0,
+        "top_strategy": {},
+        "source": "stock-mcp"
+      }
     }
   ]
 }
