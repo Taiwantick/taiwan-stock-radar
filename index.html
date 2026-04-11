@@ -474,13 +474,13 @@ footer a{color:var(--blue);text-decoration:none}
     <div class="kpi-icon">📢</div>
     <div class="kpi-label" data-zh="今日重大訊息" data-en="Today's Announcements">今日重大訊息</div>
     <div class="kpi-value" id="kpi-news-count">—</div>
-    <div class="kpi-sub" style="font-size:0.7rem;color:#aaa;margin-bottom:2px" data-zh="精選25檔" data-en="Top 25 picks">精選25檔</div>
+    <div class="kpi-sub" style="font-size:0.7rem;color:var(--muted);margin-bottom:2px" id="kpi-news-scope" data-zh="觀察清單" data-en="Watchlist">觀察清單</div>
     <div class="kpi-sub" id="kpi-news-sub">▾ <span data-zh="點擊查看訊息" data-en="Click to view">點擊查看訊息</span></div>
   </div>
   <div class="kpi" onclick="toggleWatchlist(event)" style="cursor:pointer">
     <div class="kpi-icon">⭐</div>
-    <div class="kpi-label" data-zh="本站精選" data-en="Featured Stocks">本站精選</div>
-    <div class="kpi-value">25 <span style="font-size:1rem;font-weight:400" data-zh="檔" data-en="stocks">檔</span></div>
+    <div class="kpi-label" data-zh="觀察清單" data-en="Watchlist">觀察清單</div>
+    <div class="kpi-value"><span id="kpi-wl-count">—</span> <span style="font-size:1rem;font-weight:400" data-zh="檔" data-en="stocks">檔</span></div>
     <div class="kpi-sub" data-zh="▾ 點擊展開清單" data-en="▾ Click to expand">▾ 點擊展開清單</div>
   </div>
   <div class="kpi" onclick="toggleLockPanel(event)" style="cursor:pointer">
@@ -685,7 +685,7 @@ footer a{color:var(--blue);text-decoration:none}
 <div id="news-overlay" onclick="closeNewsPanel()" style="display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.5)"></div>
 <div id="news-panel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:300;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.75);width:min(580px,95vw);max-height:82vh;display:none;flex-direction:column">
   <div style="padding:1rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-    <span style="font-size:.9rem;font-weight:700">📢 <span data-zh="今日重大訊息（精選25檔）" data-en="Today's Announcements (Featured 25)">今日重大訊息（精選25檔）</span></span>
+    <span style="font-size:.9rem;font-weight:700">📢 <span data-zh="今日重大訊息（觀察清單）" data-en="Today's Announcements (Watchlist)">今日重大訊息（觀察清單）</span></span>
     <button onclick="closeNewsPanel()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:.2rem .4rem;border-radius:4px" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">✕</button>
   </div>
   <div id="news-panel-body" style="overflow-y:auto;flex:1;padding:.4rem .2rem"></div>
@@ -695,7 +695,7 @@ footer a{color:var(--blue);text-decoration:none}
 <!-- ═══ K線圖 ═══════════════════════════════════════════════════════════════ -->
 <div class="kline-section">
   <div class="kline-header">
-    <span class="kline-badge">📈 <span data-zh="精選25檔 · 日K走勢" data-en="Featured 25 · Daily K-Chart">精選25檔 · 日K走勢</span></span>
+    <span class="kline-badge">📈 <span data-zh="觀察清單 · 日K走勢" data-en="Watchlist · Daily K-Chart">觀察清單 · 日K走勢</span></span>
     <span class="kline-meta" id="kline-meta"></span>
   </div>
   <div class="kline-stocks" id="kline-chips">
@@ -1238,8 +1238,8 @@ function filterAllOrders(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllOrders();closeNewsPanel();}});
 
 // ── News Panel ────────────────────────────────────────────────────────────────
-// 精選25檔代號（與 stocks.txt 同步）
-const WATCHED_SIDS=new Set(['006208','1711','1717','1802','1815','2313','2367','2421','2634','3017','3163','3324','3481','3491','4760','4989','5340','5439','5475','6125','6182','6217','6285','6546','6770']);
+// 觀察清單代號（從 watchlist_status.json 動態載入，初始為空）
+let WATCHED_SIDS=new Set();
 
 let _newsData=[];
 let _newsPanelOpen=false;
@@ -1682,28 +1682,70 @@ function setDays(days,btn){
 }
 
 // ── Watchlist ─────────────────────────────────────────────────────────────────
-const WATCHLIST=[
-  {sid:'006208',name:'富邦台50'},{sid:'1711',name:'永光'},{sid:'1717',name:'長興'},
-  {sid:'1802',name:'台玻'},{sid:'1815',name:'富喬'},{sid:'2313',name:'華通'},
-  {sid:'2367',name:'燿華'},{sid:'2421',name:'建準'},{sid:'2634',name:'漢翔'},
-  {sid:'3017',name:'奇鋐'},{sid:'3163',name:'波若威'},{sid:'3324',name:'雙鴻'},
-  {sid:'3481',name:'群創'},{sid:'3491',name:'昇達科'},{sid:'4760',name:'雙鍵'},
-  {sid:'4989',name:'榮科'},{sid:'5340',name:'建榮'},{sid:'5439',name:'高技'},
-  {sid:'5475',name:'德宏'},{sid:'6125',name:'廣運'},{sid:'6182',name:'合晶'},
-  {sid:'6217',name:'中探針'},{sid:'6285',name:'啟碁'},{sid:'6546',name:'正基'},
-  {sid:'6770',name:'力積電'},
-];
-// ── 個股名稱對照表（SID → name），從 WATCHLIST 初始化，執行時動態補充 ─────
-const NAMES_MAP = Object.fromEntries(WATCHLIST.map(w=>[w.sid, w.name]));
+let WATCHLIST=[];
+let WATCHLIST_GROUPS={};
+// ── 個股名稱對照表（SID → name），動態填充 ─────
+const NAMES_MAP = {};
 function sidName(sid){ return NAMES_MAP[sid]||''; }
 function sidLabel(sid){ const n=sidName(sid); return n?`${sid} ${n}`:sid; }
-document.body.insertAdjacentHTML('beforeend',`
-  <div id="watchlist-overlay" onclick="closeWatchlist()"></div>
-  <div id="watchlist-panel" style="display:none">
-    <h3><span>⭐ 本站精選（${WATCHLIST.length} 檔）</span><button onclick="closeWatchlist()">✕</button></h3>
-    <div class="wl-grid">${WATCHLIST.map(s=>`<div class="wl-item"><span class="wl-sid">${s.sid}</span><span class="wl-name">${s.name}</span></div>`).join('')}</div>
-  </div>
-`);
+
+// ── 從 watchlist_status.json 動態載入觀察清單 ──
+async function loadWatchlist(){
+  try{
+    const r=await fetch('data/watchlist_status.json');
+    if(!r.ok) throw new Error('fetch failed');
+    const d=await r.json();
+    const twStocks=d.tw_stocks||[];
+    const usJpStocks=d.us_jp_stocks||[];
+    // 台股觀察清單
+    WATCHLIST=twStocks.map(s=>({sid:s.symbol,name:s.name,group:s.group,score:s.score}));
+    WATCHED_SIDS=new Set(WATCHLIST.map(s=>s.sid));
+    WATCHLIST.forEach(s=>{ NAMES_MAP[s.sid]=s.name; });
+    // 美股/日股也加到名稱表
+    usJpStocks.forEach(s=>{ NAMES_MAP[s.symbol]=s.name; });
+    // 按分組整理
+    WATCHLIST_GROUPS={};
+    WATCHLIST.forEach(s=>{
+      const g=s.group||'其他';
+      if(!WATCHLIST_GROUPS[g]) WATCHLIST_GROUPS[g]=[];
+      WATCHLIST_GROUPS[g].push(s);
+    });
+    // 更新 KPI 數字
+    const totalCount=twStocks.length+usJpStocks.length;
+    const kpiEl=document.getElementById('kpi-wl-count');
+    if(kpiEl) kpiEl.textContent=totalCount;
+    const scopeEl=document.getElementById('kpi-news-scope');
+    if(scopeEl){
+      const zh=LANG!=='en';
+      scopeEl.textContent=zh?`台股 ${twStocks.length} 檔 · 海外 ${usJpStocks.length} 檔`:`TW ${twStocks.length} · Intl ${usJpStocks.length}`;
+    }
+    // 建立觀察清單彈窗
+    buildWatchlistPanel();
+    console.log(`✅ Watchlist loaded: ${twStocks.length} TW + ${usJpStocks.length} US/JP`);
+  }catch(e){
+    console.warn('Watchlist load failed, using empty list:',e);
+  }
+}
+
+function buildWatchlistPanel(){
+  let existing=document.getElementById('watchlist-panel');
+  if(existing) existing.remove();
+  let overlay=document.getElementById('watchlist-overlay');
+  if(overlay) overlay.remove();
+  const zh=LANG!=='en';
+  const groupHtml=Object.entries(WATCHLIST_GROUPS).map(([g,stocks])=>`
+    <div style="margin-bottom:.8rem">
+      <div style="font-size:.72rem;color:var(--blue);font-weight:600;margin-bottom:.3rem;padding-bottom:.2rem;border-bottom:1px solid var(--border)">${g}（${stocks.length}）</div>
+      <div class="wl-grid">${stocks.map(s=>`<div class="wl-item"><span class="wl-sid">${s.sid}</span><span class="wl-name">${s.name}</span></div>`).join('')}</div>
+    </div>`).join('');
+  document.body.insertAdjacentHTML('beforeend',`
+    <div id="watchlist-overlay" onclick="closeWatchlist()"></div>
+    <div id="watchlist-panel" style="display:none">
+      <h3><span>⭐ ${zh?'觀察清單':'Watchlist'}（${WATCHLIST.length} ${zh?'檔':'stocks'}）</span><button onclick="closeWatchlist()">✕</button></h3>
+      ${groupHtml}
+    </div>
+  `);
+}
 // ── Lock Panel ─────────────────────────────────────────────────────────────
 document.body.insertAdjacentHTML('beforeend',`
   <div id="lock-overlay" onclick="closeLockPanel()"></div>
@@ -2038,7 +2080,8 @@ async function loadMonitorAlerts(){
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 if(LANG==='en')document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',i===1));
-load();loadRealtime();loadScreener();loadInsider();loadKline();loadGlobalTicker();loadNews();loadSignals();
+loadWatchlist().then(()=>{loadNews();loadKline();});
+load();loadRealtime();loadScreener();loadInsider();loadGlobalTicker();loadSignals();
 loadWatchlistStatus();loadMonitorAlerts();
 setInterval(load,3600000);       // 每小時重新載入
 setInterval(loadRealtime,3600000);
