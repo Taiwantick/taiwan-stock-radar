@@ -1,0 +1,80 @@
+{
+  "updated_at": "2026-04-12T01:46:44",
+  "tw": {
+    "total": 33,
+    "avg_score": 0.0,
+    "quality_a": 0,
+    "quality_b": 0,
+    "strong_count": 0,
+    "top3": [
+      {
+        "symbol": "2330",
+        "name": "台積電",
+        "score": 0
+      },
+      {
+        "symbol": "2454",
+        "name": "聯發科",
+        "score": 0
+      },
+      {
+        "symbol": "3034",
+        "name": "聯詠",
+        "score": 0
+      }
+    ],
+    "lock_count": 0
+  },
+  "us": {
+    "total": 23,
+    "avg_score": 49.1,
+    "quality_a": 0,
+    "quality_b": 0,
+    "strong_count": 0,
+    "top3": [
+      {
+        "symbol": "MU",
+        "name": "Micron 美光",
+        "score": 58.0
+      },
+      {
+        "symbol": "NVDA",
+        "name": "NVIDIA 輝達",
+        "score": 56.5
+      },
+      {
+        "symbol": "ALAB",
+        "name": "Astera Labs",
+        "score": 55.7
+      }
+    ],
+    "avg_pe": 147.1,
+    "avg_dividend_yield": 72.4
+  },
+  "jp": {
+    "total": 11,
+    "avg_score": 35.6,
+    "quality_a": 0,
+    "quality_b": 0,
+    "strong_count": 0,
+    "top3": [
+      {
+        "symbol": "6857.T",
+        "name": "Advantest 愛德萬",
+        "score": 46.0
+      },
+      {
+        "symbol": "6954.T",
+        "name": "FANUC 發那科",
+        "score": 41.5
+      },
+      {
+        "symbol": "4186.T",
+        "name": "東京應化工業",
+        "score": 40.3
+      }
+    ],
+    "avg_pe": 55.4,
+    "avg_dividend_yield": 90.8
+  }
+}

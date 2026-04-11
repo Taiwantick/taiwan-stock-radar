@@ -1696,13 +1696,15 @@ async function loadWatchlist(){
     if(!r.ok) throw new Error('fetch failed');
     const d=await r.json();
     const twStocks=d.tw_stocks||[];
-    const usJpStocks=d.us_jp_stocks||[];
+    const usStocks=d.us_stocks||d.us_jp_stocks||[];
+    const jpStocks=d.jp_stocks||[];
     // 台股觀察清單
     WATCHLIST=twStocks.map(s=>({sid:s.symbol,name:s.name,group:s.group,score:s.score}));
     WATCHED_SIDS=new Set(WATCHLIST.map(s=>s.sid));
     WATCHLIST.forEach(s=>{ NAMES_MAP[s.sid]=s.name; });
     // 美股/日股也加到名稱表
-    usJpStocks.forEach(s=>{ NAMES_MAP[s.symbol]=s.name; });
+    usStocks.forEach(s=>{ NAMES_MAP[s.symbol]=s.name; });
+    jpStocks.forEach(s=>{ NAMES_MAP[s.symbol]=s.name; });
     // 按分組整理
     WATCHLIST_GROUPS={};
     WATCHLIST.forEach(s=>{
@@ -1711,13 +1713,13 @@ async function loadWatchlist(){
       WATCHLIST_GROUPS[g].push(s);
     });
     // 更新 KPI 數字
-    const totalCount=twStocks.length+usJpStocks.length;
+    const totalCount=twStocks.length+usStocks.length+jpStocks.length;
     const kpiEl=document.getElementById('kpi-wl-count');
     if(kpiEl) kpiEl.textContent=totalCount;
     const scopeEl=document.getElementById('kpi-news-scope');
     if(scopeEl){
       const zh=LANG!=='en';
-      scopeEl.textContent=zh?`台股 ${twStocks.length} 檔 · 海外 ${usJpStocks.length} 檔`:`TW ${twStocks.length} · Intl ${usJpStocks.length}`;
+      scopeEl.textContent=zh?`台股 ${twStocks.length} · 美股 ${usStocks.length} · 日股 ${jpStocks.length}`:`TW ${twStocks.length} · US ${usStocks.length} · JP ${jpStocks.length}`;
     }
     // 建立觀察清單彈窗
     buildWatchlistPanel();
