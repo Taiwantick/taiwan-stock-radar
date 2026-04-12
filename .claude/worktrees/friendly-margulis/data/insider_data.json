@@ -1,0 +1,14 @@
+{
+  "ts": 1774353213,
+  "date": "2026-03-24",
+  "time": "19:53",
+  "days_back": 30,
+  "warn_lots": 100,
+  "alert_lots": 30,
+  "sell_count": 0,
+  "buy_count": 0,
+  "high_count": 0,
+  "medium_count": 0,
+  "sells": [],
+  "buys": []
+}
