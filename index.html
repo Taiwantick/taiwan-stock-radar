@@ -102,6 +102,12 @@ header{background:var(--gradient-surface);border-bottom:1px solid var(--border);
 .stock-meta-value{color:var(--text);font-weight:600}
 .stock-meta-up{color:var(--green)}
 .stock-meta-dn{color:var(--red)}
+.stock-sparkline{height:48px;margin:0.5rem 0;border-radius:4px;overflow:hidden}
+.stock-sparkline canvas{width:100%;height:100%;display:block}
+.stock-price-row{display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.3rem}
+.stock-price{font-size:1.1rem;font-weight:700;font-variant-numeric:tabular-nums}
+.stock-change{font-size:0.78rem;font-weight:600}
+.stock-vol{font-size:0.7rem;color:var(--text-tertiary)}
 .stock-card-expanded{display:none}
 .stock-card.expanded .stock-card-summary{display:none}
 .stock-card.expanded .stock-card-expanded{display:block}
@@ -457,15 +463,26 @@ function filterGroup(btn,group){
 
 function renderStockCards(stocks){
   const m = MARKET;
-  const html = stocks.map(s=>{
+  const html = stocks.map((s,idx)=>{
     const scoreClass = scoreFor(s.score);
     const scoreText = s.score ? s.score.toFixed(1) : '-';
-    let price = '';
-    if(m !== 'tw' && s.price){
+    // Price row — all markets
+    let priceRow = '';
+    if(s.price){
       const change = s.change_pct || 0;
       const changeClass = change >= 0 ? 'stock-meta-up' : 'stock-meta-dn';
-      price = `<div class="stock-meta-item"><span class="stock-meta-label">P:</span><span class="stock-meta-value">${s.price.toFixed(2)}</span><span class="${changeClass}">${change>0?'+':''}${change.toFixed(2)}%</span></div>`;
+      const changeSign = change > 0 ? '+' : '';
+      const volText = s.volume ? formatVol(s.volume) : '';
+      priceRow = `<div class="stock-price-row">
+        <span class="stock-price">${formatPrice(s.price)}</span>
+        <span class="stock-change ${changeClass}">${changeSign}${change.toFixed(2)}%</span>
+        ${volText?`<span class="stock-vol">Vol ${volText}</span>`:''}
+      </div>`;
     }
+    // Sparkline placeholder
+    const sparkId = `spark-${m}-${idx}`;
+    const sparkline = s.kbars && s.kbars.close && s.kbars.close.length > 2
+      ? `<div class="stock-sparkline"><canvas id="${sparkId}"></canvas></div>` : '';
     const pe = s.pe_ratio ? `<div class="stock-meta-item"><span class="stock-meta-label">PE:</span><span class="stock-meta-value">${s.pe_ratio.toFixed(1)}</span></div>` : '';
     const symbolClass = `stock-symbol stock-symbol-${m}`;
     return `
@@ -479,18 +496,19 @@ function renderStockCards(stocks){
           <span class="score-badge ${scoreClass}">${scoreText}</span>
         </div>
         <div class="stock-card-summary">
+          ${priceRow}
+          ${sparkline}
           <div class="stock-summary">${s.one_line_summary || '-'}</div>
           <div class="stock-meta">
-            ${price}
             ${pe}
-            ${s.trade_quality?`<div class="stock-meta-item"><span class="stock-meta-label">Grade:</span><span class="stock-meta-value">${s.trade_quality}</span></div>`:''}
+            ${s.trade_quality && s.trade_quality!=='no_data'?`<div class="stock-meta-item"><span class="stock-meta-label">Grade:</span><span class="stock-meta-value">${s.trade_quality}</span></div>`:''}
           </div>
         </div>
         <div class="stock-card-expanded" style="display:none">
           <div style="font-size:0.75rem;color:var(--text-tertiary);line-height:1.6">
             <div><strong data-zh="趨勢:" data-en="Trend:">趨勢:</strong> ${s.trend_bias||'-'}</div>
             ${s.primary_strategy?`<div><strong data-zh="策略:" data-en="Strategy:">策略:</strong> ${s.primary_strategy}</div>`:''}
-            ${s.trade_quality?`<div><strong data-zh="品質:" data-en="Quality:">品質:</strong> ${s.trade_quality}</div>`:''}
+            ${s.trade_quality && s.trade_quality!=='no_data'?`<div><strong data-zh="品質:" data-en="Quality:">品質:</strong> ${s.trade_quality}</div>`:''}
             <div><strong data-zh="分數:" data-en="Score:">分數:</strong> ${s.score||0}</div>
           </div>
         </div>
@@ -498,6 +516,81 @@ function renderStockCards(stocks){
     `;
   }).join('');
   document.getElementById('stock-grid').innerHTML = html;
+  // Draw sparklines after DOM update
+  requestAnimationFrame(()=>drawSparklines(stocks));
+}
+
+function formatPrice(p){
+  if(p>=1000) return p.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+  if(p>=100) return p.toFixed(1);
+  return p.toFixed(2);
+}
+function formatVol(v){
+  if(v>=1e9) return (v/1e9).toFixed(1)+'B';
+  if(v>=1e6) return (v/1e6).toFixed(1)+'M';
+  if(v>=1e3) return (v/1e3).toFixed(0)+'K';
+  return v.toString();
+}
+
+function drawSparklines(stocks){
+  const m = MARKET;
+  stocks.forEach((s,idx)=>{
+    if(!s.kbars || !s.kbars.close || s.kbars.close.length < 3) return;
+    const canvas = document.getElementById(`spark-${m}-${idx}`);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    const W = rect.width, H = rect.height;
+    const closes = s.kbars.close;
+    const vols = s.kbars.volume || [];
+    const min = Math.min(...closes);
+    const max = Math.max(...closes);
+    const range = max - min || 1;
+    const n = closes.length;
+    const step = W / (n - 1);
+
+    // Volume bars (bottom 30%)
+    if(vols.length){
+      const maxVol = Math.max(...vols) || 1;
+      const volH = H * 0.28;
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = '#8B949E';
+      vols.forEach((v,i)=>{
+        const bh = (v / maxVol) * volH;
+        const bw = Math.max(1, step * 0.6);
+        ctx.fillRect(i * step - bw/2, H - bh, bw, bh);
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    // Price line
+    const isUp = closes[closes.length-1] >= closes[0];
+    const lineColor = isUp ? '#2DD57A' : '#F5475B';
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    closes.forEach((c,i)=>{
+      const x = i * step;
+      const y = H * 0.05 + (1 - (c - min) / range) * (H * 0.62);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Gradient fill under line
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, isUp ? 'rgba(45,213,122,0.12)' : 'rgba(245,71,91,0.12)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.lineTo((n-1)*step, H);
+    ctx.lineTo(0, H);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+  });
 }
 
 function toggleCard(card){
