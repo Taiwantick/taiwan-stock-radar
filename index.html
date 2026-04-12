@@ -391,7 +391,8 @@ async function loadGlobalTicker(){
 
 async function loadData(){
   try{
-    const res = await fetch('data/watchlist_status.json');
+    const cb = '?t=' + Date.now();
+    const res = await fetch('data/watchlist_status.json' + cb);
     DATA = await res.json();
     await loadKPI();
     renderWatchlist();
@@ -400,7 +401,8 @@ async function loadData(){
 
 async function loadKPI(){
   try{
-    const res = await fetch('data/market_kpi.json');
+    const cb = '?t=' + Date.now();
+    const res = await fetch('data/market_kpi.json' + cb);
     const kpi = await res.json();
     const m = MARKET;
     const mk = kpi[m];
