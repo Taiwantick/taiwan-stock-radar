@@ -286,10 +286,10 @@ footer a:hover{text-decoration:underline}
       <tr>
         <th data-zh="代號" data-en="Symbol">代號</th>
         <th data-zh="名稱" data-en="Name">名稱</th>
-        <th data-zh="營收YoY" data-en="Revenue YoY">營收YoY</th>
+        <th data-zh="營收YoY/分數" data-en="YoY/Score">營收YoY/分數</th>
         <th data-zh="外資(張)" data-en="Foreign">外資(張)</th>
         <th data-zh="投信(張)" data-en="Trust">投信(張)</th>
-        <th data-zh="法人標籤" data-en="Tags">法人標籤</th>
+        <th data-zh="分類" data-en="Tags">分類</th>
       </tr>
     </thead>
     <tbody id="screener-body">
@@ -648,24 +648,50 @@ function scoreFor(s){
 async function loadScreener(){
   try{
     const cb = '?t=' + Date.now();
-    const res = await fetch('data/screener_data.json' + cb);
-    const d = await res.json();
-    if(!d || !d.results || d.results.length === 0){
+    // 優先用 screener_data.json，若空則從 watchlist_status 的台股取資料
+    let rows = [];
+    try{
+      const res = await fetch('data/screener_data.json' + cb);
+      const d = await res.json();
+      if(d && d.results && d.results.length > 0) rows = d.results;
+    }catch(e){}
+
+    if(rows.length === 0 && DATA && DATA.tw_stocks){
+      // fallback：用觀察清單台股資料，按分數排序
+      rows = DATA.tw_stocks.map(s=>({
+        sid: s.symbol, name: s.name||s.symbol,
+        yoy: null, f_net: 0, t_net: 0, in_f: false, in_t: false, in_d: false,
+        score: s.score||0, price: s.price, change_pct: s.change_pct, group: s.group
+      })).sort((a,b)=>(b.score||0)-(a.score||0));
+    }
+
+    if(rows.length === 0){
       document.getElementById('screener-body').innerHTML = '';
       document.getElementById('screener-empty').style.display = 'block';
       return;
     }
-    function fmtLots(v){ if(!v) return '0'; if(Math.abs(v)>=1000) return (v/1000).toFixed(0)+'K'; return v.toLocaleString(); }
-    const html = d.results.slice(0,20).map(row=>{
+    function fmtLots(v){ if(!v) return '—'; if(Math.abs(v)>=1000) return (v/1000).toFixed(0)+'K'; return v.toLocaleString(); }
+    const html = rows.slice(0,20).map(row=>{
+      const hasYoy = row.yoy !== null && row.yoy !== undefined;
       const tags = [];
       if(row.in_f) tags.push('<span style="color:var(--green);font-size:0.75rem;font-weight:600">外資</span>');
       if(row.in_t) tags.push('<span style="color:var(--red);font-size:0.75rem;font-weight:600">投信</span>');
       if(row.in_d) tags.push('<span style="color:var(--yellow);font-size:0.75rem;font-weight:600">自營</span>');
-      const yoyColor = (row.yoy||0) >= 0 ? 'var(--green)' : 'var(--red)';
+      if(row.group) tags.push(`<span style="color:var(--muted);font-size:0.72rem">${row.group}</span>`);
+      // YoY 或分數
+      let col3 = '';
+      if(hasYoy){
+        const yoyColor = row.yoy >= 0 ? 'var(--green)' : 'var(--red)';
+        col3 = `<td style="color:${yoyColor};font-weight:600">${row.yoy >= 0 ? '+' : ''}${row.yoy.toFixed(1)}%</td>`;
+      } else {
+        const sc = row.score||0;
+        const scColor = sc>=60?'var(--green)':sc>=30?'var(--yellow)':'var(--red)';
+        col3 = `<td style="color:${scColor};font-weight:600">${sc}</td>`;
+      }
       return `<tr>
         <td style="font-family:var(--font-mono);font-weight:600;color:var(--blue)">${row.sid}</td>
         <td>${row.name||row.sid}</td>
-        <td style="color:${yoyColor};font-weight:600">${row.yoy >= 0 ? '+' : ''}${(row.yoy||0).toFixed(1)}%</td>
+        ${col3}
         <td style="color:${(row.f_net||0)>0?'var(--green)':'var(--red)'}">${fmtLots(row.f_net)}</td>
         <td style="color:${(row.t_net||0)>0?'var(--green)':'var(--red)'}">${fmtLots(row.t_net)}</td>
         <td>${tags.join(' ')}</td>
@@ -684,12 +710,17 @@ async function loadSignals(){
     if(!d) return;
     function fmtNet(v){ if(!v) return '0'; const a=Math.abs(v); if(a>=1e6) return (v/1e6).toFixed(1)+'M'; if(a>=1e3) return (v/1e3).toFixed(0)+'K'; return v.toLocaleString(); }
 
+    // 從 DATA 建立 sid→name 對照表
+    const nm = {};
+    if(DATA && DATA.tw_stocks) DATA.tw_stocks.forEach(s=>{ nm[s.symbol]=s.name; });
+
     // 1. 法人連買：外資+投信同向買超
     const consec = (d.consec_buy || []).slice(0,8);
     document.getElementById('sig-consec-buy').innerHTML = consec.map(s=>{
       const fn = s.foreign_net||0, tn = s.trust_net||0;
+      const name = s.name || nm[s.sid] || '';
       return `<tr>
-        <td class="sig-sid" style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</td>
+        <td class="sig-sid"><span style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</span> <span style="color:var(--muted);font-size:0.78rem">${name}</span></td>
         <td style="color:${fn>0?'var(--green)':'var(--red)'}">${fmtNet(fn)}</td>
         <td style="color:${tn>0?'var(--green)':'var(--red)'}">${fmtNet(tn)}</td>
       </tr>`;
@@ -700,8 +731,9 @@ async function loadSignals(){
     const margin = (d.margin_short || []).slice(0,8);
     document.getElementById('sig-margin-short').innerHTML = margin.map(s=>{
       const mc = s.margin_change||0, sc = s.short_change||0;
+      const name = s.name || nm[s.sid] || '';
       return `<tr>
-        <td class="sig-sid" style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</td>
+        <td class="sig-sid"><span style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</span> <span style="color:var(--muted);font-size:0.78rem">${name}</span></td>
         <td style="color:var(--red)">${mc.toLocaleString()}</td>
         <td style="color:var(--green)">+${sc.toLocaleString()}</td>
       </tr>`;
@@ -713,8 +745,9 @@ async function loadSignals(){
     document.getElementById('sig-vol-surge').innerHTML = vol.map(s=>{
       const tn = s.total_net||0, fn = s.foreign_net||0;
       const color = tn > 0 ? 'var(--green)' : 'var(--red)';
+      const name = s.name || nm[s.sid] || '';
       return `<tr>
-        <td class="sig-sid" style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</td>
+        <td class="sig-sid"><span style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</span> <span style="color:var(--muted);font-size:0.78rem">${name}</span></td>
         <td style="color:${color};font-weight:600">${fmtNet(tn)}</td>
         <td style="color:${fn>0?'var(--green)':'var(--red)'}">${fmtNet(fn)}</td>
       </tr>`;
