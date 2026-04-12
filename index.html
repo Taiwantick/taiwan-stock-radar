@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW" data-lang="zh" class="dark">
+<html lang="zh-TW" data-lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -7,37 +7,28 @@
 <meta name="description" content="Taiwan, US, and Japan stock watchlist dashboard with technical analysis and market signals.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        dark: { 900:'#111113', 800:'#161618', 700:'#1d1d1f', 600:'#252527', 500:'#2d2d2f', 400:'#3a3a3c', 300:'#48484a', 200:'#6e6e73', 100:'#98989d' },
-        brand: { purple:'#8B5CF6', cyan:'#06B6D4', violet:'#7C3AED', teal:'#14B8A6' },
-        up: '#34D399',
-        dn: '#F87171',
-        warn: '#FBBF24',
+        cream: '#fafaf5',
+        surface: '#f3f4ee',
+        ink: { DEFAULT:'#2e342d', light:'#5f5e5e', faint:'#8a8a85' },
+        gold: { DEFAULT:'#D4AF37', dark:'#8d5000', muted:'#b8960a' },
+        up: '#16a34a',
+        dn: '#dc2626',
+        warn: '#d97706',
       },
       fontFamily: {
-        sans: ['Inter','Noto Sans TC','-apple-system','SF Pro Display','Segoe UI','sans-serif'],
+        heading: ['Manrope','sans-serif'],
+        body: ['Noto Sans TC','sans-serif'],
         mono: ['JetBrains Mono','SF Mono','Menlo','monospace'],
       },
-      backgroundImage: {
-        'gradient-brand': 'linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%)',
-        'gradient-brand-r': 'linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%)',
-        'gradient-surface': 'linear-gradient(180deg, #161618 0%, #1d1d1f 100%)',
-        'gradient-glow': 'radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.12) 0%, transparent 60%)',
-      },
-      boxShadow: {
-        'glass': '0 8px 32px rgba(0,0,0,0.3)',
-        'card': '0 2px 16px rgba(0,0,0,0.2)',
-        'card-hover': '0 8px 30px rgba(139,92,246,0.12)',
-        'glow-purple': '0 0 20px rgba(139,92,246,0.3)',
-        'glow-cyan': '0 0 20px rgba(6,182,212,0.3)',
-      },
+      borderRadius: { eight:'8px' },
     }
   }
 }
@@ -45,301 +36,254 @@ tailwind.config = {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 <style>
-  /* Apple-style smooth scrolling & anti-aliasing */
-  html { scroll-behavior: smooth; }
-  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans TC', sans-serif; background: #fafaf5; color: #2e342d; -webkit-font-smoothing: antialiased; line-height: 1.7; }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #48484a; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d4d4c8; border-radius: 3px; }
 
-  /* Animations */
-  @keyframes fadeInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-  @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-  @keyframes gradient-shift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+/* Animations */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+.anim-up { animation: fadeInUp .5s cubic-bezier(.16,1,.3,1) both; }
 
-  .animate-fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
-  .animate-fade-in { animation: fadeIn 0.4s ease both; }
-  .stagger-1 { animation-delay: 0.05s; }
-  .stagger-2 { animation-delay: 0.1s; }
-  .stagger-3 { animation-delay: 0.15s; }
-  .stagger-4 { animation-delay: 0.2s; }
+/* Glass card — light */
+.glass-card {
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212,175,55,.08);
+  box-shadow: 0 4px 24px rgba(0,0,0,.04);
+  transition: all .3s cubic-bezier(.16,1,.3,1);
+}
+.glass-card:hover {
+  box-shadow: 0 8px 32px rgba(212,175,55,.1);
+  border-color: rgba(212,175,55,.18);
+  transform: translateY(-2px);
+}
 
-  /* Glass morphism card */
-  .glass-card {
-    background: rgba(29,29,31,0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.06);
-    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
-  }
-  .glass-card:hover {
-    border-color: rgba(139,92,246,0.2);
-    box-shadow: 0 8px 30px rgba(139,92,246,0.08);
-    transform: translateY(-1px);
-  }
+/* Gold left border KPI */
+.kpi-gold { border-left: 3px solid #D4AF37; }
 
-  /* Gradient text */
-  .text-gradient {
-    background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* Market tab active */
+.market-tab-active { color: #8d5000 !important; border-bottom: 2px solid #D4AF37; }
 
-  /* Sparkline canvas */
-  .stock-sparkline { height: 48px; border-radius: 6px; overflow: hidden; }
-  .stock-sparkline canvas { width: 100%; height: 100%; display: block; }
+/* Filter chip active */
+.filter-chip.active { background: #D4AF37 !important; color: #fff !important; border-color: transparent !important; }
 
-  /* Pulse dot */
-  .pulse-dot {
-    width: 7px; height: 7px; border-radius: 50%; background: #34D399;
-    box-shadow: 0 0 8px rgba(52,211,153,0.6);
-    animation: pulse-dot 2s infinite;
-  }
+/* Sparkline */
+.stock-sparkline { height: 48px; border-radius: 6px; overflow: hidden; }
+.stock-sparkline canvas { width:100%; height:100%; display:block; }
 
-  /* Expanded card */
-  .stock-card-expanded { display: none; }
-  .stock-card.expanded .stock-card-summary { display: none; }
-  .stock-card.expanded .stock-card-expanded { display: block; }
+/* Card expand */
+.stock-card-expanded { display: none; }
+.stock-card.expanded .stock-card-summary { display: none; }
+.stock-card.expanded .stock-card-expanded { display: block; }
 
-  /* Table hover */
-  .data-table tbody tr { transition: background 0.15s ease; }
-  .data-table tbody tr:hover { background: rgba(139,92,246,0.04); }
+/* Data table hover */
+.data-table tbody tr { transition: background .15s ease; }
+.data-table tbody tr:hover { background: rgba(212,175,55,.04); }
 
-  /* Tab pill active gradient */
-  .tab-active-tw { background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.08)); border-color: rgba(139,92,246,0.5) !important; color: #A78BFA !important; }
-  .tab-active-us { background: linear-gradient(135deg, rgba(248,113,113,0.2), rgba(248,113,113,0.08)); border-color: rgba(248,113,113,0.5) !important; color: #FCA5A5 !important; }
-  .tab-active-jp { background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,191,36,0.08)); border-color: rgba(251,191,36,0.5) !important; color: #FDE68A !important; }
+/* Pulse dot */
+.pulse-dot { width:7px; height:7px; border-radius:50%; background:#16a34a; box-shadow:0 0 8px rgba(22,163,74,.5); animation:pulse-dot 2s infinite; }
 
-  /* Filter chip active */
-  .filter-chip.active {
-    background: linear-gradient(135deg, #8B5CF6, #06B6D4) !important;
-    border-color: transparent !important;
-    color: white !important;
-  }
+/* Responsive */
+@media(max-width:768px){
+  .hide-mobile { display:none !important; }
+}
 </style>
 </head>
 
-<body class="bg-dark-700 text-gray-200 font-sans min-h-screen">
+<body class="min-h-screen">
 
-<!-- Ambient glow background -->
-<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-glow opacity-40"></div>
-</div>
-
-<div class="relative z-10">
-
-<!-- ═══════ WSJ Digest ═══════ -->
-<div id="wsj-digest" class="border-b border-white/5 bg-dark-800/80 backdrop-blur-sm">
-  <div class="max-w-[1440px] mx-auto px-6 py-3">
-    <div class="flex items-center gap-2 mb-2">
-      <span class="text-warn text-sm">&#x1F4F0;</span>
-      <span class="text-sm font-semibold text-gray-200" data-zh="華爾街日報讀報摘要" data-en="WSJ Daily Digest">華爾街日報讀報摘要</span>
+<!-- ═══════ Top Nav ═══════ -->
+<nav class="fixed top-0 w-full z-50 bg-cream/80 backdrop-blur-xl shadow-[0_1px_0_rgba(0,0,0,.06)]">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-6">
+      <div class="text-xl font-extrabold tracking-tighter text-ink font-heading">RADAR</div>
+      <div id="global-ticker" class="hide-mobile flex items-center gap-4 text-xs font-heading font-medium"></div>
     </div>
-    <div id="wsj-digest-list" class="flex flex-col gap-1.5">
-      <div class="text-xs text-gray-500" data-zh="載入中..." data-en="Loading...">載入中...</div>
+    <div class="flex items-center gap-5">
+      <div class="flex items-center gap-2 text-up text-xs font-semibold font-heading">
+        <span class="pulse-dot"></span>
+        <span data-zh="實時" data-en="Live">實時</span>
+      </div>
+      <div class="flex bg-surface rounded-full overflow-hidden border border-ink/5">
+        <button class="lang-btn active px-3 py-1 text-xs font-semibold font-heading transition-all" onclick="setLang('zh',this)">中文</button>
+        <button class="lang-btn px-3 py-1 text-xs font-semibold font-heading transition-all text-ink-light" onclick="setLang('en',this)">EN</button>
+      </div>
     </div>
   </div>
-</div>
+</nav>
 
-<!-- ═══════ Global Ticker Bar ═══════ -->
-<div id="global-ticker" class="sticky top-0 z-50 border-b border-white/5 bg-dark-800/90 backdrop-blur-xl px-6 py-2 flex items-center gap-5 flex-wrap text-xs font-mono"></div>
-
-<!-- ═══════ Header ═══════ -->
-<header class="sticky top-[36px] z-40 border-b border-white/5 bg-dark-800/80 backdrop-blur-xl">
-  <div class="max-w-[1440px] mx-auto px-6 py-4 flex items-center justify-between flex-wrap gap-4">
-    <div class="flex items-center gap-4">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-brand flex items-center justify-center text-white text-lg font-bold shadow-glow-purple">R</div>
-      <div>
-        <h1 class="text-lg font-bold tracking-tight" data-zh="3市場雷達" data-en="3-Market Radar">3市場雷達</h1>
-        <p class="text-[11px] text-gray-500 tracking-wide" data-zh="台股 · 美股 · 日股" data-en="TW · US · JP">台股 · 美股 · 日股</p>
+<!-- ═══════ WSJ Digest + Market Status Hero ═══════ -->
+<header class="pt-[56px]">
+  <!-- WSJ Digest -->
+  <div id="wsj-digest" class="bg-surface/60 border-b border-ink/5">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-3">
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="material-symbols-outlined text-gold text-base">newspaper</span>
+        <span class="text-sm font-semibold text-ink font-heading" data-zh="華爾街日報讀報摘要" data-en="WSJ Daily Digest">華爾街日報讀報摘要</span>
+      </div>
+      <div id="wsj-digest-list" class="flex flex-col gap-1">
+        <div class="text-xs text-ink-light" data-zh="載入中..." data-en="Loading...">載入中...</div>
       </div>
     </div>
-    <div class="market-tabs flex gap-2">
-      <button class="market-tab active tab-active-tw px-4 py-1.5 rounded-full border border-white/10 text-sm font-semibold text-gray-400 transition-all duration-200 hover:text-gray-200 hover:border-white/20" data-market="tw" data-zh="🇹🇼 台股" data-en="🇹🇼 TW">🇹🇼 台股</button>
-      <button class="market-tab px-4 py-1.5 rounded-full border border-white/10 text-sm font-semibold text-gray-400 transition-all duration-200 hover:text-gray-200 hover:border-white/20" data-market="us" data-zh="🇺🇸 美股" data-en="🇺🇸 US">🇺🇸 美股</button>
-      <button class="market-tab px-4 py-1.5 rounded-full border border-white/10 text-sm font-semibold text-gray-400 transition-all duration-200 hover:text-gray-200 hover:border-white/20" data-market="jp" data-zh="🇯🇵 日股" data-en="🇯🇵 JP">🇯🇵 日股</button>
-    </div>
-    <div class="flex items-center gap-4">
-      <div class="flex items-center gap-2 bg-up/10 border border-up/20 px-3 py-1 rounded-full">
-        <span class="pulse-dot"></span>
-        <span class="text-xs font-medium text-up" data-zh="實時" data-en="Live">實時</span>
-      </div>
-      <div class="lang-toggle flex bg-dark-500 border border-white/10 rounded-lg overflow-hidden">
-        <button class="lang-btn active px-3 py-1 text-xs font-medium text-gray-400 transition-all" onclick="setLang('zh',this)">中文</button>
-        <button class="lang-btn px-3 py-1 text-xs font-medium text-gray-400 transition-all" onclick="setLang('en',this)">EN</button>
-      </div>
+  </div>
+  <!-- Market Status -->
+  <div id="market-status" class="bg-white/40 backdrop-blur-sm border-b border-ink/5">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-5 flex items-center justify-center gap-4 flex-wrap">
+      <span id="status-time" class="text-2xl md:text-3xl font-bold tracking-tight font-mono text-ink"></span>
+      <span id="status-msg" class="text-sm text-ink-light"></span>
     </div>
   </div>
 </header>
 
-<!-- ═══════ Market Status Banner ═══════ -->
-<div id="market-status" class="market-status border-b border-white/5 py-4 flex items-center justify-center gap-4">
-  <span id="status-time" class="text-2xl font-bold tracking-tight font-mono text-white/90"></span>
-  <span id="status-msg" class="text-sm text-gray-400"></span>
-</div>
-
 <!-- ═══════ Main Content ═══════ -->
-<main class="max-w-[1440px] mx-auto px-6 py-6 space-y-8">
+<main class="max-w-[1440px] mx-auto px-6 md:px-10 py-8 space-y-10">
+
+  <!-- Market Tabs -->
+  <div class="flex items-center gap-8 border-b border-ink/10 font-heading">
+    <button class="market-tab market-tab-active py-3 px-1 text-sm font-semibold tracking-wider transition-colors" data-market="tw" data-zh="TAIWAN 台股" data-en="TAIWAN (TWSE)">TAIWAN 台股</button>
+    <button class="market-tab text-ink-light hover:text-ink py-3 px-1 text-sm font-semibold tracking-wider transition-colors" data-market="us" data-zh="USA 美股" data-en="USA (NASDAQ)">USA 美股</button>
+    <button class="market-tab text-ink-light hover:text-ink py-3 px-1 text-sm font-semibold tracking-wider transition-colors" data-market="jp" data-zh="JAPAN 日股" data-en="JAPAN (NIKKEI)">JAPAN 日股</button>
+  </div>
 
   <!-- KPI Row -->
-  <div id="kpi-row" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <div class="glass-card rounded-2xl p-5 animate-fade-in-up">
-      <div class="text-2xl mb-2">&#x1F4CA;</div>
-      <p class="text-[11px] uppercase tracking-widest text-gray-500 font-medium mb-1" data-zh="觀察股數" data-en="Total Stocks">觀察股數</p>
-      <p id="kpi-total" class="text-3xl font-extrabold tracking-tight text-gradient">—</p>
+  <div id="kpi-row" class="grid grid-cols-2 md:grid-cols-4 gap-5">
+    <div class="glass-card kpi-gold p-5 rounded-eight anim-up">
+      <p class="text-[11px] text-ink-light uppercase tracking-widest font-heading mb-1" data-zh="觀察股數" data-en="Total Stocks">觀察股數</p>
+      <h3 id="kpi-total" class="text-3xl font-bold font-heading text-ink">—</h3>
     </div>
-    <div class="glass-card rounded-2xl p-5 animate-fade-in-up stagger-1">
-      <div class="text-2xl mb-2">&#x1F4C8;</div>
-      <p class="text-[11px] uppercase tracking-widest text-gray-500 font-medium mb-1" data-zh="強勢股" data-en="Strong Stocks">強勢股</p>
-      <p id="kpi-strong" class="text-3xl font-extrabold tracking-tight text-up">—</p>
+    <div class="glass-card p-5 rounded-eight anim-up" style="animation-delay:.05s">
+      <p class="text-[11px] text-ink-light uppercase tracking-widest font-heading mb-1" data-zh="強勢股" data-en="Strong Stocks">強勢股</p>
+      <h3 id="kpi-strong" class="text-3xl font-bold font-heading text-up">—</h3>
     </div>
-    <div class="glass-card rounded-2xl p-5 animate-fade-in-up stagger-2">
-      <div class="text-2xl mb-2">&#x1F4AF;</div>
-      <p class="text-[11px] uppercase tracking-widest text-gray-500 font-medium mb-1" data-zh="平均分數" data-en="Avg Score">平均分數</p>
-      <p id="kpi-score" class="text-3xl font-extrabold tracking-tight text-white">—</p>
+    <div class="glass-card p-5 rounded-eight anim-up" style="animation-delay:.1s">
+      <p class="text-[11px] text-ink-light uppercase tracking-widest font-heading mb-1" data-zh="平均分數" data-en="Avg Score">平均分數</p>
+      <h3 id="kpi-score" class="text-3xl font-bold font-heading text-ink">—</h3>
     </div>
-    <div id="kpi-4" class="glass-card rounded-2xl p-5 animate-fade-in-up stagger-3">
-      <div class="text-2xl mb-2">&#x1F512;</div>
-      <p class="kpi-label text-[11px] uppercase tracking-widest text-gray-500 font-medium mb-1" data-zh="鎖碼股數" data-en="Lock Count">鎖碼股數</p>
-      <p id="kpi-lock" class="text-3xl font-extrabold tracking-tight text-brand-purple">—</p>
+    <div id="kpi-4" class="glass-card p-5 rounded-eight anim-up" style="animation-delay:.15s">
+      <p class="kpi-label text-[11px] text-ink-light uppercase tracking-widest font-heading mb-1" data-zh="鎖碼股數" data-en="Lock Count">鎖碼股數</p>
+      <h3 id="kpi-lock" class="text-3xl font-bold font-heading text-gold-dark">—</h3>
     </div>
   </div>
 
   <!-- ═══════ Watchlist ═══════ -->
   <section class="watchlist-section">
-    <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-      <h2 id="section-badge" class="section-badge text-sm font-bold px-4 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple" data-zh="&#x1F4BC; 觀察清單" data-en="&#x1F4BC; Watchlist">&#x1F4BC; 觀察清單</h2>
+    <div class="flex items-center justify-between mb-5">
+      <h2 id="section-badge" class="text-sm font-bold font-heading uppercase tracking-wider text-gold-dark flex items-center gap-2">
+        <span class="material-symbols-outlined text-gold text-lg">folder_special</span>
+        <span data-zh="觀察清單" data-en="Watchlist">觀察清單</span>
+      </h2>
     </div>
     <div id="group-filter" class="flex gap-2 mb-5 flex-wrap"></div>
-    <div id="stock-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"></div>
+    <div id="stock-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5"></div>
   </section>
 
   <!-- ═══════ Screener (TW only) ═══════ -->
   <section class="screener-section" data-market="tw">
-    <div class="flex items-center mb-4">
-      <h2 class="section-badge text-sm font-bold px-4 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple" data-zh="&#x1F4CB; 營收篩選器" data-en="&#x1F4CB; Screener">&#x1F4CB; 營收篩選器</h2>
-    </div>
-    <div class="glass-card rounded-2xl overflow-hidden">
+    <h2 class="text-sm font-bold font-heading uppercase tracking-wider text-gold-dark flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-gold text-lg">filter_list</span>
+      <span data-zh="營收篩選器" data-en="Screener">營收篩選器</span>
+    </h2>
+    <div class="glass-card rounded-eight overflow-hidden">
       <table class="data-table w-full text-sm">
         <thead>
-          <tr class="border-b border-white/5">
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="代號" data-en="Symbol">代號</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="名稱" data-en="Name">名稱</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="營收YoY/分數" data-en="YoY/Score">營收YoY/分數</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="外資(張)" data-en="Foreign">外資(張)</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="投信(張)" data-en="Trust">投信(張)</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="分類" data-en="Tags">分類</th>
+          <tr class="border-b border-ink/10 bg-surface/40">
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="代號" data-en="Symbol">代號</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="名稱" data-en="Name">名稱</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="營收YoY/分數" data-en="YoY/Score">營收YoY/分數</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="外資(張)" data-en="Foreign">外資(張)</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="投信(張)" data-en="Trust">投信(張)</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="分類" data-en="Tags">分類</th>
           </tr>
         </thead>
-        <tbody id="screener-body" class="divide-y divide-white/5"></tbody>
+        <tbody id="screener-body" class="divide-y divide-ink/5"></tbody>
       </table>
-      <div id="screener-empty" class="text-center py-10 text-gray-500 text-sm hidden">
-        <p data-zh="暫無數據" data-en="No data">暫無數據</p>
-      </div>
+      <div id="screener-empty" class="text-center py-10 text-ink-light text-sm hidden" data-zh="暫無數據" data-en="No data">暫無數據</div>
     </div>
   </section>
 
   <!-- ═══════ Signals (TW only) ═══════ -->
   <section class="signal-section" data-market="tw">
-    <div class="flex items-center mb-4">
-      <h2 class="section-badge text-sm font-bold px-4 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple" data-zh="&#x26A1; 三大籌碼訊號" data-en="&#x26A1; Signals">&#x26A1; 三大籌碼訊號</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-      <!-- Signal 1: 法人連買 -->
-      <div class="glass-card rounded-2xl p-5 animate-fade-in-up">
+    <h2 class="text-sm font-bold font-heading uppercase tracking-wider text-gold-dark flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-gold text-lg">bolt</span>
+      <span data-zh="三大籌碼訊號" data-en="Chip Signals">三大籌碼訊號</span>
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <!-- Signal 1 -->
+      <div class="glass-card rounded-eight p-5 anim-up">
         <div class="flex items-center gap-2 mb-4">
-          <span class="text-lg">&#x1F525;</span>
-          <span class="font-bold text-sm" data-zh="法人連買" data-en="Inst. Consecutive Buy">法人連買</span>
+          <span class="material-symbols-outlined text-gold">local_fire_department</span>
+          <span class="font-bold text-sm font-heading" data-zh="法人連買" data-en="Inst. Buy">法人連買</span>
         </div>
         <table class="data-table w-full text-xs">
-          <thead><tr class="border-b border-white/5">
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="代號" data-en="Symbol">代號</th>
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="外資" data-en="Foreign">外資</th>
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="投信" data-en="Trust">投信</th>
-          </tr></thead>
-          <tbody id="sig-consec-buy" class="divide-y divide-white/5"></tbody>
+          <thead><tr class="border-b border-ink/8"><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="代號" data-en="Symbol">代號</th><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="外資" data-en="Foreign">外資</th><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="投信" data-en="Trust">投信</th></tr></thead>
+          <tbody id="sig-consec-buy" class="divide-y divide-ink/5"></tbody>
         </table>
-        <div id="sig-consec-buy-empty" class="text-center py-6 text-gray-500 text-xs hidden">
-          <p data-zh="暫無數據" data-en="No data">暫無數據</p>
-        </div>
+        <div id="sig-consec-buy-empty" class="text-center py-6 text-ink-light text-xs hidden" data-zh="暫無數據" data-en="No data">暫無數據</div>
       </div>
-      <!-- Signal 2: 融資軋空 -->
-      <div class="glass-card rounded-2xl p-5 animate-fade-in-up stagger-1">
+      <!-- Signal 2 -->
+      <div class="glass-card rounded-eight p-5 anim-up" style="animation-delay:.05s">
         <div class="flex items-center gap-2 mb-4">
-          <span class="text-lg">&#x1F4C9;</span>
-          <span class="font-bold text-sm" data-zh="融資軋空" data-en="Short Squeeze">融資軋空</span>
+          <span class="material-symbols-outlined text-dn">trending_down</span>
+          <span class="font-bold text-sm font-heading" data-zh="融資軋空" data-en="Short Squeeze">融資軋空</span>
         </div>
         <table class="data-table w-full text-xs">
-          <thead><tr class="border-b border-white/5">
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="代號" data-en="Symbol">代號</th>
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="融資" data-en="Margin">融資</th>
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="融券" data-en="Short">融券</th>
-          </tr></thead>
-          <tbody id="sig-margin-short" class="divide-y divide-white/5"></tbody>
+          <thead><tr class="border-b border-ink/8"><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="代號" data-en="Symbol">代號</th><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="融資" data-en="Margin">融資</th><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="融券" data-en="Short">融券</th></tr></thead>
+          <tbody id="sig-margin-short" class="divide-y divide-ink/5"></tbody>
         </table>
-        <div id="sig-margin-short-empty" class="text-center py-6 text-gray-500 text-xs hidden">
-          <p data-zh="暫無數據" data-en="No data">暫無數據</p>
-        </div>
+        <div id="sig-margin-short-empty" class="text-center py-6 text-ink-light text-xs hidden" data-zh="暫無數據" data-en="No data">暫無數據</div>
       </div>
-      <!-- Signal 3: 法人大量進出 -->
-      <div class="glass-card rounded-2xl p-5 animate-fade-in-up stagger-2">
+      <!-- Signal 3 -->
+      <div class="glass-card rounded-eight p-5 anim-up" style="animation-delay:.1s">
         <div class="flex items-center gap-2 mb-4">
-          <span class="text-lg">&#x1F4A5;</span>
-          <span class="font-bold text-sm" data-zh="法人大量進出" data-en="Big Inst. Flow">法人大量進出</span>
+          <span class="material-symbols-outlined text-gold">swap_vert</span>
+          <span class="font-bold text-sm font-heading" data-zh="法人大量進出" data-en="Big Flow">法人大量進出</span>
         </div>
         <table class="data-table w-full text-xs">
-          <thead><tr class="border-b border-white/5">
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="代號" data-en="Symbol">代號</th>
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="法人合計" data-en="Total">法人合計</th>
-            <th class="text-left py-2 text-[10px] uppercase tracking-wider text-gray-500 font-medium" data-zh="外資" data-en="Foreign">外資</th>
-          </tr></thead>
-          <tbody id="sig-vol-surge" class="divide-y divide-white/5"></tbody>
+          <thead><tr class="border-b border-ink/8"><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="代號" data-en="Symbol">代號</th><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="法人合計" data-en="Total">法人合計</th><th class="text-left py-2 text-[10px] uppercase tracking-widest text-ink-faint font-heading" data-zh="外資" data-en="Foreign">外資</th></tr></thead>
+          <tbody id="sig-vol-surge" class="divide-y divide-ink/5"></tbody>
         </table>
-        <div id="sig-vol-surge-empty" class="text-center py-6 text-gray-500 text-xs hidden">
-          <p data-zh="暫無數據" data-en="No data">暫無數據</p>
-        </div>
+        <div id="sig-vol-surge-empty" class="text-center py-6 text-ink-light text-xs hidden" data-zh="暫無數據" data-en="No data">暫無數據</div>
       </div>
     </div>
   </section>
 
   <!-- ═══════ Monitor Alerts ═══════ -->
   <section class="monitor-section">
-    <div class="flex items-center mb-4">
-      <h2 id="monitor-badge" class="section-badge text-sm font-bold px-4 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple" data-zh="&#x1F6A8; 監控警報" data-en="&#x1F6A8; Monitor Alerts">&#x1F6A8; 監控警報</h2>
-    </div>
-    <div class="glass-card rounded-2xl overflow-hidden">
+    <h2 id="monitor-badge" class="text-sm font-bold font-heading uppercase tracking-wider text-gold-dark flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-dn text-lg">notifications_active</span>
+      <span data-zh="監控警報" data-en="Monitor Alerts">監控警報</span>
+    </h2>
+    <div class="glass-card rounded-eight overflow-hidden">
       <table class="data-table w-full text-sm">
         <thead>
-          <tr class="border-b border-white/5">
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="日期" data-en="Date">日期</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="代號" data-en="Symbol">代號</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="名稱" data-en="Name">名稱</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="類型" data-en="Type">類型</th>
-            <th class="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-gray-500 font-medium" data-zh="分數" data-en="Score">分數</th>
+          <tr class="border-b border-ink/10 bg-surface/40">
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="日期" data-en="Date">日期</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="代號" data-en="Symbol">代號</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="名稱" data-en="Name">名稱</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="類型" data-en="Type">類型</th>
+            <th class="text-left px-4 py-3 text-[10px] uppercase tracking-widest text-ink-light font-heading" data-zh="分數" data-en="Score">分數</th>
           </tr>
         </thead>
-        <tbody id="monitor-body" class="divide-y divide-white/5"></tbody>
+        <tbody id="monitor-body" class="divide-y divide-ink/5"></tbody>
       </table>
-      <div id="monitor-empty" class="text-center py-10 text-gray-500 text-sm hidden">
-        <p data-zh="暫無警報" data-en="No alerts">暫無警報</p>
-      </div>
+      <div id="monitor-empty" class="text-center py-10 text-ink-light text-sm hidden" data-zh="暫無警報" data-en="No alerts">暫無警報</div>
     </div>
   </section>
 
-  <!-- ═══════ K-line Section (TW only) ═══════ -->
+  <!-- ═══════ K-line (TW only) ═══════ -->
   <section class="kline-section" data-market="tw">
-    <div class="flex items-center mb-4">
-      <h2 class="section-badge text-sm font-bold px-4 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-brand-purple" data-zh="&#x1F4CA; 技術線圖" data-en="&#x1F4CA; K-Chart">&#x1F4CA; 技術線圖</h2>
-    </div>
+    <h2 class="text-sm font-bold font-heading uppercase tracking-wider text-gold-dark flex items-center gap-2 mb-4">
+      <span class="material-symbols-outlined text-gold text-lg">candlestick_chart</span>
+      <span data-zh="技術線圖" data-en="K-Chart">技術線圖</span>
+    </h2>
     <div class="flex flex-wrap gap-2 mb-4" id="kline-chips"></div>
-    <div class="glass-card rounded-2xl p-4">
-      <div id="kline-title" class="text-sm font-bold mb-3 text-gray-300">選擇股票</div>
+    <div class="glass-card rounded-eight p-4">
+      <div id="kline-title" class="text-sm font-bold font-heading mb-3 text-ink">選擇股票</div>
       <div id="kline-container" class="h-[380px] w-full"></div>
     </div>
   </section>
@@ -347,22 +291,26 @@ tailwind.config = {
 </main>
 
 <!-- ═══════ Footer ═══════ -->
-<footer class="border-t border-white/5 text-center py-8 text-gray-500 text-xs">
-  <p data-zh="3市場股票儀表板 · 資料僅供參考，不構成投資建議" data-en="3-Market Stock Dashboard · Data for reference only, not investment advice">3市場股票儀表板 · 資料僅供參考，不構成投資建議</p>
+<footer class="mt-16 rounded-t-[32px] bg-surface">
+  <div class="max-w-[1440px] mx-auto px-10 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+    <div>
+      <div class="font-bold text-ink text-lg font-heading mb-1">RADAR</div>
+      <p class="text-ink-light text-xs font-heading leading-relaxed max-w-xs" data-zh="資料僅供參考，不構成投資建議" data-en="Data for reference only, not investment advice">資料僅供參考，不構成投資建議</p>
+    </div>
+    <div class="text-ink-faint text-xs font-heading">© 2026 3-Market Radar · Data by TWSE, Yahoo Finance</div>
+  </div>
 </footer>
 
-</div><!-- /relative z-10 -->
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════ -->
 <!-- Script -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════ -->
 <script>
 let LANG = localStorage.getItem('dashboard_lang') || 'zh';
 let MARKET = 'tw';
 let DATA = {};
 let charts = {};
 
-/* ── i18n ─────────────────────────────────────── */
+/* ── i18n ─────────────────────────────────── */
 function t(el){ const v = el.getAttribute(`data-${LANG}`); if(v) el.textContent = v; }
 function applyLang(){
   document.documentElement.setAttribute('lang', LANG==='zh' ? 'zh-TW' : 'en');
@@ -376,16 +324,18 @@ function setLang(lang, btn){
     b.classList.remove('active');
     b.style.background = '';
     b.style.color = '';
+    b.style.fontWeight = '';
   });
   btn.classList.add('active');
-  btn.style.background = 'linear-gradient(135deg,#8B5CF6,#06B6D4)';
+  btn.style.background = '#D4AF37';
   btn.style.color = '#fff';
+  btn.style.fontWeight = '700';
   applyLang();
 }
 
 function destroy(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
 
-/* ── Global Ticker ───────────────────────────── */
+/* ── Global Ticker ──────────────────────── */
 async function loadGlobalTicker(){
   try{
     const res = await fetch('data/global_data.json');
@@ -394,16 +344,16 @@ async function loadGlobalTicker(){
     const item = (label, price, change) => {
       const cls = change >= 0 ? 'text-up' : 'text-dn';
       const sign = change > 0 ? '+' : '';
-      return `<div class="flex items-center gap-1.5"><span class="text-gray-500 font-medium">${label}</span><span class="${cls} font-semibold">$${price.toFixed(2)} ${sign}${change.toFixed(2)}%</span></div>`;
+      return `<span class="text-ink-faint">${label}</span> <span class="${cls} font-semibold">$${price.toFixed(2)} ${sign}${change.toFixed(2)}%</span>`;
     };
     if(d.gold) html.push(item('Gold', d.gold.price, d.gold.change));
     if(d.oil)  html.push(item('Oil', d.oil.price, d.oil.change));
-    if(d.usd)  html.push(`<div class="flex items-center gap-1.5"><span class="text-gray-500 font-medium">USD/TWD</span><span class="text-gray-300 font-semibold">${d.usd.price.toFixed(2)}</span></div>`);
-    document.getElementById('global-ticker').innerHTML = html.join('<span class="text-gray-600">|</span>');
-  }catch(e){ console.warn('Global ticker load failed', e); }
+    if(d.usd)  html.push(`<span class="text-ink-faint">USD/TWD</span> <span class="text-ink font-semibold">${d.usd.price.toFixed(2)}</span>`);
+    document.getElementById('global-ticker').innerHTML = html.join('<span class="text-ink/10 mx-1">|</span>');
+  }catch(e){ console.warn('Ticker failed', e); }
 }
 
-/* ── Load Data ───────────────────────────────── */
+/* ── Load Data ──────────────────────────── */
 async function loadData(){
   try{
     const cb = '?t=' + Date.now();
@@ -411,58 +361,41 @@ async function loadData(){
     DATA = await res.json();
     await loadKPI();
     renderWatchlist();
-  }catch(e){ console.error('Failed to load watchlist data', e); }
+  }catch(e){ console.error('Failed to load data', e); }
 }
 
-/* ── KPI ─────────────────────────────────────── */
+/* ── KPI ────────────────────────────────── */
 async function loadKPI(){
   try{
     const cb = '?t=' + Date.now();
     const res = await fetch('data/market_kpi.json' + cb);
     const kpi = await res.json();
-    const m = MARKET;
-    const mk = kpi[m];
+    const m = MARKET, mk = kpi[m];
     if(!mk) return;
-
     document.getElementById('kpi-total').textContent = mk.total;
     document.getElementById('kpi-strong').textContent = mk.strong_count;
     document.getElementById('kpi-score').textContent = (mk.avg_score || 0).toFixed(1);
-
     const kpi4 = document.getElementById('kpi-4');
     const label4 = kpi4.querySelector('.kpi-label');
     const val4 = document.getElementById('kpi-lock');
-
-    if(m === 'tw'){
-      label4.setAttribute('data-zh','鎖碼股數');
-      label4.setAttribute('data-en','Lock Count');
-      val4.textContent = mk.lock_count || 0;
-      t(label4);
-    } else {
-      label4.setAttribute('data-zh','平均PE');
-      label4.setAttribute('data-en','Avg PE');
-      val4.textContent = (mk.avg_pe || 0).toFixed(1);
-      t(label4);
-    }
-  }catch(e){ console.error('Failed to load KPI', e); }
+    if(m === 'tw'){ label4.setAttribute('data-zh','鎖碼股數'); label4.setAttribute('data-en','Lock Count'); val4.textContent = mk.lock_count || 0; }
+    else { label4.setAttribute('data-zh','平均PE'); label4.setAttribute('data-en','Avg PE'); val4.textContent = (mk.avg_pe || 0).toFixed(1); }
+    t(label4);
+  }catch(e){ console.error('KPI failed', e); }
 }
 
-/* ── Watchlist ───────────────────────────────── */
+/* ── Watchlist ──────────────────────────── */
 function renderWatchlist(){
-  const m = MARKET;
-  const key = m + '_stocks';
+  const key = MARKET + '_stocks';
   const stocks = (DATA[key] || []).sort((a,b) => (b.score||0) - (a.score||0));
-
   if(!stocks.length){
-    document.getElementById('stock-grid').innerHTML = `<div class="col-span-full text-center py-12 text-gray-500"><p data-zh="暫無股票" data-en="No stocks">暫無股票</p></div>`;
+    document.getElementById('stock-grid').innerHTML = `<div class="col-span-full text-center py-12 text-ink-light"><p data-zh="暫無股票" data-en="No stocks">暫無股票</p></div>`;
     return;
   }
-
   const groups = [...new Set(stocks.map(s => s.group).filter(Boolean))];
-  const chipBase = 'filter-chip px-3 py-1.5 rounded-full border border-white/10 text-xs font-medium text-gray-400 cursor-pointer transition-all duration-200 hover:border-white/20 hover:text-gray-200';
-  const html = [`<button class="${chipBase} filter-chip active" data-group="all" onclick="filterGroup(this,'all')" data-zh="全部" data-en="All">全部</button>`];
-  groups.forEach(g => {
-    html.push(`<button class="${chipBase}" data-group="${g}" onclick="filterGroup(this,'${g}')">${g}</button>`);
-  });
+  const cb = 'filter-chip px-3 py-1.5 rounded-full border border-ink/10 text-xs font-medium font-heading text-ink-light cursor-pointer transition-all hover:border-gold/30 hover:text-ink';
+  const html = [`<button class="${cb} filter-chip active" data-group="all" onclick="filterGroup(this,'all')" data-zh="全部" data-en="All">全部</button>`];
+  groups.forEach(g => html.push(`<button class="${cb}" data-group="${g}" onclick="filterGroup(this,'${g}')">${g}</button>`));
   document.getElementById('group-filter').innerHTML = html.join('');
   document.querySelectorAll('[data-zh][data-en]').forEach(t);
   renderStockCards(stocks);
@@ -471,85 +404,67 @@ function renderWatchlist(){
 function filterGroup(btn, group){
   document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const m = MARKET;
-  const key = m + '_stocks';
-  let stocks = (DATA[key] || []).sort((a,b) => (b.score||0) - (a.score||0));
+  let stocks = (DATA[MARKET + '_stocks'] || []).sort((a,b) => (b.score||0) - (a.score||0));
   if(group !== 'all') stocks = stocks.filter(s => s.group === group);
   renderStockCards(stocks);
 }
 
 function renderStockCards(stocks){
   const m = MARKET;
-  const colorMap = { tw: 'text-brand-purple', us: 'text-dn', jp: 'text-warn' };
-  const symColor = colorMap[m] || 'text-brand-purple';
-
   const html = stocks.map((s, idx) => {
     const scoreClass = scoreFor(s.score);
     const scoreText = s.score ? s.score.toFixed(1) : '-';
-    // Price row
     let priceRow = '';
     if(s.price){
       const change = s.change_pct || 0;
-      const changeColor = change >= 0 ? 'text-up' : 'text-dn';
-      const changeSign = change > 0 ? '+' : '';
-      const volText = s.volume ? formatVol(s.volume) : '';
+      const cc = change >= 0 ? 'text-up' : 'text-dn';
+      const sign = change > 0 ? '+' : '';
+      const vol = s.volume ? formatVol(s.volume) : '';
       priceRow = `<div class="flex items-baseline gap-2 mb-1">
-        <span class="text-lg font-bold tracking-tight text-white">${formatPrice(s.price)}</span>
-        <span class="text-sm font-semibold ${changeColor}">${changeSign}${change.toFixed(2)}%</span>
-        ${volText ? `<span class="text-[11px] text-gray-500">Vol ${volText}</span>` : ''}
+        <span class="text-lg font-bold tracking-tight text-ink font-heading">${formatPrice(s.price)}</span>
+        <span class="text-sm font-semibold ${cc}">${sign}${change.toFixed(2)}%</span>
+        ${vol ? `<span class="text-[11px] text-ink-faint">Vol ${vol}</span>` : ''}
       </div>`;
     }
-    // Sparkline
     const sparkId = `spark-${m}-${idx}`;
     const sparkline = s.kbars && s.kbars.close && s.kbars.close.length > 2
       ? `<div class="stock-sparkline"><canvas id="${sparkId}"></canvas></div>` : '';
-    const pe = s.pe_ratio ? `<span class="text-[11px] text-gray-500">PE: <span class="text-gray-300 font-medium">${s.pe_ratio.toFixed(1)}</span></span>` : '';
+    const pe = s.pe_ratio ? `<span class="text-[11px] text-ink-faint">PE: <span class="text-ink font-medium">${s.pe_ratio.toFixed(1)}</span></span>` : '';
 
     return `
-      <div class="glass-card rounded-2xl p-4 cursor-pointer stock-card animate-fade-in-up" style="animation-delay:${Math.min(idx*0.03,0.3)}s" onclick="toggleCard(this)">
+      <div class="glass-card rounded-eight p-5 cursor-pointer stock-card anim-up" style="animation-delay:${Math.min(idx*.03,.3)}s" onclick="toggleCard(this)">
         <div class="flex justify-between items-start mb-3">
           <div>
-            <div class="font-mono font-bold ${symColor}">${s.symbol}</div>
-            <div class="text-xs text-gray-400 mt-0.5">${s.name}</div>
-            ${s.group ? `<span class="inline-block mt-1 text-[10px] px-2 py-0.5 rounded-md bg-white/5 text-gray-500">${s.group}</span>` : ''}
+            <span class="text-xs text-gold-dark font-bold font-heading bg-gold/10 px-2 py-0.5 rounded">${s.symbol}</span>
+            <h4 class="text-base font-bold mt-1 text-ink">${s.name}</h4>
+            ${s.group ? `<span class="inline-block mt-1 text-[10px] px-2 py-0.5 rounded bg-surface text-ink-faint">${s.group}</span>` : ''}
           </div>
-          <span class="px-2 py-0.5 rounded-lg text-xs font-bold ${scoreClass}">${scoreText}</span>
+          <span class="px-2 py-0.5 rounded-lg text-xs font-bold font-heading ${scoreClass}">${scoreText}</span>
         </div>
         <div class="stock-card-summary">
           ${priceRow}
           ${sparkline}
-          <div class="text-xs text-gray-500 mb-2 leading-relaxed line-clamp-2">${s.one_line_summary || ''}</div>
-          <div class="flex gap-3 flex-wrap">
-            ${pe}
-            ${s.trade_quality && s.trade_quality!=='no_data' ? `<span class="text-[11px] text-gray-500">Grade: <span class="text-gray-300 font-medium">${s.trade_quality}</span></span>` : ''}
+          <div class="text-xs text-ink-light mb-2 leading-relaxed line-clamp-2">${s.one_line_summary || ''}</div>
+          <div class="flex gap-3 flex-wrap">${pe}
+            ${s.trade_quality && s.trade_quality!=='no_data' ? `<span class="text-[11px] text-ink-faint">Grade: <span class="text-ink font-medium">${s.trade_quality}</span></span>` : ''}
           </div>
         </div>
         <div class="stock-card-expanded" style="display:none">
-          <div class="text-xs text-gray-400 leading-relaxed space-y-1">
-            <div><span class="text-gray-500 font-medium" data-zh="趨勢:" data-en="Trend:">趨勢:</span> ${s.trend_bias||'-'}</div>
-            ${s.primary_strategy ? `<div><span class="text-gray-500 font-medium" data-zh="策略:" data-en="Strategy:">策略:</span> ${s.primary_strategy}</div>` : ''}
-            ${s.trade_quality && s.trade_quality!=='no_data' ? `<div><span class="text-gray-500 font-medium" data-zh="品質:" data-en="Quality:">品質:</span> ${s.trade_quality}</div>` : ''}
-            <div><span class="text-gray-500 font-medium" data-zh="分數:" data-en="Score:">分數:</span> ${s.score||0}</div>
+          <div class="text-xs text-ink-light leading-relaxed space-y-1 mt-2 pt-3 border-t border-ink/5">
+            <div><span class="text-ink-faint font-medium" data-zh="趨勢:" data-en="Trend:">趨勢:</span> ${s.trend_bias||'-'}</div>
+            ${s.primary_strategy ? `<div><span class="text-ink-faint font-medium" data-zh="策略:" data-en="Strategy:">策略:</span> ${s.primary_strategy}</div>` : ''}
+            ${s.trade_quality && s.trade_quality!=='no_data' ? `<div><span class="text-ink-faint font-medium" data-zh="品質:" data-en="Quality:">品質:</span> ${s.trade_quality}</div>` : ''}
+            <div><span class="text-ink-faint font-medium" data-zh="分數:" data-en="Score:">分數:</span> ${s.score||0}</div>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
   document.getElementById('stock-grid').innerHTML = html;
   requestAnimationFrame(() => drawSparklines(stocks));
 }
 
-function formatPrice(p){
-  if(p >= 1000) return p.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-  if(p >= 100) return p.toFixed(1);
-  return p.toFixed(2);
-}
-function formatVol(v){
-  if(v >= 1e9) return (v/1e9).toFixed(1)+'B';
-  if(v >= 1e6) return (v/1e6).toFixed(1)+'M';
-  if(v >= 1e3) return (v/1e3).toFixed(0)+'K';
-  return v.toString();
-}
+function formatPrice(p){ return p>=1000 ? p.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}) : p>=100 ? p.toFixed(1) : p.toFixed(2); }
+function formatVol(v){ return v>=1e9 ? (v/1e9).toFixed(1)+'B' : v>=1e6 ? (v/1e6).toFixed(1)+'M' : v>=1e3 ? (v/1e3).toFixed(0)+'K' : v.toString(); }
 
 function drawSparklines(stocks){
   const m = MARKET;
@@ -560,55 +475,28 @@ function drawSparklines(stocks){
     const ctx = canvas.getContext('2d');
     const rect = canvas.parentElement.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
     const W = rect.width, H = rect.height;
-    const closes = s.kbars.close;
-    const vols = s.kbars.volume || [];
-    const min = Math.min(...closes);
-    const max = Math.max(...closes);
-    const range = max - min || 1;
-    const n = closes.length;
-    const step = W / (n - 1);
-
-    // Volume bars
+    const closes = s.kbars.close, vols = s.kbars.volume || [];
+    const min = Math.min(...closes), max = Math.max(...closes), range = max-min||1;
+    const n = closes.length, step = W/(n-1);
     if(vols.length){
-      const maxVol = Math.max(...vols) || 1;
-      const volH = H * 0.28;
-      ctx.globalAlpha = 0.12;
-      ctx.fillStyle = '#6e6e73';
-      vols.forEach((v, i) => {
-        const bh = (v / maxVol) * volH;
-        const bw = Math.max(1, step * 0.6);
-        ctx.fillRect(i * step - bw/2, H - bh, bw, bh);
-      });
+      const maxVol = Math.max(...vols)||1, volH = H*.28;
+      ctx.globalAlpha = .1; ctx.fillStyle = '#8a8a85';
+      vols.forEach((v,i)=>{ const bh=(v/maxVol)*volH, bw=Math.max(1,step*.6); ctx.fillRect(i*step-bw/2, H-bh, bw, bh); });
       ctx.globalAlpha = 1;
     }
-
-    // Price line
     const isUp = closes[closes.length-1] >= closes[0];
-    const lineColor = isUp ? '#34D399' : '#F87171';
-    ctx.strokeStyle = lineColor;
-    ctx.lineWidth = 1.5;
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    closes.forEach((c, i) => {
-      const x = i * step;
-      const y = H * 0.05 + (1 - (c - min) / range) * (H * 0.62);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
+    ctx.strokeStyle = isUp ? '#16a34a' : '#dc2626';
+    ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.beginPath();
+    closes.forEach((c,i)=>{ const x=i*step, y=H*.05+(1-(c-min)/range)*(H*.62); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
     ctx.stroke();
-
-    // Gradient fill
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, isUp ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.lineTo((n-1)*step, H);
-    ctx.lineTo(0, H);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
+    const grad = ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0, isUp?'rgba(22,163,74,.08)':'rgba(220,38,38,.08)');
+    grad.addColorStop(1, 'rgba(250,250,245,0)');
+    ctx.lineTo((n-1)*step, H); ctx.lineTo(0, H); ctx.closePath();
+    ctx.fillStyle = grad; ctx.fill();
   });
 }
 
@@ -620,296 +508,132 @@ function toggleCard(card){
 
 function scoreFor(s){
   if(!s) return 'bg-dn/10 text-dn';
-  if(s >= 75) return 'bg-up/15 text-up';
-  if(s >= 50) return 'bg-brand-cyan/10 text-brand-cyan';
+  if(s >= 75) return 'bg-up/10 text-up';
+  if(s >= 50) return 'bg-gold/10 text-gold-dark';
   if(s >= 25) return 'bg-warn/10 text-warn';
   return 'bg-dn/10 text-dn';
 }
 
-/* ── Screener ────────────────────────────────── */
+/* ── Screener ──────────────────────────── */
 async function loadScreener(){
   try{
-    const cb = '?t=' + Date.now();
-    let rows = [];
-    try{
-      const res = await fetch('data/screener_data.json' + cb);
-      const d = await res.json();
-      if(d && d.results && d.results.length > 0) rows = d.results;
-    }catch(e){}
-
-    if(rows.length === 0 && DATA && DATA.tw_stocks){
-      rows = DATA.tw_stocks.map(s => ({
-        sid: s.symbol, name: s.name||s.symbol,
-        yoy: null, f_net: 0, t_net: 0, in_f: false, in_t: false, in_d: false,
-        score: s.score||0, price: s.price, change_pct: s.change_pct, group: s.group
-      })).sort((a,b) => (b.score||0) - (a.score||0));
+    const cb = '?t='+Date.now(); let rows = [];
+    try{ const r=await fetch('data/screener_data.json'+cb); const d=await r.json(); if(d&&d.results&&d.results.length>0) rows=d.results; }catch(e){}
+    if(rows.length===0 && DATA && DATA.tw_stocks){
+      rows = DATA.tw_stocks.map(s=>({sid:s.symbol,name:s.name||s.symbol,yoy:null,f_net:0,t_net:0,in_f:false,in_t:false,in_d:false,score:s.score||0,group:s.group})).sort((a,b)=>(b.score||0)-(a.score||0));
     }
-
-    if(rows.length === 0){
-      document.getElementById('screener-body').innerHTML = '';
-      document.getElementById('screener-empty').classList.remove('hidden');
-      return;
-    }
-    function fmtLots(v){ if(!v) return '—'; if(Math.abs(v)>=1000) return (v/1000).toFixed(0)+'K'; return v.toLocaleString(); }
-    const html = rows.slice(0,20).map(row => {
-      const hasYoy = row.yoy !== null && row.yoy !== undefined;
-      const tags = [];
+    if(!rows.length){ document.getElementById('screener-body').innerHTML=''; document.getElementById('screener-empty').classList.remove('hidden'); return; }
+    function fmt(v){ if(!v)return'—'; return Math.abs(v)>=1000?(v/1000).toFixed(0)+'K':v.toLocaleString(); }
+    const html = rows.slice(0,20).map(row=>{
+      const hasYoy = row.yoy!==null&&row.yoy!==undefined;
+      const tags=[];
       if(row.in_f) tags.push('<span class="text-up text-xs font-semibold">外資</span>');
       if(row.in_t) tags.push('<span class="text-dn text-xs font-semibold">投信</span>');
       if(row.in_d) tags.push('<span class="text-warn text-xs font-semibold">自營</span>');
-      if(row.group) tags.push(`<span class="text-gray-500 text-[11px]">${row.group}</span>`);
-      let col3 = '';
-      if(hasYoy){
-        const yc = row.yoy >= 0 ? 'text-up' : 'text-dn';
-        col3 = `<td class="px-4 py-2.5 font-semibold ${yc}">${row.yoy >= 0 ? '+' : ''}${row.yoy.toFixed(1)}%</td>`;
-      } else {
-        const sc = row.score||0;
-        const scCls = sc>=60 ? 'text-up' : sc>=30 ? 'text-warn' : 'text-dn';
-        col3 = `<td class="px-4 py-2.5 font-semibold ${scCls}">${sc}</td>`;
-      }
+      if(row.group) tags.push(`<span class="text-ink-faint text-[11px]">${row.group}</span>`);
+      let col3='';
+      if(hasYoy){ const c=row.yoy>=0?'text-up':'text-dn'; col3=`<td class="px-4 py-2.5 font-semibold ${c}">${row.yoy>=0?'+':''}${row.yoy.toFixed(1)}%</td>`; }
+      else { const sc=row.score||0; const c=sc>=60?'text-up':sc>=30?'text-warn':'text-dn'; col3=`<td class="px-4 py-2.5 font-semibold ${c}">${sc}</td>`; }
       return `<tr>
-        <td class="px-4 py-2.5 font-mono font-semibold text-brand-purple">${row.sid}</td>
-        <td class="px-4 py-2.5 text-gray-300">${row.name||row.sid}</td>
-        ${col3}
-        <td class="px-4 py-2.5 ${(row.f_net||0)>0?'text-up':'text-dn'}">${fmtLots(row.f_net)}</td>
-        <td class="px-4 py-2.5 ${(row.t_net||0)>0?'text-up':'text-dn'}">${fmtLots(row.t_net)}</td>
-        <td class="px-4 py-2.5">${tags.join(' ')}</td>
-      </tr>`;
+        <td class="px-4 py-2.5 font-mono font-semibold text-gold-dark">${row.sid}</td>
+        <td class="px-4 py-2.5 text-ink">${row.name||row.sid}</td>${col3}
+        <td class="px-4 py-2.5 ${(row.f_net||0)>0?'text-up':'text-dn'}">${fmt(row.f_net)}</td>
+        <td class="px-4 py-2.5 ${(row.t_net||0)>0?'text-up':'text-dn'}">${fmt(row.t_net)}</td>
+        <td class="px-4 py-2.5">${tags.join(' ')}</td></tr>`;
     }).join('');
-    document.getElementById('screener-body').innerHTML = html;
+    document.getElementById('screener-body').innerHTML=html;
     document.getElementById('screener-empty').classList.add('hidden');
-  }catch(e){ console.warn('Screener load failed', e); }
+  }catch(e){ console.warn('Screener failed',e); }
 }
 
-/* ── Signals ─────────────────────────────────── */
+/* ── Signals ──────────────────────────── */
 async function loadSignals(){
   try{
-    const cb = '?t=' + Date.now();
-    const res = await fetch('data/radar_data.json' + cb);
-    const d = await res.json();
-    if(!d) return;
-    function fmtNet(v){ if(!v) return '0'; const a=Math.abs(v); if(a>=1e6) return (v/1e6).toFixed(1)+'M'; if(a>=1e3) return (v/1e3).toFixed(0)+'K'; return v.toLocaleString(); }
-
-    const nm = {};
-    if(DATA && DATA.tw_stocks) DATA.tw_stocks.forEach(s => { nm[s.symbol] = s.name; });
-
-    // 法人連買
-    const consec = (d.consec_buy || []).slice(0,8);
-    document.getElementById('sig-consec-buy').innerHTML = consec.map(s => {
-      const fn = s.foreign_net||0, tn = s.trust_net||0;
-      const name = s.name || nm[s.sid] || '';
-      return `<tr>
-        <td class="py-2"><span class="font-mono font-semibold text-brand-purple">${s.sid}</span> <span class="text-gray-500 text-[11px]">${name}</span></td>
-        <td class="py-2 ${fn>0?'text-up':'text-dn'} font-medium">${fmtNet(fn)}</td>
-        <td class="py-2 ${tn>0?'text-up':'text-dn'} font-medium">${fmtNet(tn)}</td>
-      </tr>`;
-    }).join('');
-    document.getElementById('sig-consec-buy-empty').classList.toggle('hidden', consec.length > 0);
-
-    // 融資軋空
-    const margin = (d.margin_short || []).slice(0,8);
-    document.getElementById('sig-margin-short').innerHTML = margin.map(s => {
-      const mc = s.margin_change||0, sc = s.short_change||0;
-      const name = s.name || nm[s.sid] || '';
-      return `<tr>
-        <td class="py-2"><span class="font-mono font-semibold text-brand-purple">${s.sid}</span> <span class="text-gray-500 text-[11px]">${name}</span></td>
-        <td class="py-2 text-dn font-medium">${mc.toLocaleString()}</td>
-        <td class="py-2 text-up font-medium">+${sc.toLocaleString()}</td>
-      </tr>`;
-    }).join('');
-    document.getElementById('sig-margin-short-empty').classList.toggle('hidden', margin.length > 0);
-
-    // 法人大量進出
-    const vol = (d.vol_surge || []).slice(0,8);
-    document.getElementById('sig-vol-surge').innerHTML = vol.map(s => {
-      const tn = s.total_net||0, fn = s.foreign_net||0;
-      const name = s.name || nm[s.sid] || '';
-      return `<tr>
-        <td class="py-2"><span class="font-mono font-semibold text-brand-purple">${s.sid}</span> <span class="text-gray-500 text-[11px]">${name}</span></td>
-        <td class="py-2 ${tn>0?'text-up':'text-dn'} font-bold">${fmtNet(tn)}</td>
-        <td class="py-2 ${fn>0?'text-up':'text-dn'} font-medium">${fmtNet(fn)}</td>
-      </tr>`;
-    }).join('');
-    document.getElementById('sig-vol-surge-empty').classList.toggle('hidden', vol.length > 0);
-  }catch(e){ console.warn('Signals load failed', e); }
+    const cb='?t='+Date.now(); const res=await fetch('data/radar_data.json'+cb); const d=await res.json(); if(!d)return;
+    function fmt(v){ if(!v)return'0'; const a=Math.abs(v); return a>=1e6?(v/1e6).toFixed(1)+'M':a>=1e3?(v/1e3).toFixed(0)+'K':v.toLocaleString(); }
+    const nm={}; if(DATA&&DATA.tw_stocks) DATA.tw_stocks.forEach(s=>{nm[s.symbol]=s.name;});
+    const consec=(d.consec_buy||[]).slice(0,8);
+    document.getElementById('sig-consec-buy').innerHTML=consec.map(s=>{const fn=s.foreign_net||0,tn=s.trust_net||0,name=s.name||nm[s.sid]||''; return `<tr><td class="py-2"><span class="font-mono font-semibold text-gold-dark">${s.sid}</span> <span class="text-ink-faint text-[11px]">${name}</span></td><td class="py-2 ${fn>0?'text-up':'text-dn'} font-medium">${fmt(fn)}</td><td class="py-2 ${tn>0?'text-up':'text-dn'} font-medium">${fmt(tn)}</td></tr>`;}).join('');
+    document.getElementById('sig-consec-buy-empty').classList.toggle('hidden',consec.length>0);
+    const margin=(d.margin_short||[]).slice(0,8);
+    document.getElementById('sig-margin-short').innerHTML=margin.map(s=>{const mc=s.margin_change||0,sc=s.short_change||0,name=s.name||nm[s.sid]||''; return `<tr><td class="py-2"><span class="font-mono font-semibold text-gold-dark">${s.sid}</span> <span class="text-ink-faint text-[11px]">${name}</span></td><td class="py-2 text-dn font-medium">${mc.toLocaleString()}</td><td class="py-2 text-up font-medium">+${sc.toLocaleString()}</td></tr>`;}).join('');
+    document.getElementById('sig-margin-short-empty').classList.toggle('hidden',margin.length>0);
+    const vol=(d.vol_surge||[]).slice(0,8);
+    document.getElementById('sig-vol-surge').innerHTML=vol.map(s=>{const tn=s.total_net||0,fn=s.foreign_net||0,name=s.name||nm[s.sid]||''; return `<tr><td class="py-2"><span class="font-mono font-semibold text-gold-dark">${s.sid}</span> <span class="text-ink-faint text-[11px]">${name}</span></td><td class="py-2 ${tn>0?'text-up':'text-dn'} font-bold">${fmt(tn)}</td><td class="py-2 ${fn>0?'text-up':'text-dn'} font-medium">${fmt(fn)}</td></tr>`;}).join('');
+    document.getElementById('sig-vol-surge-empty').classList.toggle('hidden',vol.length>0);
+  }catch(e){ console.warn('Signals failed',e); }
 }
 
-/* ── Monitor ─────────────────────────────────── */
+/* ── Monitor ──────────────────────────── */
 async function loadMonitor(){
   try{
-    const cb = '?t=' + Date.now();
-    const res = await fetch('data/monitor_alerts.json' + cb);
-    const d = await res.json();
-    if(!d || !d.alerts || d.alerts.length === 0){
-      document.getElementById('monitor-body').innerHTML = '';
-      document.getElementById('monitor-empty').classList.remove('hidden');
-      return;
-    }
-    const alertLabels = {
-      breakdown:{zh:'跌破支撐',en:'Breakdown'}, breakout:{zh:'突破壓力',en:'Breakout'},
-      volatility:{zh:'波動異常',en:'Volatility'}, volume:{zh:'爆量',en:'Volume'},
-      reversal:{zh:'反轉訊號',en:'Reversal'}
-    };
-    const html = d.alerts.slice(0,20).map(a => {
-      const label = alertLabels[a.alert_type] || {zh:a.alert_type, en:a.alert_type};
-      const typeText = LANG==='zh' ? label.zh : label.en;
-      const sc = a.score||0;
-      const scCls = sc>=60 ? 'text-up' : sc>=30 ? 'text-warn' : 'text-dn';
-      return `<tr>
-        <td class="px-4 py-2.5 text-gray-500 text-xs">${a.date||''}</td>
-        <td class="px-4 py-2.5 font-mono font-semibold text-brand-purple">${a.symbol}</td>
-        <td class="px-4 py-2.5 text-gray-300">${a.name||a.symbol}</td>
-        <td class="px-4 py-2.5 text-gray-400">${typeText}</td>
-        <td class="px-4 py-2.5 font-bold ${scCls}">${sc||'—'}</td>
-      </tr>`;
+    const cb='?t='+Date.now(); const res=await fetch('data/monitor_alerts.json'+cb); const d=await res.json();
+    if(!d||!d.alerts||!d.alerts.length){ document.getElementById('monitor-body').innerHTML=''; document.getElementById('monitor-empty').classList.remove('hidden'); return; }
+    const labels={breakdown:{zh:'跌破支撐',en:'Breakdown'},breakout:{zh:'突破壓力',en:'Breakout'},volatility:{zh:'波動異常',en:'Volatility'},volume:{zh:'爆量',en:'Volume'},reversal:{zh:'反轉訊號',en:'Reversal'}};
+    const html=d.alerts.slice(0,20).map(a=>{const l=labels[a.alert_type]||{zh:a.alert_type,en:a.alert_type}; const txt=LANG==='zh'?l.zh:l.en; const sc=a.score||0; const c=sc>=60?'text-up':sc>=30?'text-warn':'text-dn';
+      return `<tr><td class="px-4 py-2.5 text-ink-faint text-xs">${a.date||''}</td><td class="px-4 py-2.5 font-mono font-semibold text-gold-dark">${a.symbol}</td><td class="px-4 py-2.5 text-ink">${a.name||a.symbol}</td><td class="px-4 py-2.5 text-ink-light">${txt}</td><td class="px-4 py-2.5 font-bold ${c}">${sc||'—'}</td></tr>`;
     }).join('');
-    document.getElementById('monitor-body').innerHTML = html;
+    document.getElementById('monitor-body').innerHTML=html;
     document.getElementById('monitor-empty').classList.add('hidden');
-  }catch(e){ console.warn('Monitor load failed', e); }
+  }catch(e){ console.warn('Monitor failed',e); }
 }
 
-/* ── K-line ──────────────────────────────────── */
+/* ── K-line ──────────────────────────── */
 async function loadKline(){
   try{
-    const res = await fetch('data/kline_data.json');
-    const d = await res.json();
-    if(!d || !d.stocks) return;
-    const chipBase = 'px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer border border-white/10 transition-all duration-200 hover:border-brand-purple/40 hover:text-brand-purple';
-    const html = d.stocks.slice(0,10).map(s =>
-      `<button class="kline-chip ${chipBase}" onclick="showKlineChart('${s.symbol}')" data-symbol="${s.symbol}">${s.symbol}</button>`
-    ).join('');
-    document.getElementById('kline-chips').innerHTML = html;
-    if(d.stocks.length > 0){
-      const firstBtn = document.querySelector('.kline-chip');
-      if(firstBtn){
-        firstBtn.style.background = 'rgba(139,92,246,0.15)';
-        firstBtn.style.borderColor = 'rgba(139,92,246,0.4)';
-        firstBtn.style.color = '#A78BFA';
-        showKlineChart(d.stocks[0].symbol);
-      }
-    }
-  }catch(e){ console.warn('Kline load failed', e); }
+    const res=await fetch('data/kline_data.json'); const d=await res.json(); if(!d||!d.stocks)return;
+    const cb='px-3 py-1 rounded-eight text-xs font-semibold font-heading cursor-pointer border border-ink/10 text-ink-light transition-all hover:border-gold/30 hover:text-gold-dark';
+    document.getElementById('kline-chips').innerHTML=d.stocks.slice(0,10).map(s=>`<button class="kline-chip ${cb}" onclick="showKlineChart('${s.symbol}')" data-symbol="${s.symbol}">${s.symbol}</button>`).join('');
+    if(d.stocks.length>0){const b=document.querySelector('.kline-chip'); if(b){b.style.background='rgba(212,175,55,.1)';b.style.borderColor='rgba(212,175,55,.3)';b.style.color='#8d5000'; showKlineChart(d.stocks[0].symbol);}}
+  }catch(e){ console.warn('Kline failed',e); }
 }
-
 function showKlineChart(symbol){
-  document.querySelectorAll('.kline-chip').forEach(c => {
-    const isActive = c.dataset.symbol === symbol;
-    c.style.background = isActive ? 'rgba(139,92,246,0.15)' : '';
-    c.style.borderColor = isActive ? 'rgba(139,92,246,0.4)' : '';
-    c.style.color = isActive ? '#A78BFA' : '';
-  });
-  document.getElementById('kline-title').textContent = symbol;
-  const container = document.getElementById('kline-container');
-  container.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500 text-sm">Loading...</div>';
+  document.querySelectorAll('.kline-chip').forEach(c=>{const a=c.dataset.symbol===symbol; c.style.background=a?'rgba(212,175,55,.1)':''; c.style.borderColor=a?'rgba(212,175,55,.3)':''; c.style.color=a?'#8d5000':'';});
+  document.getElementById('kline-title').textContent=symbol;
+  document.getElementById('kline-container').innerHTML='<div class="flex items-center justify-center h-full text-ink-light text-sm">Loading...</div>';
 }
 
-/* ── Market Switch ───────────────────────────── */
+/* ── Market Switch ──────────────────── */
 function switchMarket(market){
   MARKET = market;
-  document.querySelectorAll('.market-tab').forEach(t => {
-    t.classList.remove('active','tab-active-tw','tab-active-us','tab-active-jp');
-  });
+  document.querySelectorAll('.market-tab').forEach(t => { t.classList.remove('market-tab-active'); t.classList.add('text-ink-light'); });
   const btn = document.querySelector(`[data-market="${market}"]`);
-  btn.classList.add('active', `tab-active-${market}`);
-
-  // Section badge colors
-  const badgeCls = { tw:'bg-brand-purple/10 border-brand-purple/20 text-brand-purple', us:'bg-dn/10 border-dn/20 text-dn', jp:'bg-warn/10 border-warn/20 text-warn' };
-  const badge = document.getElementById('section-badge');
-  badge.className = `section-badge text-sm font-bold px-4 py-1 rounded-full border ${badgeCls[market]}`;
-  const monBadge = document.getElementById('monitor-badge');
-  monBadge.className = `section-badge text-sm font-bold px-4 py-1 rounded-full border ${badgeCls[market]}`;
-
-  // TW-only sections
-  document.querySelectorAll('.screener-section,.signal-section,.monitor-section').forEach(el => {
-    el.style.display = market === 'tw' ? '' : 'none';
-  });
-
+  btn.classList.add('market-tab-active'); btn.classList.remove('text-ink-light');
+  document.querySelectorAll('.screener-section,.signal-section,.monitor-section').forEach(el => { el.style.display = market==='tw' ? '' : 'none'; });
   loadKPI().then(() => renderWatchlist());
 }
 
-/* ── Market Status ───────────────────────────── */
+/* ── Market Status ──────────────────── */
 function updateMarketStatus(){
-  const now = new Date();
-  const h = now.getHours(), m = now.getMinutes();
-  const day = now.getDay();
-  const timeStr = now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-  const dateStr = now.toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'});
-
-  const el = document.getElementById('market-status');
-  const timeEl = document.getElementById('status-time');
-  const msgEl = document.getElementById('status-msg');
+  const now=new Date(), h=now.getHours(), m=now.getMinutes(), day=now.getDay();
+  const timeStr=now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  const dateStr=now.toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'});
+  const el=document.getElementById('market-status'), timeEl=document.getElementById('status-time'), msgEl=document.getElementById('status-msg');
   timeEl.textContent = dateStr + ' ' + timeStr;
-
-  const isWeekend = day === 0 || day === 6;
-  const mins = h * 60 + m;
-  const marketOpen = 9 * 60;
-  const marketClose = 13 * 60 + 30;
-
-  // Reset bg
-  el.style.background = '';
-
-  if(isWeekend){
-    el.style.background = 'rgba(251,191,36,0.05)';
-    msgEl.textContent = LANG==='zh'
-      ? '目前不是股票交易日，本站顯示的資料是上一個交易日的資料'
-      : 'Market is closed today. Data shown is from the last trading day.';
-  } else if(mins < marketOpen){
-    el.style.background = 'rgba(139,92,246,0.05)';
-    msgEl.textContent = LANG==='zh'
-      ? '現在還沒到交易時間，本站顯示的是昨天收盤的資料'
-      : 'Market has not opened yet. Data shown is from yesterday\'s close.';
-  } else if(mins >= marketClose){
-    el.style.background = 'rgba(52,211,153,0.05)';
-    msgEl.textContent = LANG==='zh'
-      ? '現在已經過了交易時間，本站顯示的是今天收盤的資料'
-      : 'Market has closed. Data shown is from today\'s close.';
-  } else {
-    msgEl.textContent = LANG==='zh' ? '盤中交易時段' : 'Market is open';
-  }
+  const isWeekend=day===0||day===6, mins=h*60+m;
+  el.style.background='';
+  if(isWeekend){ el.style.background='rgba(212,175,55,.05)'; msgEl.textContent=LANG==='zh'?'目前不是股票交易日，本站顯示的資料是上一個交易日的資料':'Market closed. Data from last trading day.'; }
+  else if(mins<540){ el.style.background='rgba(212,175,55,.03)'; msgEl.textContent=LANG==='zh'?'現在還沒到交易時間，本站顯示的是昨天收盤的資料':'Pre-market. Data from yesterday\'s close.'; }
+  else if(mins>=810){ el.style.background='rgba(22,163,74,.03)'; msgEl.textContent=LANG==='zh'?'現在已經過了交易時間，本站顯示的是今天收盤的資料':'Market closed. Data from today\'s close.'; }
+  else { msgEl.textContent=LANG==='zh'?'盤中交易時段':'Market is open'; }
 }
 
-/* ── WSJ Digest ──────────────────────────────── */
+/* ── WSJ Digest ──────────────────────── */
 async function loadWSJDigest(){
   try{
-    const cb = '?t=' + Date.now();
-    const res = await fetch('data/wsj_digest.json' + cb);
-    const d = await res.json();
-    if(!d || !d.items || d.items.length === 0){
-      document.getElementById('wsj-digest-list').innerHTML =
-        `<div class="text-xs text-gray-500" data-zh="暫無摘要" data-en="No digest available">暫無摘要</div>`;
-      return;
-    }
-    const html = d.items.map(item =>
-      `<div class="flex items-baseline gap-2 text-xs leading-relaxed">
-        <span class="text-warn font-bold flex-shrink-0">·</span>
-        <a href="${item.url}" target="_blank" rel="noopener" class="text-gray-300 hover:text-brand-cyan transition-colors duration-200">${item.title}</a>
-      </div>`
+    const cb='?t='+Date.now(); const res=await fetch('data/wsj_digest.json'+cb); const d=await res.json();
+    if(!d||!d.items||!d.items.length){ document.getElementById('wsj-digest-list').innerHTML=`<div class="text-xs text-ink-faint" data-zh="暫無摘要" data-en="No digest">暫無摘要</div>`; return; }
+    document.getElementById('wsj-digest-list').innerHTML = d.items.map(item =>
+      `<div class="flex items-baseline gap-2 text-xs leading-relaxed"><span class="text-gold font-bold flex-shrink-0">·</span><a href="${item.url}" target="_blank" rel="noopener" class="text-ink hover:text-gold-dark transition-colors">${item.title}</a></div>`
     ).join('');
-    document.getElementById('wsj-digest-list').innerHTML = html;
-    if(d.date){
-      const titleEl = document.querySelector('#wsj-digest .text-sm.font-semibold');
-      if(titleEl) titleEl.innerHTML += ` <span class="text-xs text-gray-500 font-normal">${d.date}</span>`;
-    }
-  }catch(e){
-    document.getElementById('wsj-digest-list').innerHTML =
-      `<div class="text-xs text-gray-500" data-zh="載入失敗" data-en="Failed to load">載入失敗</div>`;
-  }
+    if(d.date){ const el=document.querySelector('#wsj-digest .font-semibold'); if(el) el.innerHTML+=` <span class="text-xs text-ink-faint font-normal">${d.date}</span>`; }
+  }catch(e){ document.getElementById('wsj-digest-list').innerHTML=`<div class="text-xs text-ink-faint">載入失敗</div>`; }
 }
 
-/* ── Init ────────────────────────────────────── */
+/* ── Init ────────────────────────────── */
 async function init(){
-  // Set active lang btn style
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    if(b.classList.contains('active')){
-      b.style.background = 'linear-gradient(135deg,#8B5CF6,#06B6D4)';
-      b.style.color = '#fff';
-    }
-  });
-
-  document.querySelectorAll('.market-tab').forEach(btn => {
-    btn.addEventListener('click', () => switchMarket(btn.dataset.market));
-  });
-
+  document.querySelectorAll('.lang-btn').forEach(b => { if(b.classList.contains('active')){ b.style.background='#D4AF37'; b.style.color='#fff'; b.style.fontWeight='700'; }});
+  document.querySelectorAll('.market-tab').forEach(btn => btn.addEventListener('click', () => switchMarket(btn.dataset.market)));
   updateMarketStatus();
   await loadWSJDigest();
   await loadGlobalTicker();
@@ -918,10 +642,8 @@ async function init(){
   await loadSignals();
   await loadMonitor();
   await loadKline();
-
   applyLang();
 }
-
 init();
 setInterval(updateMarketStatus, 1000);
 setInterval(loadGlobalTicker, 60000);
