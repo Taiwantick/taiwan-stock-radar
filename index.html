@@ -286,9 +286,10 @@ footer a:hover{text-decoration:underline}
       <tr>
         <th data-zh="代號" data-en="Symbol">代號</th>
         <th data-zh="名稱" data-en="Name">名稱</th>
-        <th data-zh="分數" data-en="Score">分數</th>
         <th data-zh="營收YoY" data-en="Revenue YoY">營收YoY</th>
-        <th data-zh="法人" data-en="Institution">法人</th>
+        <th data-zh="外資(張)" data-en="Foreign">外資(張)</th>
+        <th data-zh="投信(張)" data-en="Trust">投信(張)</th>
+        <th data-zh="法人標籤" data-en="Tags">法人標籤</th>
       </tr>
     </thead>
     <tbody id="screener-body">
@@ -311,7 +312,7 @@ footer a:hover{text-decoration:underline}
         <span data-zh="法人連買" data-en="Inst. Consecutive Buy">法人連買</span>
       </div>
       <table class="sig-table">
-        <thead><tr><th data-zh="代號" data-en="Symbol">代號</th><th data-zh="天數" data-en="Days">天數</th></tr></thead>
+        <thead><tr><th data-zh="代號" data-en="Symbol">代號</th><th data-zh="外資" data-en="Foreign">外資</th><th data-zh="投信" data-en="Trust">投信</th></tr></thead>
         <tbody id="sig-consec-buy"></tbody>
       </table>
       <div id="sig-consec-buy-empty" class="sig-empty" style="display:none">
@@ -324,7 +325,7 @@ footer a:hover{text-decoration:underline}
         <span data-zh="融資軋空" data-en="Short Squeeze">融資軋空</span>
       </div>
       <table class="sig-table">
-        <thead><tr><th data-zh="代號" data-en="Symbol">代號</th><th data-zh="狀態" data-en="Status">狀態</th></tr></thead>
+        <thead><tr><th data-zh="代號" data-en="Symbol">代號</th><th data-zh="融資" data-en="Margin">融資</th><th data-zh="融券" data-en="Short">融券</th></tr></thead>
         <tbody id="sig-margin-short"></tbody>
       </table>
       <div id="sig-margin-short-empty" class="sig-empty" style="display:none">
@@ -334,10 +335,10 @@ footer a:hover{text-decoration:underline}
     <div class="signal-card">
       <div class="signal-card-title">
         <span>💥</span>
-        <span data-zh="爆量" data-en="Volume Surge">爆量</span>
+        <span data-zh="法人大量進出" data-en="Big Inst. Flow">法人大量進出</span>
       </div>
       <table class="sig-table">
-        <thead><tr><th data-zh="代號" data-en="Symbol">代號</th><th data-zh="倍數" data-en="Multiple">倍數</th></tr></thead>
+        <thead><tr><th data-zh="代號" data-en="Symbol">代號</th><th data-zh="法人合計" data-en="Total">法人合計</th><th data-zh="外資" data-en="Foreign">外資</th></tr></thead>
         <tbody id="sig-vol-surge"></tbody>
       </table>
       <div id="sig-vol-surge-empty" class="sig-empty" style="display:none">
@@ -355,10 +356,11 @@ footer a:hover{text-decoration:underline}
   <table class="monitor-table">
     <thead>
       <tr>
-        <th data-zh="時間" data-en="Time">時間</th>
+        <th data-zh="日期" data-en="Date">日期</th>
         <th data-zh="代號" data-en="Symbol">代號</th>
+        <th data-zh="名稱" data-en="Name">名稱</th>
         <th data-zh="類型" data-en="Type">類型</th>
-        <th data-zh="描述" data-en="Description">描述</th>
+        <th data-zh="分數" data-en="Score">分數</th>
       </tr>
     </thead>
     <tbody id="monitor-body"></tbody>
@@ -645,22 +647,30 @@ function scoreFor(s){
 
 async function loadScreener(){
   try{
-    const res = await fetch('data/screener_data.json');
+    const cb = '?t=' + Date.now();
+    const res = await fetch('data/screener_data.json' + cb);
     const d = await res.json();
-    if(!d || !d.data || d.data.length === 0){
+    if(!d || !d.results || d.results.length === 0){
       document.getElementById('screener-body').innerHTML = '';
       document.getElementById('screener-empty').style.display = 'block';
       return;
     }
-    const html = d.data.slice(0,20).map(row=>`
-      <tr>
-        <td>${row.symbol}</td>
-        <td>${row.name}</td>
-        <td>${(row.score || 0).toFixed(1)}</td>
-        <td>${(row.revenue_yoy||0).toFixed(1)}%</td>
-        <td>${['f','t','d'].map(tag=>row[tag+'_inst']?`<span class="tag tag-${tag}">${tag.toUpperCase()}</span>`:'').join('')}</td>
-      </tr>
-    `).join('');
+    function fmtLots(v){ if(!v) return '0'; if(Math.abs(v)>=1000) return (v/1000).toFixed(0)+'K'; return v.toLocaleString(); }
+    const html = d.results.slice(0,20).map(row=>{
+      const tags = [];
+      if(row.in_f) tags.push('<span style="color:var(--green);font-size:0.75rem;font-weight:600">外資</span>');
+      if(row.in_t) tags.push('<span style="color:var(--red);font-size:0.75rem;font-weight:600">投信</span>');
+      if(row.in_d) tags.push('<span style="color:var(--yellow);font-size:0.75rem;font-weight:600">自營</span>');
+      const yoyColor = (row.yoy||0) >= 0 ? 'var(--green)' : 'var(--red)';
+      return `<tr>
+        <td style="font-family:var(--font-mono);font-weight:600;color:var(--blue)">${row.sid}</td>
+        <td>${row.name||row.sid}</td>
+        <td style="color:${yoyColor};font-weight:600">${row.yoy >= 0 ? '+' : ''}${(row.yoy||0).toFixed(1)}%</td>
+        <td style="color:${(row.f_net||0)>0?'var(--green)':'var(--red)'}">${fmtLots(row.f_net)}</td>
+        <td style="color:${(row.t_net||0)>0?'var(--green)':'var(--red)'}">${fmtLots(row.t_net)}</td>
+        <td>${tags.join(' ')}</td>
+      </tr>`;
+    }).join('');
     document.getElementById('screener-body').innerHTML = html;
     document.getElementById('screener-empty').style.display = 'none';
   }catch(e){console.warn('Screener load failed',e);}
@@ -668,56 +678,78 @@ async function loadScreener(){
 
 async function loadSignals(){
   try{
-    const res = await fetch('data/radar_data.json');
+    const cb = '?t=' + Date.now();
+    const res = await fetch('data/radar_data.json' + cb);
     const d = await res.json();
     if(!d) return;
+    function fmtNet(v){ if(!v) return '0'; const a=Math.abs(v); if(a>=1e6) return (v/1e6).toFixed(1)+'M'; if(a>=1e3) return (v/1e3).toFixed(0)+'K'; return v.toLocaleString(); }
 
+    // 1. 法人連買：外資+投信同向買超
     const consec = (d.consec_buy || []).slice(0,8);
-    document.getElementById('sig-consec-buy').innerHTML = consec.map(s=>`
-      <tr>
-        <td class="sig-sid">${s.symbol}</td>
-        <td class="sig-up">${s.days}天</td>
-      </tr>
-    `).join('');
+    document.getElementById('sig-consec-buy').innerHTML = consec.map(s=>{
+      const fn = s.foreign_net||0, tn = s.trust_net||0;
+      return `<tr>
+        <td class="sig-sid" style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</td>
+        <td style="color:${fn>0?'var(--green)':'var(--red)'}">${fmtNet(fn)}</td>
+        <td style="color:${tn>0?'var(--green)':'var(--red)'}">${fmtNet(tn)}</td>
+      </tr>`;
+    }).join('');
     document.getElementById('sig-consec-buy-empty').style.display = consec.length?'none':'block';
 
+    // 2. 融資軋空：融資減少 + 融券增加
     const margin = (d.margin_short || []).slice(0,8);
-    document.getElementById('sig-margin-short').innerHTML = margin.map(s=>`
-      <tr>
-        <td class="sig-sid">${s.symbol}</td>
-        <td class="${s.status==='危險'?'sig-dn':'sig-up'}">${s.status}</td>
-      </tr>
-    `).join('');
+    document.getElementById('sig-margin-short').innerHTML = margin.map(s=>{
+      const mc = s.margin_change||0, sc = s.short_change||0;
+      return `<tr>
+        <td class="sig-sid" style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</td>
+        <td style="color:var(--red)">${mc.toLocaleString()}</td>
+        <td style="color:var(--green)">+${sc.toLocaleString()}</td>
+      </tr>`;
+    }).join('');
     document.getElementById('sig-margin-short-empty').style.display = margin.length?'none':'block';
 
+    // 3. 爆量：法人大量進出
     const vol = (d.vol_surge || []).slice(0,8);
-    document.getElementById('sig-vol-surge').innerHTML = vol.map(s=>`
-      <tr>
-        <td class="sig-sid">${s.symbol}</td>
-        <td class="sig-up">${s.multiple.toFixed(1)}x</td>
-      </tr>
-    `).join('');
+    document.getElementById('sig-vol-surge').innerHTML = vol.map(s=>{
+      const tn = s.total_net||0, fn = s.foreign_net||0;
+      const color = tn > 0 ? 'var(--green)' : 'var(--red)';
+      return `<tr>
+        <td class="sig-sid" style="font-family:var(--font-mono);color:var(--blue)">${s.sid}</td>
+        <td style="color:${color};font-weight:600">${fmtNet(tn)}</td>
+        <td style="color:${fn>0?'var(--green)':'var(--red)'}">${fmtNet(fn)}</td>
+      </tr>`;
+    }).join('');
     document.getElementById('sig-vol-surge-empty').style.display = vol.length?'none':'block';
   }catch(e){console.warn('Signals load failed',e);}
 }
 
 async function loadMonitor(){
   try{
-    const res = await fetch('data/monitor_alerts.json');
+    const cb = '?t=' + Date.now();
+    const res = await fetch('data/monitor_alerts.json' + cb);
     const d = await res.json();
     if(!d || !d.alerts || d.alerts.length === 0){
       document.getElementById('monitor-body').innerHTML = '';
       document.getElementById('monitor-empty').style.display = 'block';
       return;
     }
-    const html = d.alerts.slice(-10).reverse().map(alert=>`
-      <tr>
-        <td>${alert.time}</td>
-        <td>${alert.symbol}</td>
-        <td>${alert.type}</td>
-        <td>${alert.description}</td>
-      </tr>
-    `).join('');
+    const alertLabels = {
+      breakdown: {zh:'跌破支撐',en:'Breakdown'}, breakout: {zh:'突破壓力',en:'Breakout'},
+      volatility: {zh:'波動異常',en:'Volatility'}, volume: {zh:'爆量',en:'Volume'},
+      reversal: {zh:'反轉訊號',en:'Reversal'}
+    };
+    const html = d.alerts.slice(0,20).map(a=>{
+      const label = alertLabels[a.alert_type] || {zh:a.alert_type, en:a.alert_type};
+      const typeText = LANG==='zh' ? label.zh : label.en;
+      const scoreColor = (a.score||0)>=60?'var(--green)':(a.score||0)>=30?'var(--yellow)':'var(--red)';
+      return `<tr>
+        <td style="color:var(--muted);font-size:0.78rem">${a.date||''}</td>
+        <td style="font-family:var(--font-mono);font-weight:600;color:var(--blue)">${a.symbol}</td>
+        <td>${a.name||a.symbol}</td>
+        <td>${typeText}</td>
+        <td style="color:${scoreColor};font-weight:600">${a.score||'—'}</td>
+      </tr>`;
+    }).join('');
     document.getElementById('monitor-body').innerHTML = html;
     document.getElementById('monitor-empty').style.display = 'none';
   }catch(e){console.warn('Monitor load failed',e);}
@@ -767,6 +799,11 @@ function switchMarket(market){
 
   const monBadge = document.getElementById('monitor-badge');
   monBadge.className = 'section-badge ' + badgeMap[market];
+
+  // 台股專屬區塊：營收篩選器、籌碼訊號、監控警報
+  document.querySelectorAll('.screener-section,.signal-section,.monitor-section').forEach(el=>{
+    el.style.display = market === 'tw' ? '' : 'none';
+  });
 
   loadKPI().then(()=>renderWatchlist());
 }
