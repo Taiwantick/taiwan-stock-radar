@@ -1,5 +1,27 @@
 {
-  "date": "2026-04-14",
-  "updated_at": "2026-04-14T14:00:02",
-  "items": []
+  "date": "2026-04-15",
+  "updated_at": "2026-04-15T08:00:00",
+  "source": "WSJ RSS",
+  "items": [
+    {
+      "title": "川普暗示美伊談判數日內或重啟",
+      "url": "https://www.wsj.com/world/middle-east/iran-us-talks-trump-hormuz-blockade"
+    },
+    {
+      "title": "美軍封鎖荷莫茲海峽油價逼近百元",
+      "url": "https://www.wsj.com/world/middle-east/us-navy-blockade-strait-hormuz-iran"
+    },
+    {
+      "title": "匈牙利變天馬扎爾終結奧班16年執政",
+      "url": "https://www.wsj.com/world/europe/hungary-election-magyar-orban-defeat"
+    },
+    {
+      "title": "IMF下調全球展望警告荷莫茲衝擊",
+      "url": "https://www.wsj.com/economy/imf-world-economic-outlook-april-2026-hormuz"
+    },
+    {
+      "title": "美大型銀行財報亮眼摩根大通盈利增",
+      "url": "https://www.wsj.com/finance/banking/jpmorgan-goldman-sachs-q1-2026-earnings"
+    }
+  ]
 }
