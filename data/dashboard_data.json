@@ -1,144 +1,6 @@
 {
   "runs": [
     {
-      "ts": 1774245600,
-      "summary": "2026/03/23 盤後分析完成",
-      "stocks": [
-        {
-          "sid": "3017",
-          "display": "3017 奇鋐",
-          "trend_state": "多頭強勢",
-          "pos_label": "主力進場",
-          "is_lock": true,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 2900,
-          "score": 86
-        },
-        {
-          "sid": "6285",
-          "display": "6285 啟碁",
-          "trend_state": "多頭",
-          "pos_label": "主力進場",
-          "is_lock": true,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 2600,
-          "score": 83
-        },
-        {
-          "sid": "6546",
-          "display": "6546 正基",
-          "trend_state": "多頭",
-          "pos_label": "主力進場",
-          "is_lock": true,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 1900,
-          "score": 80
-        },
-        {
-          "sid": "6182",
-          "display": "6182 合晶",
-          "trend_state": "多頭",
-          "pos_label": "多頭續強",
-          "is_lock": false,
-          "is_strong": true,
-          "dmi_turn_strong": true,
-          "inst3": 1100,
-          "score": 74
-        },
-        {
-          "sid": "3324",
-          "display": "3324 雙鴻",
-          "trend_state": "觀察",
-          "pos_label": "觀察",
-          "is_lock": false,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 300,
-          "score": 60
-        },
-        {
-          "sid": "2634",
-          "display": "2634 漢翔",
-          "trend_state": "多頭",
-          "pos_label": "多頭續強",
-          "is_lock": false,
-          "is_strong": true,
-          "dmi_turn_strong": true,
-          "inst3": 800,
-          "score": 73
-        },
-        {
-          "sid": "3163",
-          "display": "3163 波若威",
-          "trend_state": "多頭",
-          "pos_label": "主力進場",
-          "is_lock": true,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 1300,
-          "score": 75
-        },
-        {
-          "sid": "6125",
-          "display": "6125 廣運",
-          "trend_state": "多頭",
-          "pos_label": "多頭續強",
-          "is_lock": false,
-          "is_strong": true,
-          "dmi_turn_strong": true,
-          "inst3": 650,
-          "score": 69
-        },
-        {
-          "sid": "2421",
-          "display": "2421 建準",
-          "trend_state": "觀察",
-          "pos_label": "觀察",
-          "is_lock": false,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 220,
-          "score": 57
-        },
-        {
-          "sid": "4760",
-          "display": "4760 雙鍵",
-          "trend_state": "多頭",
-          "pos_label": "觀察",
-          "is_lock": false,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 400,
-          "score": 62
-        },
-        {
-          "sid": "5475",
-          "display": "5475 德宏",
-          "trend_state": "多頭",
-          "pos_label": "多頭續強",
-          "is_lock": false,
-          "is_strong": true,
-          "dmi_turn_strong": true,
-          "inst3": 550,
-          "score": 68
-        },
-        {
-          "sid": "1717",
-          "display": "1717 長興",
-          "trend_state": "觀察",
-          "pos_label": "觀察",
-          "is_lock": false,
-          "is_strong": false,
-          "dmi_turn_strong": false,
-          "inst3": 180,
-          "score": 50
-        }
-      ]
-    },
-    {
       "ts": 1774159200,
       "summary": "2026/03/22 盤後分析完成",
       "stocks": [
@@ -3059,6 +2921,854 @@
         "top_strategy": {
           "right_side": 3,
           "pressure_break_ready": 3
+        },
+        "source": "stock-mcp"
+      }
+    },
+    {
+      "ts": 1776152811,
+      "date": "2026-04-14",
+      "time": "15:46",
+      "stocks": [
+        {
+          "sid": "3034",
+          "display": "3034 聯詠",
+          "trend_state": "多頭強勢",
+          "pos_label": "趨勢已偏右側，適合等回測承接，不宜追到壓力區。",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": false,
+          "inst3": -124245,
+          "score": 84,
+          "primary_strategy": "right_side",
+          "trade_quality": "B",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區"
+          ],
+          "reasons": [
+            "突破20日高點",
+            "量能放大",
+            "DMI多頭（+DI 31.46 / -DI 27.35 / ADX 20.93）"
+          ]
+        },
+        {
+          "sid": "3005",
+          "display": "3005 神基",
+          "trend_state": "多頭強勢",
+          "pos_label": "趨勢已偏右側，適合等回測承接，不宜追到壓力區。",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": false,
+          "inst3": -1879321,
+          "score": 82,
+          "primary_strategy": "right_side",
+          "trade_quality": "B",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區"
+          ],
+          "reasons": [
+            "突破20日高點",
+            "量能放大",
+            "DMI多頭（+DI 39.81 / -DI 8.53 / ADX 25.24）"
+          ]
+        },
+        {
+          "sid": "2317",
+          "display": "2317 鴻海",
+          "trend_state": "neutral_to_bullish",
+          "pos_label": "接近壓力帶且量能轉強，適合等有效突破或突破後回踩。",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": false,
+          "inst3": 3338554,
+          "score": 79,
+          "primary_strategy": "pressure_break_ready",
+          "trade_quality": "B",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 12.97 / -DI 0.84 / ADX 70.17）",
+            "站上20MA"
+          ]
+        },
+        {
+          "sid": "2881",
+          "display": "2881 富邦金",
+          "trend_state": "neutral_to_bullish",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": true,
+          "dmi_turn_strong": false,
+          "inst3": -8476415,
+          "score": 74,
+          "primary_strategy": null,
+          "trade_quality": "B",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區"
+          ],
+          "reasons": [
+            "突破20日高點",
+            "量能放大",
+            "站上20MA"
+          ]
+        },
+        {
+          "sid": "2330",
+          "display": "2330 台積電",
+          "trend_state": "震盪",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -6045484,
+          "score": 60,
+          "primary_strategy": null,
+          "trade_quality": "C",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "結構強但不宜追價"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 14.7 / -DI 3.48 / ADX 61.37）",
+            "站上20MA"
+          ]
+        },
+        {
+          "sid": "2882",
+          "display": "2882 國泰金",
+          "trend_state": "震盪",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -6509594,
+          "score": 57,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 25.64 / -DI 13.35 / ADX 26.44）",
+            "站上20MA"
+          ]
+        },
+        {
+          "sid": "3711",
+          "display": "3711 日月光投控",
+          "trend_state": "震盪",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -841584,
+          "score": 55,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 27.4 / -DI 19.28 / ADX 48.66）",
+            "站上20MA"
+          ]
+        },
+        {
+          "sid": "3231",
+          "display": "3231 緯創",
+          "trend_state": "震盪",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 4211842,
+          "score": 54,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "1301",
+          "display": "1301 台塑",
+          "trend_state": "震盪",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 58639055,
+          "score": 54,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "6669",
+          "display": "6669 緯穎",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -50108,
+          "score": 46,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "2409",
+          "display": "2409 友達",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -9398989,
+          "score": 44,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 31.04 / -DI 7.19 / ADX 62.37）",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "3081",
+          "display": "3081 聯亞",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 0,
+          "score": 43,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "6274",
+          "display": "6274 台燿",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 0,
+          "score": 42,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上5MA"
+          ]
+        },
+        {
+          "sid": "3714",
+          "display": "3714 富采",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": true,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 11169366,
+          "score": 41,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 95.65 / -DI 0.79 / ADX 98.37）"
+          ]
+        },
+        {
+          "sid": "2027",
+          "display": "2027 大成鋼",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": true,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 2681848,
+          "score": 39,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "2454",
+          "display": "2454 聯發科",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -75299,
+          "score": 38,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 6.8 / -DI 6.56 / ADX 48.87）",
+            "股價位於支撐之上"
+          ]
+        },
+        {
+          "sid": "3008",
+          "display": "3008 大立光",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 508779,
+          "score": 38,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "DMI多頭（+DI 38.43 / -DI 16.46 / ADX 40.03）"
+          ]
+        },
+        {
+          "sid": "3324",
+          "display": "3324 雙鴻",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 0,
+          "score": 37,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "2455",
+          "display": "2455 全新",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": true,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 842525,
+          "score": 37,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上5MA",
+            "股價位於支撐之上"
+          ]
+        },
+        {
+          "sid": "3376",
+          "display": "3376 新日興",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -2524014,
+          "score": 33,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "3017",
+          "display": "3017 奇鋐",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -915808,
+          "score": 32,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "1303",
+          "display": "1303 南亞",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": true,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 32080263,
+          "score": 32,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上週線",
+            "股價位於支撐之上"
+          ]
+        },
+        {
+          "sid": "3443",
+          "display": "3443 創意",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": true,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 162478,
+          "score": 30,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大"
+          ]
+        },
+        {
+          "sid": "2383",
+          "display": "2383 台光電",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -267746,
+          "score": 29,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上週線"
+          ]
+        },
+        {
+          "sid": "6442",
+          "display": "6442 光聖",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -649071,
+          "score": 29,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "站上5MA"
+          ]
+        },
+        {
+          "sid": "2345",
+          "display": "2345 智邦",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": true,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": 152538,
+          "score": 25,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大"
+          ]
+        },
+        {
+          "sid": "8046",
+          "display": "8046 南電",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -231322,
+          "score": 22,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上20MA",
+            "股價位於支撐之上"
+          ]
+        },
+        {
+          "sid": "2308",
+          "display": "2308 台達電",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -522895,
+          "score": 18,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大"
+          ]
+        },
+        {
+          "sid": "2367",
+          "display": "2367 燿華",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -637644,
+          "score": 16,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大"
+          ]
+        },
+        {
+          "sid": "6285",
+          "display": "6285 啟碁",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -52811,
+          "score": 15,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大"
+          ]
+        },
+        {
+          "sid": "2059",
+          "display": "2059 川湖",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -171585,
+          "score": 14,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "站上5MA",
+            "股價位於支撐之上"
+          ]
+        },
+        {
+          "sid": "2382",
+          "display": "2382 廣達",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -58569,
+          "score": 12,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "股價位於支撐之上"
+          ]
+        },
+        {
+          "sid": "2313",
+          "display": "2313 華通",
+          "trend_state": "空",
+          "pos_label": "目前無明確主策略歸類，建議持續觀察。",
+          "is_lock": false,
+          "is_strong": false,
+          "dmi_turn_strong": false,
+          "inst3": -13713941,
+          "score": 10,
+          "primary_strategy": null,
+          "trade_quality": "avoid",
+          "engine_a": 0,
+          "engine_b": 0,
+          "engine_c": 0,
+          "risk_flags": [
+            "接近壓力區",
+            "趨勢偏弱",
+            "暫不建議進場"
+          ],
+          "reasons": [
+            "量能放大",
+            "股價位於支撐之上"
+          ]
+        }
+      ],
+      "summary": {
+        "total": 33,
+        "strong": 4,
+        "lock": 6,
+        "top_strategy": {
+          "right_side": 2,
+          "pressure_break_ready": 1
         },
         "source": "stock-mcp"
       }

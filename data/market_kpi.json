@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-13T15:33:44",
+  "updated_at": "2026-04-14T15:47:39",
   "tw": {
     "total": 33,
     "avg_score": 0.0,
@@ -23,37 +23,37 @@
         "score": 0
       }
     ],
-    "lock_count": 0
+    "lock_count": 6
   },
   "us": {
     "total": 23,
-    "avg_score": 49.1,
+    "avg_score": 50.8,
     "quality_a": 0,
-    "quality_b": 0,
-    "strong_count": 0,
+    "quality_b": 1,
+    "strong_count": 1,
     "top3": [
+      {
+        "symbol": "ALAB",
+        "name": "Astera Labs",
+        "score": 60.8
+      },
       {
         "symbol": "MU",
         "name": "Micron 美光",
         "score": 58.0
       },
       {
-        "symbol": "NVDA",
-        "name": "NVIDIA 輝達",
-        "score": 56.5
-      },
-      {
-        "symbol": "ALAB",
-        "name": "Astera Labs",
-        "score": 55.7
+        "symbol": "ORCL",
+        "name": "Oracle 甲骨文",
+        "score": 57.2
       }
     ],
-    "avg_pe": 147.1,
-    "avg_dividend_yield": 72.4
+    "avg_pe": 158.5,
+    "avg_dividend_yield": 70.2
   },
   "jp": {
     "total": 11,
-    "avg_score": 35.6,
+    "avg_score": 34.9,
     "quality_a": 0,
     "quality_b": 0,
     "strong_count": 0,
@@ -61,20 +61,20 @@
       {
         "symbol": "4186.T",
         "name": "東京應化工業",
-        "score": 47.0
+        "score": 44.0
       },
       {
         "symbol": "6857.T",
         "name": "Advantest 愛德萬",
-        "score": 46.0
+        "score": 43.0
       },
       {
-        "symbol": "6146.T",
-        "name": "DISCO 迪斯科",
-        "score": 38.5
+        "symbol": "6954.T",
+        "name": "FANUC 發那科",
+        "score": 39.2
       }
     ],
-    "avg_pe": 55.6,
-    "avg_dividend_yield": 90.8
+    "avg_pe": 58.4,
+    "avg_dividend_yield": 90.6
   }
 }
