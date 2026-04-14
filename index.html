@@ -626,7 +626,7 @@ async function loadWSJDigest(){
     document.getElementById('wsj-digest-list').innerHTML = d.items.map(item =>
       `<div class="flex items-baseline gap-2 text-xs leading-relaxed"><span class="text-gold font-bold flex-shrink-0">·</span><a href="${item.url}" target="_blank" rel="noopener" class="text-ink hover:text-gold-dark transition-colors">${item.title}</a></div>`
     ).join('');
-    if(d.date){ const el=document.querySelector('#wsj-digest .font-semibold'); if(el) el.innerHTML+=` <span class="text-xs text-ink-faint font-normal">${d.date}</span>`; }
+    if(d.date){ const el=document.querySelector('#wsj-digest .font-semibold'); if(el){ let label=d.date; if(d.updated_at){ const t=new Date(d.updated_at); label+=` (上次更新：${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')})`; } el.innerHTML+=` <span class="text-xs text-ink-faint font-normal">${label}</span>`; } }
   }catch(e){ document.getElementById('wsj-digest-list').innerHTML=`<div class="text-xs text-ink-faint">載入失敗</div>`; }
 }
 
