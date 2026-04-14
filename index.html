@@ -125,6 +125,7 @@ body { font-family: 'Noto Sans TC', sans-serif; background: #FFFDF7; color: #2e3
       <div class="flex items-center gap-2 mb-1.5">
         <span class="material-symbols-outlined text-gold text-base">newspaper</span>
         <span class="text-sm font-semibold text-ink font-heading" data-zh="華爾街日報讀報摘要" data-en="WSJ Daily Digest">華爾街日報讀報摘要</span>
+        <span id="wsj-updated-at" class="text-xs text-ink-faint font-normal"></span>
       </div>
       <div id="wsj-digest-list" class="flex flex-col gap-1">
         <div class="text-xs text-ink-light" data-zh="載入中..." data-en="Loading...">載入中...</div>
@@ -626,7 +627,7 @@ async function loadWSJDigest(){
     document.getElementById('wsj-digest-list').innerHTML = d.items.map(item =>
       `<div class="flex items-baseline gap-2 text-xs leading-relaxed"><span class="text-gold font-bold flex-shrink-0">·</span><a href="${item.url}" target="_blank" rel="noopener" class="text-ink hover:text-gold-dark transition-colors">${item.title}</a></div>`
     ).join('');
-    if(d.date){ const el=document.querySelector('#wsj-digest .font-semibold'); if(el){ let label=d.date; if(d.updated_at){ const t=new Date(d.updated_at); label+=` (上次更新：${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')})`; } el.innerHTML+=` <span class="text-xs text-ink-faint font-normal">${label}</span>`; } }
+    if(d.date){ const el=document.getElementById('wsj-updated-at'); if(el){ let label=d.date; if(d.updated_at){ const t=new Date(d.updated_at); label+=` (上次更新：${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')})`; } el.textContent=label; } }
   }catch(e){ document.getElementById('wsj-digest-list').innerHTML=`<div class="text-xs text-ink-faint">載入失敗</div>`; }
 }
 
