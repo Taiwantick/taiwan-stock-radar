@@ -1,27 +1,27 @@
 {
-  "date": "2026-04-15",
-  "updated_at": "2026-04-15T08:00:00",
+  "date": "2026-04-17",
+  "updated_at": "2026-04-17T00:10:11",
   "source": "WSJ RSS",
   "items": [
     {
-      "title": "川普暗示美伊談判數日內或重啟",
-      "url": "https://www.wsj.com/world/middle-east/iran-us-talks-trump-hormuz-blockade"
+      "title": "川普考慮對伊朗有限打擊 油價震盪",
+      "url": "https://www.wsj.com/world/middle-east"
     },
     {
-      "title": "美軍封鎖荷莫茲海峽油價逼近百元",
-      "url": "https://www.wsj.com/world/middle-east/us-navy-blockade-strait-hormuz-iran"
+      "title": "美銀Q1獲利86億美元 近二十年新高",
+      "url": "https://www.wsj.com/finance/banking"
     },
     {
-      "title": "匈牙利變天馬扎爾終結奧班16年執政",
-      "url": "https://www.wsj.com/world/europe/hungary-election-magyar-orban-defeat"
+      "title": "標普500再創新高 伊朗停火預期激勵",
+      "url": "https://www.wsj.com/finance/stocks"
     },
     {
-      "title": "IMF下調全球展望警告荷莫茲衝擊",
-      "url": "https://www.wsj.com/economy/imf-world-economic-outlook-april-2026-hormuz"
+      "title": "摩根士丹利財報超預期 股價跳漲4.5%",
+      "url": "https://www.wsj.com/finance/banking"
     },
     {
-      "title": "美大型銀行財報亮眼摩根大通盈利增",
-      "url": "https://www.wsj.com/finance/banking/jpmorgan-goldman-sachs-q1-2026-earnings"
+      "title": "Allbirds轉型AI算力公司 股價暴漲582%",
+      "url": "https://www.wsj.com/tech"
     }
   ]
 }
