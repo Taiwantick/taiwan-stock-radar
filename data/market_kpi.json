@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-16T15:31:41",
+  "updated_at": "2026-04-17T15:34:47",
   "tw": {
     "total": 38,
     "avg_score": 0.0,
@@ -23,11 +23,11 @@
         "score": 0
       }
     ],
-    "lock_count": 7
+    "lock_count": 0
   },
   "us": {
     "total": 24,
-    "avg_score": 49.6,
+    "avg_score": 49.0,
     "quality_a": 0,
     "quality_b": 1,
     "strong_count": 1,
@@ -35,25 +35,25 @@
       {
         "symbol": "ALAB",
         "name": "Astera Labs",
-        "score": 60.8
+        "score": 62.2
+      },
+      {
+        "symbol": "PLTR",
+        "name": "Palantir",
+        "score": 58.7
       },
       {
         "symbol": "NVDA",
         "name": "NVIDIA 輝達",
-        "score": 56.5
-      },
-      {
-        "symbol": "LRCX",
-        "name": "Lam Research 半導體設備",
-        "score": 56.2
+        "score": 58.0
       }
     ],
-    "avg_pe": 153.0,
-    "avg_dividend_yield": 69.0
+    "avg_pe": 154.8,
+    "avg_dividend_yield": 68.8
   },
   "jp": {
     "total": 11,
-    "avg_score": 34.9,
+    "avg_score": 35.6,
     "quality_a": 0,
     "quality_b": 0,
     "strong_count": 0,
@@ -64,17 +64,17 @@
         "score": 43.0
       },
       {
-        "symbol": "6954.T",
-        "name": "FANUC 發那科",
-        "score": 40.7
+        "symbol": "5801.T",
+        "name": "古河電氣工業",
+        "score": 41.7
       },
       {
-        "symbol": "4186.T",
-        "name": "東京應化工業",
-        "score": 40.3
+        "symbol": "7701.T",
+        "name": "島津製作所",
+        "score": 41.5
       }
     ],
-    "avg_pe": 57.8,
-    "avg_dividend_yield": 90.0
+    "avg_pe": 55.6,
+    "avg_dividend_yield": 89.3
   }
 }
