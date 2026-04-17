@@ -1,5 +1,27 @@
 {
-  "date": "2026-04-17",
-  "updated_at": "2026-04-17T14:00:02",
-  "items": []
+  "date": "2026-04-18",
+  "updated_at": "2026-04-18T08:00:00",
+  "source": "WSJ RSS",
+  "items": [
+    {
+      "title": "伊朗宣布荷莫茲海峽重開 國際油價暴跌9%",
+      "url": "https://www.reuters.com/business/energy/oil-falls-prospects-talks-end-iran-war-revive-supply-2026-04-17/"
+    },
+    {
+      "title": "美股三大指數同創新高 油價重挫帶動風險偏好",
+      "url": "https://www.reuters.com/world/china/global-markets-wrapup-1-2026-04-17/"
+    },
+    {
+      "title": "Netflix財測不佳股價重挫 海斯汀退出董事會",
+      "url": "https://www.cnbc.com/2026/04/16/netflix-nflx-earnings-q1-2026.html"
+    },
+    {
+      "title": "蘋果iPhone中國首季出貨暴增20% 逆勢領先同業",
+      "url": "https://www.reuters.com/world/china/apples-iphone-shipments-china-surge-20-q1-data-shows-2026-04-17/"
+    },
+    {
+      "title": "川普稱美伊戰爭可望很快結束 中東局勢現緩和",
+      "url": "https://www.politico.com/news/2026/04/17/iran-war-strait-of-hormuz-open-00878387"
+    }
+  ]
 }
