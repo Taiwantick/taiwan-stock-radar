@@ -620,13 +620,58 @@ function updateMarketStatus(){
 }
 
 /* ── WSJ Digest ──────────────────────── */
+function _esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function _wsjItemHtml(item, idx){
+  const hasDeep = !!(item.summary || item.impact_taiwan || (item.related_stocks && item.related_stocks.length));
+  const id = 'wsj-item-'+idx;
+  const headerRow = `
+    <div class="flex items-baseline gap-2 text-xs leading-relaxed">
+      <span class="text-gold font-bold flex-shrink-0">·</span>
+      ${hasDeep
+        ? `<button type="button" data-toggle="${id}" class="wsj-toggle text-left text-ink hover:text-gold-dark transition-colors cursor-pointer">
+             <span class="wsj-caret inline-block transition-transform text-ink-faint">▸</span>
+             <span>${_esc(item.title)}</span>
+           </button>
+           <a href="${_esc(item.url)}" target="_blank" rel="noopener" class="text-[10px] text-ink-faint hover:text-gold-dark ml-1">[原文↗]</a>`
+        : `<a href="${_esc(item.url)}" target="_blank" rel="noopener" class="text-ink hover:text-gold-dark transition-colors">${_esc(item.title)}</a>`
+      }
+      ${item.source_name ? `<span class="text-[10px] text-ink-faint">（${_esc(item.source_name)}）</span>` : ''}
+    </div>`;
+  if(!hasDeep) return headerRow;
+  const stocksHtml = (item.related_stocks||[]).map(s => {
+    const market = s.market || 'tw';
+    const cls = market==='us' ? 'bg-blue-50 text-blue-700 border-blue-200'
+              : market==='jp' ? 'bg-rose-50 text-rose-700 border-rose-200'
+                              : 'bg-amber-50 text-amber-800 border-amber-200';
+    return `<div class="flex items-start gap-2 py-0.5">
+      <span class="inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-semibold border rounded ${cls} flex-shrink-0">${_esc(s.symbol)} ${_esc(s.name||'')}</span>
+      <span class="text-[11px] text-ink-light leading-snug">${_esc(s.reason||'')}</span>
+    </div>`;
+  }).join('');
+  const detailBlock = `
+    <div id="${id}" class="wsj-detail hidden pl-4 mt-1 mb-2 pb-2 border-l-2 border-gold/30">
+      ${item.summary ? `<div class="text-[12px] text-ink leading-relaxed mb-1.5">${_esc(item.summary)}</div>` : ''}
+      ${item.impact_taiwan ? `<div class="text-[11px] text-ink-light leading-relaxed mb-1.5"><span class="font-semibold text-gold-dark">對台股影響：</span>${_esc(item.impact_taiwan)}</div>` : ''}
+      ${stocksHtml ? `<div class="mt-1"><div class="text-[10px] font-semibold text-ink-faint mb-0.5">相關個股（watchlist）</div>${stocksHtml}</div>` : ''}
+      ${item.published_at ? `<div class="text-[10px] text-ink-faint mt-1">發佈：${_esc(item.published_at)}</div>` : ''}
+    </div>`;
+  return headerRow + detailBlock;
+}
 async function loadWSJDigest(){
   try{
     const cb='?t='+Date.now(); const res=await fetch('data/wsj_digest.json'+cb); const d=await res.json();
     if(!d||!d.items||!d.items.length){ document.getElementById('wsj-digest-list').innerHTML=`<div class="text-xs text-ink-faint" data-zh="暫無摘要" data-en="No digest">暫無摘要</div>`; return; }
-    document.getElementById('wsj-digest-list').innerHTML = d.items.map(item =>
-      `<div class="flex items-baseline gap-2 text-xs leading-relaxed"><span class="text-gold font-bold flex-shrink-0">·</span><a href="${item.url}" target="_blank" rel="noopener" class="text-ink hover:text-gold-dark transition-colors">${item.title}</a></div>`
-    ).join('');
+    document.getElementById('wsj-digest-list').innerHTML = d.items.map((item,i)=>_wsjItemHtml(item,i)).join('');
+    document.querySelectorAll('.wsj-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-toggle');
+        const panel = document.getElementById(id);
+        if(!panel) return;
+        const isHidden = panel.classList.toggle('hidden');
+        const caret = btn.querySelector('.wsj-caret');
+        if(caret) caret.style.transform = isHidden ? '' : 'rotate(90deg)';
+      });
+    });
     if(d.date){ const el=document.getElementById('wsj-updated-at'); if(el){ let label=d.date; if(d.updated_at){ const t=new Date(d.updated_at); label+=` (上次更新：${t.getMonth()+1}/${t.getDate()} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')})`; } el.textContent=label; } }
   }catch(e){ document.getElementById('wsj-digest-list').innerHTML=`<div class="text-xs text-ink-faint">載入失敗</div>`; }
 }

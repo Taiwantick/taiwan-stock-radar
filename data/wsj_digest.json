@@ -1,27 +1,68 @@
 {
-  "date": "2026-04-18",
-  "updated_at": "2026-04-18T08:00:00",
-  "source": "WSJ RSS",
+  "date": "2026-04-21",
+  "updated_at": "2026-04-21T08:00:00",
+  "source": "WSJ + Bloomberg + CNBC (v2 deep-read demo)",
+  "schema_version": 2,
   "items": [
     {
-      "title": "伊朗宣布荷莫茲海峽重開 國際油價暴跌9%",
-      "url": "https://www.reuters.com/business/energy/oil-falls-prospects-talks-end-iran-war-revive-supply-2026-04-17/"
+      "title": "美軍扣押伊朗貨輪Touska 油價跳漲股市重挫",
+      "url": "https://www.cnbc.com/2026/04/20/us-iran-war-middle-east-conflict-peace-deal-strait-hormuz-shipping-ceasefire-tensions.html",
+      "source_name": "CNBC / WSJ",
+      "published_at": "2026-04-20T14:30:00Z",
+      "summary": "美國海軍4月19日在荷姆茲海峽攔截並登船扣押伊朗籍貨輪Touska,該船因拒絕遵守美方封鎖指令遭飛彈驅逐艦鎖定,海軍陸戰隊由直升機垂降上船。伊朗外交部批為「海盜行為」並揚言報復,暫緩原定在巴基斯坦舉行的新一輪和談。市場反應劇烈:布蘭特原油單日跳漲逾4%,道瓊期貨與S&P 500同步回檔,金價走高。此事件終結4月以來兩國外交解凍,荷姆茲商業航運再度陷入停擺,全球能源供應鏈不確定性升高。",
+      "impact_taiwan": "油價與地緣溢價上揚短線壓抑台股風險胃納,傳產塑化族群面臨原料成本墊高壓力。但中東緊張通常利多國防相關產業與高科技供應鏈安全溢價,長線對AI伺服器與先進製程代工的戰略定位反而偏多。半導體族群中性偏多,若緊張持續升溫,台積電等代工主力可望受惠於供應鏈分散化需求。",
+      "related_stocks": [
+        {"symbol": "1301", "name": "台塑", "market": "tw", "group": "傳產", "reason": "原油跳漲直接提高塑化原料成本,短線承壓"},
+        {"symbol": "2330", "name": "台積電", "market": "tw", "group": "半導體", "reason": "地緣緊張放大AI/先進製程的戰略價值溢價"},
+        {"symbol": "LMT", "name": "Lockheed Martin", "market": "us", "group": "美股_軍工", "reason": "中東緊張推升美國防預算與對盟軍軍售訂單"},
+        {"symbol": "HII", "name": "Huntington Ingalls", "market": "us", "group": "美股_軍工", "reason": "美海軍持續在荷姆茲海峽行動,帶動艦艇建造需求"}
+      ]
     },
     {
-      "title": "美股三大指數同創新高 油價重挫帶動風險偏好",
-      "url": "https://www.reuters.com/world/china/global-markets-wrapup-1-2026-04-17/"
+      "title": "QXO砸170億併購TopBuild 股價收跌3%",
+      "url": "https://www.fool.com/coverage/stock-market-today/2026/04/20/stock-market-today-april-20-qxo-dips-after-usd17-billion-topbuild-acquisition-sparks-dilution-and-leverage-concerns/",
+      "source_name": "Motley Fool",
+      "published_at": "2026-04-20T21:00:00Z",
+      "summary": "美國建材通路龍頭QXO宣布以170億美元現金加股票收購絕緣建材大廠TopBuild(BLD)。QXO以每股$24.21作收、下跌3.16%,市場對併購稀釋股本與槓桿比率走高感到疑慮。TopBuild為北美最大住宅絕緣承包商,QXO此前積極透過併購整合屋頂、防水、建材配送通路,意在打造全美最大建材經銷生態系。該案預計對美國住宅建築供應鏈帶來新一輪通路重組,但短期QXO EBITDA倍數承壓,需密切觀察整合進度與協同效應落地情況。",
+      "impact_taiwan": "此案對台股直接連動偏弱,主要影響限於美國建材通路市場。若美國住宅市場因併購整合刺激而活絡,間接帶動建材、空調、PCB、電子零組件需求,對台系中下游有輕微正向。此則屬產業資訊性新聞,無明確台股連動族群。",
+      "related_stocks": []
     },
     {
-      "title": "Netflix財測不佳股價重挫 海斯汀退出董事會",
-      "url": "https://www.cnbc.com/2026/04/16/netflix-nflx-earnings-q1-2026.html"
+      "title": "特斯拉週三盤後公布Q1財報 科技財報季登場",
+      "url": "https://www.cnbc.com/2026/04/17/stock-market-next-week-outlook-for-april-20-24-2026.html",
+      "source_name": "CNBC / WSJ",
+      "published_at": "2026-04-17T12:00:00Z",
+      "summary": "本週美股焦點為特斯拉(TSLA)4月22日盤後揭曉2026年Q1財報,為大型科技股財報季開場戲。本週S&P 500共有93家成份股公布財報,含7家道瓊成份股,橫跨金融(Capital One、Interactive Brokers)、工業(RTX、United Airlines)、醫療(Intuitive Surgical)。市場關注特斯拉電動車交車量是否維持成長、能源儲存業務展望、以及AI自駕(FSD / Robotaxi)進度。Nvidia、AMD、台積電等AI鏈個股表現將緊跟特斯拉對AI基礎設施資本支出的指引。",
+      "impact_taiwan": "特斯拉財報與AI/機器人資本支出展望,是台灣AI伺服器、半導體、散熱族群短線最重要催化劑之一。若特斯拉釋出加碼AI訓練基礎設施訊號,鴻海、廣達、緯穎、台積電等供應鏈有望獲盤後連動正向反應;反之若Q2展望疲弱則短線偏空,尤其對AI伺服器族群影響顯著。",
+      "related_stocks": [
+        {"symbol": "2330", "name": "台積電", "market": "tw", "group": "半導體", "reason": "特斯拉AI晶片核心代工夥伴,FSD新一代晶片指引為觀察重點"},
+        {"symbol": "2317", "name": "鴻海", "market": "tw", "group": "AI_伺服器", "reason": "電動車代工與AI伺服器雙利多,特斯拉CapEx指引直接連動"},
+        {"symbol": "2382", "name": "廣達", "market": "tw", "group": "AI_伺服器", "reason": "AI伺服器主力供應商,特斯拉資本支出指引為盤後關鍵"},
+        {"symbol": "6669", "name": "緯穎", "market": "tw", "group": "AI_伺服器", "reason": "超大規模雲端AI伺服器,受惠大型業者加碼AI基礎設施"}
+      ]
     },
     {
-      "title": "蘋果iPhone中國首季出貨暴增20% 逆勢領先同業",
-      "url": "https://www.reuters.com/world/china/apples-iphone-shipments-china-surge-20-q1-data-shows-2026-04-17/"
+      "title": "WSJ：美司法部對肉品大廠啟動反托拉斯刑案",
+      "url": "https://gvwire.com/2026/04/20/us-justice-department-criminally-investigating-beef-companies-wsj-reports/",
+      "source_name": "WSJ",
+      "published_at": "2026-04-20T18:00:00Z",
+      "summary": "根據華爾街日報4月20日報導,美國司法部反托拉斯部門已對大型肉品加工業者展開刑事調查,目標鎖定Tyson Foods、JBS、Cargill等業界龍頭,調查重點為是否有聯合壟斷肉品批發定價、操縱市場價格之行為。此案源自多年來消費者與牧場主對肉品定價透明度的訴訟積累。若罪名成立,相關業者面臨高額罰款與業務限制。股市方面,肉品相關個股承壓,但對S&P 500整體影響有限,屬產業特定風險事件。",
+      "impact_taiwan": "此案對台股連動極低,屬美國內政與產業監理議題。台灣食品、畜牧相關上市櫃公司規模較小且業務本地化,不受直接波及。可作為美國食品類股監理風險參考,但watchlist內無具體個股連動。",
+      "related_stocks": []
     },
     {
-      "title": "川普稱美伊戰爭可望很快結束 中東局勢現緩和",
-      "url": "https://www.politico.com/news/2026/04/17/iran-war-strait-of-hormuz-open-00878387"
+      "title": "WSJ：歐洲備妥去美化NATO替代防衛方案",
+      "url": "https://english.news.cn/europe/20260415/0938d8634045486cb35f9fccf339821a/c.html",
+      "source_name": "WSJ / Xinhua",
+      "published_at": "2026-04-15T10:00:00Z",
+      "summary": "華爾街日報4月中旬報導,面對美國可能退出或降低NATO承諾的疑慮,歐洲各國積極研擬「去美化」備援防衛方案,以既有NATO軍事結構為底盤但改由歐洲主導決策。另份WSJ報導指出德國政府推動車廠轉型軍工產線:Volkswagen、BMW、Mercedes-Benz、MAN等大廠正與以色列鐵穹系統業者洽談零組件代工,目標2027量產;Schaeffler已開始生產UAV引擎與軍用航空零組件,部分工廠導入第三班次供應烏克蘭武器彈藥。德國製造業每月流失1.5萬職缺,政府寄望軍工擴張填補。",
+      "impact_taiwan": "全球國防支出上行對台灣電子代工、PCB、連接器、精密機構件族群長線偏多,尤其高規格軍工電子零件存在國產替代商機。日股光纖軍工板塊(三菱重工、川崎重工)同步受益,與台灣光學、連接器供應鏈存在協力關係。整體中性偏多,惟此為長線題材,短線無明顯催化。",
+      "related_stocks": [
+        {"symbol": "LMT", "name": "Lockheed Martin", "market": "us", "group": "美股_軍工", "reason": "歐洲採購美製F-35與飛彈防禦系統的主要受惠者"},
+        {"symbol": "HII", "name": "Huntington Ingalls", "market": "us", "group": "美股_軍工", "reason": "歐洲海軍現代化帶動艦艇建造需求"},
+        {"symbol": "7011.T", "name": "三菱重工業", "market": "jp", "group": "日股_光纖軍工", "reason": "全球國防擴張題材外溢至日本軍工生態"},
+        {"symbol": "3376", "name": "新日興", "market": "tw", "group": "連接器", "reason": "軍工高規格連接器潛在訂單,可供應國防電子次系統"}
+      ]
     }
   ]
 }
